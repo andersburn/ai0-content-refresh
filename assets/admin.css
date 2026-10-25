@@ -5,3 +5,5 @@
 .ai0r-rates{display:flex;flex-wrap:wrap;gap:12px;margin-top:12px}.ai0r-rates label{display:flex;flex-direction:column;gap:4px}.ai0r-rates input{width:130px}.ai0r-admin [hidden]{display:none!important}[data-custom-model-wrap]{margin-top:12px}.ai0r-admin select[name="model_choice"]{min-width:300px;max-width:100%}
 
 .ai0r-selected-exclusions{max-width:740px;margin-top:12px;overflow-wrap:anywhere}.ai0r-selected-exclusions ul{list-style:disc;margin:8px 0 0 20px}.ai0r-selected-exclusions li{margin:0 0 8px;line-height:1.6}.ai0r-post-links{display:flex;flex-wrap:wrap;gap:6px}
+
+.ai0r-media-choices li{display:flex;align-items:flex-start;gap:16px;padding:16px;border:1px solid #dce2e7;border-radius:8px;margin:12px 0}.ai0r-media-choices img{width:120px;max-width:25%;height:auto;border-radius:5px}

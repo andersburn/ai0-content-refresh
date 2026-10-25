@@ -16,12 +16,13 @@ final class AI0R_Content {
             'findings' => ['type' => 'array', 'items' => $string],
             'no_change_reason' => $string,
             'replacements' => ['type' => 'array', 'items' => ['type' => 'object', 'properties' => ['id' => $string, 'text' => $string], 'required' => ['id','text'], 'additionalProperties' => false]],
+            'images' => ['type' => 'array', 'items' => ['type' => 'object', 'properties' => ['attachment_id' => ['type' => 'integer'], 'after_block' => ['type' => 'integer'], 'reason' => $string], 'required' => ['attachment_id','after_block','reason'], 'additionalProperties' => false]],
             'sections' => ['type' => 'array', 'items' => ['type' => 'object', 'properties' => [
                 'after_block' => ['type' => 'integer'],
                 'kind' => ['type' => 'string', 'enum' => ['summary','faq','checklist','table','callout','cta','related']],
                 'heading' => $string, 'text' => $string, 'items' => ['type' => 'array', 'items' => $item],
             ], 'required' => ['after_block','kind','heading','text','items'], 'additionalProperties' => false]],
-        ], 'required' => ['summary','findings','no_change_reason','replacements','sections'], 'additionalProperties' => false];
+        ], 'required' => ['summary','findings','no_change_reason','replacements','sections','images'], 'additionalProperties' => false];
     }
 
     private static function replacement(string $old, string $requested): string {
@@ -103,7 +104,7 @@ final class AI0R_Content {
         return ['segments' => $segments, 'outline' => $outline, 'blocks' => $blocks];
     }
 
-    public static function build(string $original, array $response, array $allowed_urls, bool $allow_additions, ?array &$report = null): string {
+    public static function build(string $original, array $response, array $allowed_urls, bool $allow_additions, ?array &$report = null, array $allowed_images = [], bool $allow_media = false): string {
         $data = self::extract($original);
         $changes = [];
         $seen = [];
@@ -147,7 +148,11 @@ final class AI0R_Content {
             $headings[] = $key;
             $insert[$s['after_block']][] = ['blockName' => 'ai0-refresh/section', 'attrs' => $clean, 'innerBlocks' => [], 'innerHTML' => '', 'innerContent' => []];
         }
-        $report = ['text_changes' => count($changes), 'new_sections' => count($response['sections']), 'unchanged_suggestions' => count($seen) - count($changes)];
+        if (array_key_exists('images', $response) && !is_array($response['images'])) { throw new RuntimeException('Modellen returnerede en ugyldig billedliste.'); }
+        $chosen = [];
+        $image_insert = AI0R_Media::insertions($original, $response['images'] ?? [], $allowed_images, $allow_media, $blocks, $chosen);
+        foreach ($image_insert as $at => $images) { $insert[$at] = array_merge($insert[$at] ?? [], $images); }
+        $report = ['text_changes' => count($changes), 'new_sections' => count($response['sections']), 'new_images' => count($chosen), 'images' => $chosen, 'unchanged_suggestions' => count($seen) - count($changes)];
         if (!$changes && !$insert) { return $original; }
         $final = [];
         foreach ($blocks as $i => $b) {

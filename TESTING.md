@@ -1,11 +1,11 @@
-# Validation for 1.3.0
+# Validation for 1.4.0
 
 Run date: 25 October 2026 (Europe/Copenhagen).
 
 - PHP 8.5.2 syntax checks: all PHP files pass.
 - JavaScript syntax: all scripts pass Node.js `--check`.
-- 75 offline regression checks with WordPress 7.1.3's actual block parser, HTML token processor and escaping functions.
-- 86 integration checks in an isolated WordPress 7.1.3 installation using the official WordPress SQLite Database Integration drop-in. This exercises actual options, metadata, database tables, `wp_update_post`, WordPress revisions, transactions, block rendering, REST types, admin output and cron callbacks.
+- 76 offline regression checks with WordPress 7.1.3's actual block parser, HTML token processor and escaping functions.
+- 107 integration checks in an isolated WordPress 7.1.3 installation using the official WordPress SQLite Database Integration drop-in. This exercises actual options, metadata, database tables, `wp_update_post`, WordPress revisions, transactions, block rendering, REST types, admin output and cron callbacks.
 - 7 real HTTP checks against the disposable PHP server: anonymous AJAX recording; authenticated administrator and subscriber exclusion with the exact same cached anonymous token; legacy REST no-op; Google-only disabling and internal re-enabling; DNT. Real WordPress login cookies and session-token validation are used, without exposing cookies.
 - Browser verification of native model dropdown, Other field, saving a custom model with its rates/source, persistence, and switching to the recommendation without carrying another model's rates.
 - Previous-version browser verification of the recommendation button, dropdown search, selecting results, no-result message, preserving choices across filters, Escape to close, saving, and persistence of both the model and selected exclusions. API fields remain empty when previously stored credentials exist.
@@ -34,3 +34,7 @@ Price tests cover known model rates, cached reads/writes, the documented long-co
 Version 1.3.0 adds real database checks for 90-day/year cutoff inclusivity, excluding older and future rows, and updating the queue label. History frontend/editor targets are verified on the list and detail; deleted content has no broken links. Browser verification confirms separate list items and help-text line breaks, online-rate status, and public/editor links.
 
 Currency tests cover validation, exact base/quote, invalid numbers/dates, daily caching, throttled retry, keeping the last valid rate during outages, USD-only fallback, preservation of prior manual historical prices and immutable exchange snapshots. OpenAI/Google and the repeatable currency outage cases use simulated responses. A separate live, public request was also validated through WordPress HTTP against Frankfurter’s ECB USD/DKK endpoint; it returned a valid dated observation without any API key. No production installation/content or real OpenAI/Google calls were used.
+
+Version 1.4.0 adds native WordPress media fixtures, using copies of a bundled Twenty Twenty-Five image only in the disposable uploads directory. Coverage includes title/alt search, introduction keyword fallback, excluding private-parent/tiny/logo/unrelated/featured images, disabled search, bounded metadata-only input, native image-only suggestions, preservation of attachment alt/caption metadata, rejecting unknown IDs/duplicate IDs/over-limit/disabled insertions, excluding existing legacy/Gutenberg/reusable-block images, history display, rechecking privacy and permission before publish, transactional image publication, and exact restoration without deleting media. The model's image-choice responses were simulated; metadata relevance is not a live-model visual-quality evaluation.
+
+Browser checks confirm image choice/reason/alt in history and recognition as a native Image block in Gutenberg's document overview, with no block-validation errors logged. The browser's blob-based editor canvas did not render, so the editor canvas itself was not visually verified; the history image preview rendered normally. No test-only compatibility plugin is included in the ZIP.

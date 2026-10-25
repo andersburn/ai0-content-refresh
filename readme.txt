@@ -3,7 +3,7 @@ Contributors: ai0
 Tags: gutenberg, content, openai, search-console
 Requires at least: 6.7
 Requires PHP: 8.1
-Stable tag: 1.3.0
+Stable tag: 1.4.0
 License: GPLv2 or later
 
 Et separat plugin til at forbedre eksisterende sider og blogindlæg med OpenAI og Search Console.
@@ -19,7 +19,7 @@ Et separat plugin til at forbedre eksisterende sider og blogindlæg med OpenAI o
 
 Automatik er slået fra ved installation. Manuelle genereringer gemmer altid et forslag. Pluginet ændrer aldrig URL, titel, kategori, featured image, Yoast-felter eller temaets metadata. Kun post_content ændres. Det eksisterende AI Blog Writer-plugin berøres ikke.
 
-== Opdatering fra 1.0.0 / 1.1.0 / 1.2.0 ==
+== Opdatering fra 1.0.0 / 1.1.0 / 1.2.0 / 1.3.0 ==
 Upload den nye ZIP, og vælg at erstatte den eksisterende pluginversion. API-nøgle, Google-forbindelse, modelvalg og historik bevares. Den oprindelige standardprompt erstattes af en mere aktiv forbedringsprompt; en prompt, du selv har ændret, bevares.
 
 Indstillinger > Udeluk sider og indlæg er en søgbar dropdown med flervalg. Søg på titel eller ID, markér de sider og indlæg, der skal udelukkes, og gem. Valgene er fælles med editorens og prioriteringsoversigtens udelukkelse. Tidligere indtastede ID’er og per-side-markeringer overføres automatisk. Filtrering af listen rydder ikke valgte sider. Valgte sider vises med én side pr. linje under dropdownen. Hjælpeteksten er også opdelt på flere linjer.
@@ -42,7 +42,18 @@ Pluginet bruger WordPress’ HTML-tokenprocessor til at ændre tekst i kendte te
 
 Nye resuméer, FAQ’er, tjeklister, tabeller, faktabokse, kontaktbokse og relaterede links gemmes som redigerbare ai0-refresh/section-blokke. Der tillades højst fire på en side i alt. Billeder og videoer bevares; pluginet genererer ikke nye billeder/videoer. Modellen instrueres til at undgå dubletter og til kun at bruge eksisterende fakta. Den har ikke web research. Teknisk kontrol er ikke faktatjek og garanterer ikke højere placeringer.
 
-De nye elementer kræver det aktive plugin for frontend-rendering. Ved deaktivering bevares blokdata i indholdet, men de dynamiske elementer vises ikke før genaktivering. Gendan originalindholdet inden permanent fjernelse, hvis det ønskes.
+De nye ai0-refresh/section-tekstelementer kræver det aktive plugin for frontend-rendering. Almindelige billedblokke gør ikke. Ved deaktivering bevares blokdata i indholdet, men de dynamiske elementer vises ikke før genaktivering. Gendan originalindholdet inden permanent fjernelse, hvis det ønskes.
+
+== Billeder fra WordPress’ mediebibliotek ==
+Fra 1.4.0 kan pluginet søge og genbruge dine eksisterende uploadede billeder. Indstillinger > Billeder fra mediebiblioteket > Tillad søgning og genbrug af eksisterende billeder styrer adgangen. Den er som udgangspunkt slået til i denne version og kan slås fra separat fra nye tekstelementer. Der oprettes ingen ny WordPress-bruger, og der kræves ingen ny API-nøgle eller ekstern billedtjeneste.
+
+Pluginet søger lokalt med WordPress’ get_posts/WP_Query. Op til fire emneord fra sidens titel og overskrifter bruges mod medietitler/billedtekster samt filnavne og alt-tekster. Sidens indledning bruges, når titel/overskrifter ikke giver nok ord. Op til 12 relevante kandidater sendes til modellen som ID, titel, filnavn, alt-tekst, billedtekst og dimensioner. Billedfiler og billed-URL’er sendes ikke til OpenAI. Dette er søgning i metadata, ikke visuel analyse af billederne. Gode titler og alt-tekster i mediebiblioteket gør derfor billedvalgene bedre.
+
+Modellen kan vælge højst to nye billeder og skal forklare relevans og placering. Den må også vælge nul billeder. Serveren accepterer kun ID’er fra det faktiske søgeresultat. JPEG, PNG, WebP, GIF og AVIF er tilladt, når WordPress kan levere et billede på mindst 300 × 180 pixels. Logoer/ikoner med kendte navne og billeder tilknyttet private, ikke-udgivne eller adgangskodebeskyttede sider springes over. Ikke-tilknyttede billeder regnes som tilgængelige, som i det almindelige WordPress-mediebibliotek. Til særlige adgangsregler kan filteret ai0r_media_allowed($allowed, $attachment_id) bruges.
+
+Eksisterende medieblokke, featured image, filer og metadata ændres ikke. Kendte billed-ID’er og billed-URL’er i indholdet og genbrugte blokke bruges til at undgå dubletter. Specialblokke/shortcodes, der selv henter skjulte medier, kan ikke altid genkendes. Nye billeder gemmes som almindelige core/image-blokke med WordPress’ large-størrelse og bibliotekets eksisterende alt-tekst/billedtekst. De kan redigeres i Gutenberg og kræver ikke dette plugin for at blive vist. Højst to nye billeder er en separat grænse fra de fire nye tekstelementer.
+
+Historikken viser antal nye billeder, miniature, bibliotekstitel, alt-tekst, begrundelse og søgeresultat. Et forslag med kun et nyt billede tæller som en ændring. Ved publicering kontrolleres billedadgang og de valgte mediers tilgængelighed/URL igen; et billede, som siden er blevet gjort privat eller fjernet, publiceres ikke. Gendannelse fjerner de indsatte blokke fra siden, men sletter ingen filer fra mediebiblioteket. Seks måneders pause gælder som før. Metadata fylder lidt ekstra i API-inputtet og indgår automatisk i token- og prisoverslaget.
 
 == Prioritering og seks måneder ==
 I Indstillinger > Trafikkilde til prioritering vælger du Kun Google Search Console, Kun indbygget besøgstæller eller begge. Kun Google stopper al intern optælling. Kun intern stopper den automatiske Google-synkronisering. Den separate tæller-afbryder kan også slå intern optælling og brug af tællerdata fra. Eksisterende data og Google-forbindelse bevares ved skift, med den normale retention. Ingen kilde erstattes i stilhed af den anden. Manuelle markeringer og alder bruges altid.
@@ -101,11 +112,14 @@ Cachevenligt browserscript kalder admin-ajax.php med et signeret indholds-ID. B�
 
 For samtykke-/privacyintegration kan filteret ai0r_tracking_allowed bruges til at styre både script og endpoint. Hvis samtykke varierer pr. besøgende på cachede sider, skal CMP’en også blokere scriptet, indtil passende samtykke foreligger. Pluginet afgør ikke kravene til dit konkrete website.
 
-OpenAI: Der sendes ved generering den valgte sides tekst, titel, URL, redaktionelle prompt og et begrænset katalog af offentlige interne links til https://api.openai.com/v1/responses med store=false. API-nøglen sendes kun til api.openai.com. Modeltesten bruger /v1/models. Googles OAuth- og Search Console-endpoints bruges kun efter opsætning og godkendelse. Nøgler og tokens gemmes krypteret med en nøgle afledt af WordPress’ auth-salt; en ændring af salts kræver genindtastning og nyt Google-login. Databasekopier bør stadig beskyttes.
+OpenAI: Der sendes ved generering den valgte sides tekst, titel, URL, redaktionelle prompt, et begrænset katalog af offentlige interne links og, når billedadgang er slået til, metadata om op til 12 relevante billeder til https://api.openai.com/v1/responses med store=false. API-nøglen sendes kun til api.openai.com. Modeltesten bruger /v1/models. Googles OAuth- og Search Console-endpoints bruges kun efter opsætning og godkendelse. Nøgler og tokens gemmes krypteret med en nøgle afledt af WordPress’ auth-salt; en ændring af salts kræver genindtastning og nyt Google-login. Databasekopier bør stadig beskyttes.
 
 Udvikler-hook: ai0r_content_applied($post_id, $history_id, $is_restore) til eksplicit cachepurge eller andre lokale integrationer. WordPress’ normale post-update-hooks køres også.
 
 == Changelog ==
+= 1.4.0 =
+Indbygget søgning efter relevante billeder i WordPress-mediebiblioteket; separat adgangsindstilling; højst to nye native Gutenberg-billedblokke; metadata frem for billedfiler til modellen; beskyttelse mod kendte dubletter og private billeder; billedvalg og begrundelser i historikken; kontrol igen ved publicering.
+
 = 1.3.0 =
 Automatisk USD/DKK-omregning via Frankfurter/ECB med kursdato, cache, fejlhåndtering og gemte historikkurser; udelukkede sider som liste med linjeskift; visninger for 90 dage og ét kalenderår; frontend- og editorlinks i historikoversigt og historikdetaljer.
 

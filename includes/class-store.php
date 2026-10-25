@@ -18,7 +18,7 @@ final class AI0R_Store {
             'enabled' => 0, 'mode' => 'review', 'model' => self::RECOMMENDED_MODEL, 'api_key' => '',
             'monthly_limit' => 10, 'monthly_tokens' => 250000, 'max_output' => 12000,
             'start_day' => 1, 'hour' => 3, 'post_types' => ['post', 'page'],
-            'tracking' => 1, 'traffic_source' => 'both', 'additions' => 1, 'excluded_ids' => '',
+            'tracking' => 1, 'traffic_source' => 'both', 'additions' => 1, 'media_library' => 1, 'excluded_ids' => '',
             'custom_rates' => [],
             'google_client_id' => '', 'google_secret' => '', 'property' => '',
             'prompt' => "Forbedr aktivt siden på dansk i dens eksisterende tone og til dens målgruppe. Find konkrete svagheder i indledning, læsbarhed, gentagelser, sprogfejl og svar på læserens spørgsmål, og ret dem i de redigerbare tekster. Gør værdien og forskellene mellem sidens tilbud tydeligere. Omformulér gerne væsentligt, når det gør indholdet mere konkret og let at forstå; bevar de eksisterende fakta og forbehold. Overvej et kort resumé, en relevant sammenligningstabel, tjekliste eller FAQ ud fra sidens egne oplysninger, hvis det giver overblik og ikke allerede findes. Bevar billeder, videoer, links, bannere og layout. Opfind aldrig priser, garantier, resultater, citater, erfaringer eller nye faktuelle påstande. Oplist de konkrete forbedringsmuligheder. Foreslå kun ingen ændringer, hvis du efter en reel gennemgang ikke kan finde en nyttig forbedring, og forklar præcist hvorfor.",

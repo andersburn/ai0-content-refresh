@@ -151,6 +151,7 @@ final class AI0R_Admin {
         $s['excluded_ids'] = implode(',', wp_parse_id_list(wp_unslash($_POST['excluded_ids'] ?? '')));
         $s['tracking'] = !empty($_POST['tracking']) ? 1 : 0;
         $s['additions'] = !empty($_POST['additions']) ? 1 : 0;
+        $s['media_library'] = !empty($_POST['media_library']) ? 1 : 0;
         $s['prompt'] = sanitize_textarea_field(wp_unslash($_POST['prompt'] ?? ''));
         if (mb_strlen($s['prompt']) > 12000) { throw new RuntimeException('Prompten må højst fylde 12.000 tegn.'); }
         update_option('ai0r_settings', $s, false);
@@ -290,6 +291,7 @@ final class AI0R_Admin {
         self::row('Valutaomregning', '<strong>Automatisk USD → DKK</strong><p>' . esc_html(AI0R_Exchange::description(AI0R_Exchange::current())) . '</p><a href="https://frankfurter.dev/" target="_blank" rel="noopener">Valutakilde ↗</a>', 'Seneste referencekurs hentes automatisk og gemmes lokalt i op til et døgn. Ingen ekstra API-nøgle nødvendig. Weekender og helligdage bruger seneste offentliggjorte kurs. Estimater er uden moms, gebyrer og aftalerabatter.');
         self::row('Prompt', '<textarea aria-label="Prompt" name="prompt" rows="9" class="large-text">' . esc_textarea($s['prompt']) . '</textarea>', 'Prompten kan tilpasses. Pluginets faste bevaringsregler og seksmånedersgrænse kan ikke slås fra med prompten.');
         self::row('Nye indholdselementer', '<label><input type="checkbox" name="additions" value="1" ' . checked((bool) $s['additions'], true, false) . '> Tillad resumé, FAQ, tjekliste, tabel, faktaboks og relevante links</label>', 'Højst fire nye elementer pr. side i alt. Eksisterende medier og specialblokke bliver bevaret.');
+        self::row('Billeder fra mediebiblioteket', '<label><input type="checkbox" name="media_library" value="1" ' . checked((bool) $s['media_library'], true, false) . '> Tillad søgning og genbrug af eksisterende billeder</label>', 'Søger via WordPress i titler, filnavne, alt-tekster og billedtekster ud fra sidens emner. Modellen får metadata om op til 12 relevante billeder og kan indsætte højst to. Billedfiler sendes ikke til OpenAI. Eksisterende billeder og metadata bevares. Billeder tilknyttet private eller ikke-udgivne sider udelades.');
         $types = '';
         foreach (['page' => 'Sider','post' => 'Blogindlæg'] as $k => $label) { $types .= '<label class="ai0r-check"><input name="post_types[]" type="checkbox" value="' . esc_attr($k) . '" ' . checked(in_array($k, $s['post_types'], true), true, false) . '> ' . esc_html($label) . '</label>'; }
         self::row('Indholdstyper', $types);
@@ -369,12 +371,22 @@ final class AI0R_Admin {
             if (array_key_exists('exchange', $details['cost'] ?? [])) { echo '<p class="description">' . esc_html(AI0R_Exchange::description($details['cost']['exchange'])) . '</p>'; }
             elseif (!empty($details['cost']['usd_dkk'])) { echo '<p class="description">Tidligere manuel beregningskurs: ' . esc_html((string) $details['cost']['usd_dkk']) . ' DKK/USD</p>'; }
             if (is_array($details) && isset($details['text_changes'], $details['new_sections'])) {
-                echo '<p class="ai0r-change-count"><strong>' . (int) $details['text_changes'] . ' tekstændringer · ' . (int) $details['new_sections'] . ' nye elementer</strong></p>';
+                echo '<p class="ai0r-change-count"><strong>' . (int) $details['text_changes'] . ' tekstændringer · ' . (int) $details['new_sections'] . ' nye elementer · ' . (int) ($details['new_images'] ?? 0) . (($details['new_images'] ?? 0) === 1 ? ' nyt billede' : ' nye billeder') . '</strong></p>';
                 if (!empty($details['findings'])) {
                     echo '<h3>Modellens vurdering</h3><ul>';
                     foreach ($details['findings'] as $finding) { echo '<li>' . esc_html($finding) . '</li>'; }
                     echo '</ul>';
                 }
+            }
+            if (!empty($details['media_search']['enabled'])) {
+                echo '<p class="description">Mediebibliotek: søgt på ' . esc_html(implode(', ', $details['media_search']['terms'])) . ' · ' . (int) $details['media_search']['candidates'] . ' egnede kandidater.</p>';
+            }
+            if (!empty($details['images'])) {
+                echo '<h3>Billeder i forslaget</h3><ul class="ai0r-media-choices">';
+                foreach ($details['images'] as $image) {
+                    echo '<li>' . (get_post((int) $image['id']) ? wp_get_attachment_image((int) $image['id'], 'thumbnail') : '') . '<div><strong>' . esc_html($image['title']) . ' · ID ' . (int) $image['id'] . '</strong><p>' . esc_html($image['reason']) . '</p><p class="description">Alt-tekst: ' . esc_html($image['alt'] ?: '(tom i mediebiblioteket)') . '</p></div></li>';
+                }
+                echo '</ul>';
             }
             if ($h->status === 'no_change') {
                 echo '<p class="ai0r-warning"><strong>Ingen ændringer blev foreslået eller publiceret.</strong> Før og efter er identiske.' . (!empty($details['no_change_reason']) ? '<br>Modellens begrundelse: ' . esc_html($details['no_change_reason']) : '') . '</p>';
