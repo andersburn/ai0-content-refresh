@@ -1,16 +1,13 @@
-# Ai0 Content Refresh 1.0.0
+# Ai0 Content Refresh 1.1.0
 
 Historisk version til AI-assisteret SEO-optimering og vedligeholdelse af eksisterende WordPress-indhold.
 
-Første selvstændige version til AI-assisteret forbedring af eksisterende WordPress-sider og blogindlæg.
-
-- OpenAI API-nøgle, modelvalg og redigerbar prompt.
-- Planlagt månedlig gennemgang, forslag eller automatisk publicering og forbrugsgrænser.
-- Search Console via Google OAuth, lokal besøgstæller og manuel prioritet.
-- Bevaring af Gutenberg-blokke, medier, bannere og links; nye redigerbare indholdselementer.
-- Seks kalendermåneders pause, historik, diff, publicering og gendannelse.
-
-Dette er en historisk version. Brug 1.4.0 til nye installationer for de efterfølgende rettelser og funktioner.
+- Anbefalet model med valgknap.
+- Søgbar dropdown med flervalg til udelukkede sider og blogindlæg.
+- Mere aktiv redaktionel prompt og bedre kontekst omkring tekstfragmenter.
+- Rettelse af manglende mellemrum ved inline-formatering.
+- Faktiske ændringstal, tydelig besked ved identiske svar og mulighed for manuel gentagelse.
+- Eksisterende API-nøgle, modelvalg, prompt og historik bevares ved opdatering.
 
 ## Krav
 

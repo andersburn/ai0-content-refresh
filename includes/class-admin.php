@@ -5,7 +5,10 @@ final class AI0R_Admin {
     public static function boot(): void {
         add_action('admin_menu', static function () { add_menu_page('Ai0 Content Refresh', 'Content Refresh', 'manage_options', 'ai0-refresh', [self::class, 'page'], 'dashicons-update-alt', 59); });
         add_action('admin_enqueue_scripts', static function ($hook) {
-            if ($hook === 'toplevel_page_ai0-refresh') { wp_enqueue_style('ai0r-admin', plugins_url('assets/admin.css', AI0R_FILE), [], AI0R_VERSION); }
+            if ($hook === 'toplevel_page_ai0-refresh') {
+                wp_enqueue_style('ai0r-admin', plugins_url('assets/admin.css', AI0R_FILE), [], AI0R_VERSION);
+                wp_enqueue_script('ai0r-admin', plugins_url('assets/admin.js', AI0R_FILE), [], AI0R_VERSION, true);
+            }
         });
         add_action('admin_post_ai0r_action', [self::class, 'action']);
         add_action('admin_post_ai0r_oauth_callback', static function () {
@@ -67,7 +70,8 @@ final class AI0R_Admin {
                     $post_id = absint($_POST['post_id'] ?? 0);
                     if (!current_user_can('edit_post', $post_id)) { throw new RuntimeException('Du må ikke redigere dette indhold.'); }
                     $detail = AI0R_Plugin::generate($post_id, false); $tab = 'history';
-                    self::notice('Kørslen er gemt i historikken. Et forslag ændrer ikke den udgivne side.'); break;
+                    $h = AI0R_Store::history($detail);
+                    self::notice($h && $h->status === 'no_change' ? 'Modellen foreslog ingen ændringer. Siden er uændret; se begrundelsen i historikken.' : 'Kørslen er gemt i historikken. Et forslag ændrer ikke den udgivne side.'); break;
                 case 'next':
                     foreach (AI0R_Plugin::queue() as $row) {
                         if (!$row['blocked']) { $detail = AI0R_Plugin::generate($row['post']->ID, false); break; }
@@ -89,7 +93,7 @@ final class AI0R_Admin {
                     $post_id = absint($_POST['post_id'] ?? 0);
                     if (!current_user_can('edit_post', $post_id)) { throw new RuntimeException('Adgang nægtet.'); }
                     update_post_meta($post_id, '_ai0r_priority', max(0, min(2, (int) ($_POST['priority'] ?? 0))));
-                    update_post_meta($post_id, '_ai0r_excluded', !empty($_POST['excluded']) ? 1 : 0);
+                    AI0R_Store::set_excluded($post_id, !empty($_POST['excluded']));
                     self::notice('Prioriteringen er gemt.'); break;
                 default: throw new RuntimeException('Ukendt handling.');
             }
@@ -145,14 +149,14 @@ final class AI0R_Admin {
         foreach ([0 => 'Normal', 1 => 'Vigtig', 2 => 'Meget vigtig'] as $value => $label) {
             echo '<option value="' . esc_attr((string) $value) . '" ' . selected((int) get_post_meta($p->ID, '_ai0r_priority', true), $value, false) . '>' . esc_html($label) . '</option>';
         }
-        echo '</select><p><label><input type="checkbox" name="ai0r_excluded" value="1" ' . checked((bool) get_post_meta($p->ID, '_ai0r_excluded', true), true, false) . '> Udeluk denne side</label></p>';
+        echo '</select><p><label><input type="checkbox" name="ai0r_excluded" value="1" ' . checked(AI0R_Store::excluded($p->ID), true, false) . '> Udeluk denne side</label></p>';
         if ($p->post_status === 'publish') { echo '<p>Tidligst næste opdatering: <strong>' . esc_html(wp_date('d.m.Y', AI0R_Plugin::next_allowed($p)->getTimestamp())) . '</strong></p>'; }
     }
 
     public static function save_meta(int $id, WP_Post $p): void {
         if (!isset($_POST['ai0r_meta_nonce']) || !wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['ai0r_meta_nonce'])), 'ai0r_priority_' . $id) || !current_user_can('edit_post', $id) || wp_is_post_revision($id) || wp_is_post_autosave($id) || !in_array($p->post_type, ['post','page'], true)) { return; }
         update_post_meta($id, '_ai0r_priority', max(0, min(2, (int) ($_POST['ai0r_priority'] ?? 0))));
-        update_post_meta($id, '_ai0r_excluded', !empty($_POST['ai0r_excluded']) ? 1 : 0);
+        AI0R_Store::set_excluded($id, !empty($_POST['ai0r_excluded']));
     }
 
     public static function page(): void {
@@ -162,6 +166,7 @@ final class AI0R_Admin {
         $notice = get_transient('ai0r_notice_' . get_current_user_id());
         delete_transient('ai0r_notice_' . get_current_user_id());
         if ($notice) { echo '<div class="notice ' . ($notice['error'] ? 'notice-error' : 'notice-success') . '"><p>' . esc_html($notice['text']) . '</p></div>'; }
+        if (get_option('ai0r_install_error')) { echo '<div class="notice notice-error"><p>' . esc_html(get_option('ai0r_install_error')) . '</p></div>'; }
         echo '<nav class="nav-tab-wrapper">';
         foreach (['queue' => 'Indhold & prioritering', 'history' => 'Genereringshistorik', 'settings' => 'Indstillinger', 'google' => 'Google Search Console'] as $key => $label) {
             echo '<a class="nav-tab ' . ($key === $tab ? 'nav-tab-active' : '') . '" href="' . esc_url(add_query_arg(['page' => 'ai0-refresh', 'tab' => $key], admin_url('admin.php'))) . '">' . esc_html($label) . '</a>';
@@ -202,7 +207,7 @@ final class AI0R_Admin {
             self::form('priority', ['post_id' => $p->ID]);
             echo '<select aria-label="Prioritet" name="priority">';
             foreach ([0 => 'Normal',1 => 'Vigtig',2 => 'Meget vigtig'] as $v => $label) { echo '<option value="' . (int) $v . '" ' . selected((int) get_post_meta($p->ID, '_ai0r_priority', true), $v, false) . '>' . esc_html($label) . '</option>'; }
-            echo '</select><label class="ai0r-check"><input name="excluded" type="checkbox" value="1" ' . checked((bool) get_post_meta($p->ID, '_ai0r_excluded', true), true, false) . '> Udeluk</label><button class="button button-small">Gem</button></form></td><td>';
+            echo '</select><label class="ai0r-check"><input name="excluded" type="checkbox" value="1" ' . checked(AI0R_Store::excluded($p->ID), true, false) . '> Udeluk</label><button class="button button-small">Gem</button></form></td><td>';
             if ($r['blocked']) { echo esc_html($r['blocked']); }
             else { echo '<p class="ai0r-ready">Klar til gennemgang</p>'; self::button('generate', 'Generér forslag', ['post_id' => $p->ID]); }
             echo '</td></tr>';
@@ -220,21 +225,44 @@ final class AI0R_Admin {
         echo '<tr><th scope="row">' . esc_html($label) . '</th><td>' . $html . ($help ? '<p class="description">' . esc_html($help) . '</p>' : '') . '</td></tr>';
     }
 
+    private static function exclusions(): string {
+        $selected_ids = wp_parse_id_list(AI0R_Store::settings()['excluded_ids']);
+        $posts = get_posts(['post_type' => ['post','page'], 'post_status' => ['publish','draft','pending','future','private'], 'numberposts' => -1, 'orderby' => 'title', 'order' => 'ASC']);
+        $items = [];
+        foreach ($posts as $p) {
+            if (!current_user_can('edit_post', $p->ID)) { continue; }
+            if (get_post_meta($p->ID, '_ai0r_excluded', true)) { $selected_ids[] = $p->ID; }
+            $items[$p->ID] = ($p->post_title ?: '(Uden titel)') . ' · ' . ($p->post_type === 'page' ? 'Side' : 'Blogindlæg') . ' · ID ' . $p->ID;
+        }
+        $selected_ids = array_unique($selected_ids);
+        foreach ($selected_ids as $id) {
+            if (!isset($items[$id])) { $items[$id] = 'Tidligere udelukket indhold · ID ' . $id; }
+        }
+        $out = '<details class="ai0r-picker" data-exclusions><summary>Vælg sider og indlæg <span data-selection-count>(' . count($selected_ids) . ' valgt)</span></summary><div class="ai0r-picker-panel">';
+        $out .= '<label for="ai0r-exclusion-search">Søg i sider og blogindlæg</label><input id="ai0r-exclusion-search" type="search" placeholder="Søg på titel eller ID …" autocomplete="off" data-exclusion-search>';
+        $out .= '<div class="ai0r-picker-options" role="group" aria-label="Sider og indlæg der skal udelukkes">';
+        foreach ($items as $id => $label) {
+            $out .= '<label class="ai0r-picker-option" data-exclusion-option><input type="checkbox" name="excluded_ids[]" value="' . (int) $id . '" ' . checked(in_array($id, $selected_ids, true), true, false) . '> <span>' . esc_html($label) . '</span></label>';
+        }
+        return $out . '</div><p data-no-matches hidden>Ingen sider matcher din søgning.</p><button type="button" class="button button-small" data-clear-exclusions>Ryd alle valg</button></div></details><p class="description" data-selected-exclusions aria-live="polite"></p>';
+    }
+
     private static function settings(): void {
         $s = AI0R_Store::settings(); $u = AI0R_Store::usage();
         echo '<div class="ai0r-panel"><h2>API og redaktionelle valg</h2>';
         self::form('settings', [], 'settings');
         echo '<table class="form-table">';
         self::row('OpenAI API-nøgle', '<input aria-label="OpenAI API-nøgle" class="regular-text" type="password" autocomplete="new-password" name="api_key" value="" placeholder="' . esc_attr($s['api_key'] ? 'Nøgle gemt — lad feltet stå tomt for at beholde den' : 'Indtast din API-nøgle') . '"><label class="ai0r-check"><input type="checkbox" name="remove_api_key" value="1"> Fjern gemt API-nøgle</label>', 'Nøglen gemmes krypteret på denne WordPress-installation og sendes kun til OpenAI.');
-        $models = '<input aria-label="Model" class="regular-text" list="ai0r-models" name="model" value="' . esc_attr($s['model']) . '" placeholder="Vælg eller skriv model-ID"><datalist id="ai0r-models">';
+        $models = '<div class="ai0r-recommendation"><strong>Anbefalet: GPT-6.1 Sol</strong><p>Mit forslag til denne opgave: god tekstkvalitet og en balance mellem kvalitet og pris. Start med <code>' . esc_html(AI0R_Store::RECOMMENDED_MODEL) . '</code>, og gennemgå de første forslag.</p><button type="button" class="button" data-recommended-model="' . esc_attr(AI0R_Store::RECOMMENDED_MODEL) . '">Brug den anbefalede model</button> <a href="https://developers.openai.com/api/docs/models" target="_blank" rel="noopener">OpenAI Docs ↗</a></div>';
+        $models .= '<input aria-label="Model" class="regular-text" list="ai0r-models" name="model" value="' . esc_attr($s['model']) . '" placeholder="' . esc_attr(AI0R_Store::RECOMMENDED_MODEL) . '"><datalist id="ai0r-models">';
         foreach ((array) get_option('ai0r_models', []) as $m) { $models .= '<option value="' . esc_attr($m) . '"></option>'; }
-        self::row('Model', $models . '</datalist>', 'Gem nøglen, og brug knappen “Test nøgle og hent modeller” nedenfor. Modellen skal understøtte Responses API og Structured Outputs; modellisten garanterer ikke kompatibilitet.');
+        self::row('Model', $models . '</datalist>', 'Du kan vælge en anden model. Gem nøglen, og hent din kontos modeller med knappen nedenfor. Anbefalingen forudsætter, at din konto har adgang til modellen.');
         self::row('Prompt', '<textarea aria-label="Prompt" name="prompt" rows="9" class="large-text">' . esc_textarea($s['prompt']) . '</textarea>', 'Prompten kan tilpasses. Pluginets faste bevaringsregler og seksmånedersgrænse kan ikke slås fra med prompten.');
         self::row('Nye indholdselementer', '<label><input type="checkbox" name="additions" value="1" ' . checked((bool) $s['additions'], true, false) . '> Tillad resumé, FAQ, tjekliste, tabel, faktaboks og relevante links</label>', 'Højst fire nye elementer pr. side i alt. Eksisterende medier og specialblokke bliver bevaret.');
         $types = '';
         foreach (['page' => 'Sider','post' => 'Blogindlæg'] as $k => $label) { $types .= '<label class="ai0r-check"><input name="post_types[]" type="checkbox" value="' . esc_attr($k) . '" ' . checked(in_array($k, $s['post_types'], true), true, false) . '> ' . esc_html($label) . '</label>'; }
         self::row('Indholdstyper', $types);
-        self::row('Udeluk bestemte ID’er', '<input aria-label="Udelukkede ID’er" class="regular-text" name="excluded_ids" value="' . esc_attr($s['excluded_ids']) . '">', 'Kommasepareret. Privatlivssiden, adgangskodebeskyttet indhold og Yoast-noindex udelukkes automatisk. Markér også vilkår og andre sider, som ikke skal omskrives.');
+        self::row('Udeluk sider og indlæg', self::exclusions(), 'Åbn listen, søg og vælg flere sider. Valgene er de samme som under Indhold & prioritering og i editoren. Gem indstillingerne for at anvende dem. Privatlivssiden, adgangskodebeskyttet indhold og Yoast-noindex er automatisk udelukket.');
         self::row('Sidevisninger', '<label><input type="checkbox" name="tracking" value="1" ' . checked((bool) $s['tracking'], true, false) . '> Aktivér den indbyggede besøgstæller</label>', 'Gemmer kun dato, indholds-ID og antal visninger. Ingen cookies eller besøgsprofiler. Kortvarig misbrugsbegrænsning bruger en envejsværdi af IP-adressen i op til to minutter. Respekterer DNT/GPC. Ryd sidens cache efter aktivering eller ændring.');
         echo '</table><h2>Automatik og forbrugsgrænser</h2><table class="form-table">';
         self::row('Planlagt kørsel', '<label><input name="enabled" type="checkbox" value="1" ' . checked((bool) $s['enabled'], true, false) . '> Aktivér planlagt gennemgang</label>');
@@ -275,7 +303,7 @@ final class AI0R_Admin {
     }
 
     private static function statuses(): array {
-        return ['running' => 'Kører', 'pending' => 'Afventer gennemgang', 'applied' => 'Publiceret', 'rolled_back' => 'Gendannet', 'rejected' => 'Afvist', 'stale' => 'Forældet forslag', 'no_change' => 'Ingen ændring nødvendig', 'error' => 'Fejl'];
+        return ['running' => 'Kører', 'pending' => 'Afventer gennemgang', 'applied' => 'Publiceret', 'rolled_back' => 'Gendannet', 'rejected' => 'Afvist', 'stale' => 'Forældet forslag', 'no_change' => 'Ingen ændringer foreslået', 'error' => 'Fejl'];
     }
 
     private static function history(): void {
@@ -285,10 +313,27 @@ final class AI0R_Admin {
             $h = AI0R_Store::history($id);
             if (!$h) { echo '<p>Historikken findes ikke.</p>'; return; }
             echo '<div class="ai0r-panel"><h2>' . esc_html(get_the_title($h->post_id) ?: 'Indhold slettet') . '</h2><p>' . esc_html(self::statuses()[$h->status] ?? $h->status) . ' · ' . esc_html($h->model) . ' · ' . esc_html(get_date_from_gmt($h->created_at, 'd.m.Y H:i')) . '</p><p>' . nl2br(esc_html($h->summary)) . '</p><p>' . (int) $h->input_tokens . ' inputtokens + ' . (int) $h->output_tokens . ' outputtokens (eller reserverede tokens ved ukendt forbrug).</p>';
+            $details = json_decode($h->details ?? '', true);
+            if (is_array($details) && isset($details['text_changes'], $details['new_sections'])) {
+                echo '<p class="ai0r-change-count"><strong>' . (int) $details['text_changes'] . ' tekstændringer · ' . (int) $details['new_sections'] . ' nye elementer</strong></p>';
+                if (!empty($details['findings'])) {
+                    echo '<h3>Modellens vurdering</h3><ul>';
+                    foreach ($details['findings'] as $finding) { echo '<li>' . esc_html($finding) . '</li>'; }
+                    echo '</ul>';
+                }
+            }
+            if ($h->status === 'no_change') {
+                echo '<p class="ai0r-warning"><strong>Ingen ændringer blev foreslået eller publiceret.</strong> Før og efter er identiske.' . (!empty($details['no_change_reason']) ? '<br>Modellens begrundelse: ' . esc_html($details['no_change_reason']) : '') . '</p>';
+                $post = get_post($h->post_id);
+                if ($post && AI0R_Plugin::reason($post) === '') {
+                    self::button('generate', 'Prøv en ny gennemgang', ['post_id' => $h->post_id], 'history');
+                    echo '<p class="description">Du kan ændre model eller prompt og prøve igen. Kørslen tæller med i månedens forbrug; seksmånedersgrænsen gælder stadig.</p>';
+                }
+            }
             if ($h->status === 'pending') { self::button('apply', 'Publicér dette forslag', ['id' => $id], 'history', true); self::button('reject', 'Afvis forslag', ['id' => $id], 'history'); }
             if ($h->status === 'applied') { self::button('restore', 'Gendan indhold før denne opdatering', ['id' => $id], 'history'); }
             echo '<details><summary>Prompt brugt til denne kørsel</summary><pre>' . esc_html($h->prompt) . '</pre></details>';
-            if ($h->after_content) {
+            if ($h->after_content && $h->after_content !== $h->before_content) {
                 echo '<h3>Ændringer i indholdet</h3>';
                 require_once ABSPATH . 'wp-admin/includes/revision.php';
                 $diff = wp_text_diff($h->before_content, $h->after_content, ['title_left' => 'Før', 'title_right' => 'Forslag', 'show_split_view' => true]);

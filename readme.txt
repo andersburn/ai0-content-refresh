@@ -3,7 +3,7 @@ Contributors: ai0
 Tags: gutenberg, content, openai, search-console
 Requires at least: 6.7
 Requires PHP: 8.1
-Stable tag: 1.0.0
+Stable tag: 1.1.0
 License: GPLv2 or later
 
 Et separat plugin til at forbedre eksisterende sider og blogindlæg med OpenAI og Search Console.
@@ -12,12 +12,19 @@ Et separat plugin til at forbedre eksisterende sider og blogindlæg med OpenAI o
 1. Upload ai0-content-refresh.zip under Plugins > Tilføj plugin > Upload plugin.
 2. Aktivér pluginet og åbn Content Refresh > Indstillinger.
 3. Indtast din egen OpenAI API-nøgle. Gem, og tryk Test nøgle og hent modeller.
-4. Vælg eller indtast et kompatibelt model-ID. Modellen skal understøtte Responses API og Structured Outputs.
+4. Brug den anbefalede GPT-6.1 Sol (gpt-6.1-sol), eller vælg et andet kompatibelt model-ID. Modellen skal understøtte Responses API og Structured Outputs, og din konto skal have adgang til modellen.
 5. Tilpas prompt, indholdstyper, månedligt antal genereringer og tokenloft.
 6. Generér et forslag, og gennemgå historikkens ændringer og forhåndsvisning.
 7. Aktivér planlagt gennemgang og vælg automatisk publicering, når du er klar.
 
 Automatik er slået fra ved installation. Manuelle genereringer gemmer altid et forslag. Pluginet ændrer aldrig URL, titel, kategori, featured image, Yoast-felter eller temaets metadata. Kun post_content ændres. Det eksisterende AI Blog Writer-plugin berøres ikke.
+
+== Opdatering fra 1.0.0 ==
+Upload den nye ZIP, og vælg at erstatte den eksisterende pluginversion. API-nøgle, Google-forbindelse, modelvalg og historik bevares. Den oprindelige standardprompt erstattes af en mere aktiv forbedringsprompt; en prompt, du selv har ændret, bevares.
+
+Indstillinger > Udeluk sider og indlæg er en søgbar dropdown med flervalg. Søg på titel eller ID, markér de sider og indlæg, der skal udelukkes, og gem. Valgene er fælles med editorens og prioriteringsoversigtens udelukkelse. Tidligere indtastede ID’er og per-side-markeringer overføres automatisk. Filtrering af listen rydder ikke valgte sider.
+
+Modelanbefalingen er et redaktionelt udgangspunkt, ikke en garanti for resultat eller adgang. GPT-6.1 Sol er valgt som balance mellem kvalitet og pris ud fra OpenAI Docs: https://developers.openai.com/api/docs/models (kontrolleret 25. oktober 2026). Et eksisterende modelvalg ændres ikke automatisk; knappen Brug den anbefalede model udfylder feltet, og du gemmer derefter indstillingerne.
 
 == Search Console: Google-login ==
 Login-knappen er inkluderet, men en egen OAuth-klient skal konfigureres én gang. Pluginet indeholder ikke en fælles hosted Google-login-service eller en indbygget fælles Client Secret.
@@ -52,6 +59,8 @@ WP-Cron kræver trafik. Brug webhotellets system-cron mod wp-cron.php for stabil
 == Historik og gendannelse ==
 Historikken gemmer model, redaktionel prompt, før/efter-indhold, hashes, datoer, status og tokens/reservationer. Forslag kan gennemgås, publiceres eller afvises. Publiceret indhold kan gendannes, hvis indholdet ikke er ændret siden. En nyere manuel ændring bliver ikke overskrevet. Seks måneders regel kontrolleres igen ved publicering. Ved ændringer i WordPress’ lagringsfiltre annulleres opdateringen, hvis indholdet ikke længere matcher det validerede forslag.
 
+Fra version 1.1.0 gemmes også faktiske antal tekstændringer og nye elementer samt modellens konkrete vurdering. Identiske tekstforslag tæller ikke som ændringer. Et svar uden effektive ændringer vises som Ingen ændringer foreslået, med begrundelse og mulighed for en ny manuel gennemgang. Det publiceres ikke, starter ikke en ny seksmånedersperiode og vises ikke som to identiske før/efter-versioner. Månedens kvoter gælder også ved en ny gennemgang. Modellen kan fortsat vælge ingen ændringer; pluginet tvinger ikke en unyttig omskrivning igennem.
+
 Databasens posts-, postmeta- og historiktabeller skal understøtte transaktioner (InnoDB) for sikker publicering. Historik slettes ikke automatisk ved deaktivering eller fjernelse. Nye WordPress-revisioner oprettes også, hvis revisioner er aktiveret. Metadata ændres ikke; der er derfor ingen metadata, som skal gendannes.
 
 == Besøgstæller og eksterne tjenester ==
@@ -66,5 +75,8 @@ OpenAI: Der sendes ved generering den valgte sides tekst, titel, URL, redaktione
 Udvikler-hook: ai0r_content_applied($post_id, $history_id, $is_restore) til eksplicit cachepurge eller andre lokale integrationer. WordPress’ normale post-update-hooks køres også.
 
 == Changelog ==
+= 1.1.0 =
+Anbefalet model med valgknap; søgbar dropdown med flervalg og fælles udelukkelsesliste; mere aktiv forbedringsprompt og lokal tekstkontekst; rettelse af manglende mellemrum ved inline-formatering; ændringstal og klarere ingen-ændring-historik; manuel gentagelse af gennemgange uden ændringer; bevaring af egne indstillinger ved opgradering.
+
 = 1.0.0 =
 Separat plugin med brugerindtastet OpenAI-nøgle, modelvalg, prompt, planlægning, Search Console OAuth, lokal tæller, prioritering, bevaring af Gutenberg/klassisk HTML, nye redigerbare elementer, historik og gendannelse.

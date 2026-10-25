@@ -2,6 +2,12 @@
 defined('ABSPATH') || exit;
 
 final class AI0R_Store {
+    public const RECOMMENDED_MODEL = 'gpt-6.1-sol';
+
+    public static function legacy_prompt(): string {
+        return 'Skriv på dansk i sidens eksisterende tone. Gør teksten klarere, mere konkret og nyttig for læseren. Bevar fakta, forbehold, personlige erfaringer og søgeintention. Undgå fyld og unødvendige omskrivninger. Tilføj kun elementer, som giver en tydelig forbedring. Opfind aldrig priser, resultater, citater, cases, kilder eller nye faktuelle påstande. Vælg ingen ændringer, hvis indholdet allerede fungerer godt.';
+    }
+
     public static function table(string $suffix): string {
         global $wpdb;
         return $wpdb->prefix . 'ai0r_' . $suffix;
@@ -9,17 +15,30 @@ final class AI0R_Store {
 
     public static function defaults(): array {
         return [
-            'enabled' => 0, 'mode' => 'review', 'model' => '', 'api_key' => '',
+            'enabled' => 0, 'mode' => 'review', 'model' => self::RECOMMENDED_MODEL, 'api_key' => '',
             'monthly_limit' => 10, 'monthly_tokens' => 250000, 'max_output' => 12000,
             'start_day' => 1, 'hour' => 3, 'post_types' => ['post', 'page'],
             'tracking' => 1, 'additions' => 1, 'excluded_ids' => '',
             'google_client_id' => '', 'google_secret' => '', 'property' => '',
-            'prompt' => "Skriv på dansk i sidens eksisterende tone. Gør teksten klarere, mere konkret og nyttig for læseren. Bevar fakta, forbehold, personlige erfaringer og søgeintention. Undgå fyld og unødvendige omskrivninger. Tilføj kun elementer, som giver en tydelig forbedring. Opfind aldrig priser, resultater, citater, cases, kilder eller nye faktuelle påstande. Vælg ingen ændringer, hvis indholdet allerede fungerer godt.",
+            'prompt' => "Forbedr aktivt siden på dansk i dens eksisterende tone og til dens målgruppe. Find konkrete svagheder i indledning, læsbarhed, gentagelser, sprogfejl og svar på læserens spørgsmål, og ret dem i de redigerbare tekster. Gør værdien og forskellene mellem sidens tilbud tydeligere. Omformulér gerne væsentligt, når det gør indholdet mere konkret og let at forstå; bevar de eksisterende fakta og forbehold. Overvej et kort resumé, en relevant sammenligningstabel, tjekliste eller FAQ ud fra sidens egne oplysninger, hvis det giver overblik og ikke allerede findes. Bevar billeder, videoer, links, bannere og layout. Opfind aldrig priser, garantier, resultater, citater, erfaringer eller nye faktuelle påstande. Oplist de konkrete forbedringsmuligheder. Foreslå kun ingen ændringer, hvis du efter en reel gennemgang ikke kan finde en nyttig forbedring, og forklar præcist hvorfor.",
         ];
     }
 
     public static function settings(): array {
         return array_merge(self::defaults(), (array) get_option('ai0r_settings', []));
+    }
+
+    public static function excluded(int $id): bool {
+        return in_array($id, wp_parse_id_list(self::settings()['excluded_ids']), true) || (bool) get_post_meta($id, '_ai0r_excluded', true);
+    }
+
+    public static function set_excluded(int $id, bool $excluded): void {
+        $s = self::settings();
+        $ids = array_values(array_diff(wp_parse_id_list($s['excluded_ids']), [$id]));
+        if ($excluded) { $ids[] = $id; }
+        $s['excluded_ids'] = implode(',', $ids);
+        update_option('ai0r_settings', $s, false);
+        delete_post_meta($id, '_ai0r_excluded');
     }
 
     public static function install(): void {
@@ -38,6 +57,7 @@ final class AI0R_Store {
             model varchar(160) NOT NULL DEFAULT '',
             prompt longtext NOT NULL,
             summary text NOT NULL,
+            details longtext NULL,
             before_content longtext NOT NULL,
             after_content longtext NOT NULL,
             before_hash varchar(64) NOT NULL,
@@ -55,8 +75,21 @@ final class AI0R_Store {
             PRIMARY KEY (post_id,day),
             KEY day (day)
         ) $charset;");
+        if (!$wpdb->get_var("SHOW COLUMNS FROM $history LIKE 'details'")) {
+            update_option('ai0r_install_error', 'Pluginets historiktabel kunne ikke opdateres. Kontakt webhotellet; eksisterende historik er bevaret.', false);
+            return;
+        }
+        delete_option('ai0r_install_error');
         if (!get_option('ai0r_settings')) {
             add_option('ai0r_settings', self::defaults(), '', false);
+        } elseif (version_compare((string) get_option('ai0r_version', '0'), '1.1.0', '<')) {
+            $s = self::settings();
+            // Upgrade only the original shipped prompt; preserve editorial prompts and model choices.
+            if ($s['prompt'] === self::legacy_prompt()) { $s['prompt'] = self::defaults()['prompt']; }
+            $legacy_ids = get_posts(['post_type' => ['post','page'], 'post_status' => 'any', 'numberposts' => -1, 'fields' => 'ids', 'meta_key' => '_ai0r_excluded', 'meta_value' => '1']);
+            $s['excluded_ids'] = implode(',', wp_parse_id_list(array_merge(wp_parse_id_list($s['excluded_ids']), $legacy_ids)));
+            update_option('ai0r_settings', $s, false);
+            foreach ($legacy_ids as $id) { delete_post_meta($id, '_ai0r_excluded'); }
         }
         update_option('ai0r_version', AI0R_VERSION, false);
         if (!wp_next_scheduled('ai0r_tick')) {
@@ -127,7 +160,7 @@ final class AI0R_Store {
     public static function record(array $data): int {
         global $wpdb;
         $data += ['post_id' => 0, 'created_at' => gmdate('Y-m-d H:i:s'), 'actor_id' => get_current_user_id(),
-            'status' => 'running', 'model' => '', 'prompt' => '', 'summary' => '', 'before_content' => '',
+            'status' => 'running', 'model' => '', 'prompt' => '', 'summary' => '', 'details' => '', 'before_content' => '',
             'after_content' => '', 'before_hash' => '', 'after_hash' => '', 'input_tokens' => 0, 'output_tokens' => 0];
         if (!$wpdb->insert(self::table('history'), $data)) { throw new RuntimeException('Historikken kunne ikke gemmes. Ingen API-kald blev startet.'); }
         return (int) $wpdb->insert_id;

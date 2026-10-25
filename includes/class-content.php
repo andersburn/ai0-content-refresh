@@ -13,13 +13,24 @@ final class AI0R_Content {
         $item = ['type' => 'object', 'properties' => ['label' => $string, 'text' => $string, 'url' => $string], 'required' => ['label','text','url'], 'additionalProperties' => false];
         return ['type' => 'object', 'properties' => [
             'summary' => $string,
+            'findings' => ['type' => 'array', 'items' => $string],
+            'no_change_reason' => $string,
             'replacements' => ['type' => 'array', 'items' => ['type' => 'object', 'properties' => ['id' => $string, 'text' => $string], 'required' => ['id','text'], 'additionalProperties' => false]],
             'sections' => ['type' => 'array', 'items' => ['type' => 'object', 'properties' => [
                 'after_block' => ['type' => 'integer'],
                 'kind' => ['type' => 'string', 'enum' => ['summary','faq','checklist','table','callout','cta','related']],
                 'heading' => $string, 'text' => $string, 'items' => ['type' => 'array', 'items' => $item],
             ], 'required' => ['after_block','kind','heading','text','items'], 'additionalProperties' => false]],
-        ], 'required' => ['summary','replacements','sections'], 'additionalProperties' => false];
+        ], 'required' => ['summary','findings','no_change_reason','replacements','sections'], 'additionalProperties' => false];
+    }
+
+    private static function replacement(string $old, string $requested): string {
+        preg_match('/^\s*/u', $old, $leading);
+        preg_match('/\s*$/u', $old, $trailing);
+        preg_match('/^\s*/u', $requested, $new_leading);
+        preg_match('/\s*$/u', $requested, $new_trailing);
+        // Preserve existing spacing, but also allow an explicitly requested missing space to be fixed.
+        return ($leading[0] ?: $new_leading[0]) . trim($requested) . ($trailing[0] ?: $new_trailing[0]);
     }
 
     /** Change only real text tokens. Existing tags, attributes, links and embeds remain untouched. */
@@ -47,13 +58,9 @@ final class AI0R_Content {
             $text = $p->get_modifiable_text();
             if (array_intersect($stack, self::BLOCKED_TAGS) || !array_intersect($stack, ['P','H2','H3','H4','H5','H6','LI','TH','TD','BLOCKQUOTE']) ||
                 mb_strlen(trim($text)) < 4 || preg_match('/\[[^\]]*\]/u', $text)) { continue; }
-            $segments[$id] = ['id' => $id, 'text' => $text];
+            $segments[$id] = ['id' => $id, 'text' => $text, 'context' => mb_substr(wp_strip_all_tags($html), 0, 1400)];
             if (array_key_exists($id, $changes)) {
-                $new = $changes[$id];
-                // Preserve whitespace at rich-text boundaries (e.g. before a protected link).
-                preg_match('/^\s*/u', $text, $leading);
-                preg_match('/\s*$/u', $text, $trailing);
-                if (!$p->set_modifiable_text($leading[0] . trim($new) . $trailing[0])) {
+                if (!$p->set_modifiable_text(self::replacement($text, $changes[$id]))) {
                     throw new RuntimeException('En tekst kunne ikke ændres sikkert.');
                 }
             }
@@ -91,27 +98,29 @@ final class AI0R_Content {
         self::walk($blocks, $segments);
         $outline = [];
         foreach ($blocks as $i => $block) {
-            $outline[] = ['index' => $i, 'type' => $block['blockName'] ?: 'legacy-html', 'text' => mb_substr(wp_strip_all_tags($block['innerHTML']), 0, 450)];
+            $outline[] = ['index' => $i, 'type' => $block['blockName'] ?: 'legacy-html', 'text' => mb_substr(wp_strip_all_tags(serialize_block($block)), 0, 450)];
         }
         return ['segments' => $segments, 'outline' => $outline, 'blocks' => $blocks];
     }
 
-    public static function build(string $original, array $response, array $allowed_urls, bool $allow_additions): string {
+    public static function build(string $original, array $response, array $allowed_urls, bool $allow_additions, ?array &$report = null): string {
         $data = self::extract($original);
         $changes = [];
+        $seen = [];
         if (!isset($response['replacements'], $response['sections'], $response['summary']) || !is_array($response['replacements']) || !is_array($response['sections']) || !is_string($response['summary'])) {
             throw new RuntimeException('Modellen returnerede et ugyldigt svar.');
         }
         foreach ($response['replacements'] as $r) {
-            if (!is_array($r) || !isset($data['segments'][$r['id'] ?? '']) || !is_string($r['text'] ?? null) || isset($changes[$r['id']])) {
+            if (!is_array($r) || !is_string($r['id'] ?? null) || !isset($data['segments'][$r['id']]) || !is_string($r['text'] ?? null) || isset($seen[$r['id']])) {
                 throw new RuntimeException('Modellen forsøgte at ændre et ukendt eller gentaget tekstfelt.');
             }
+            $seen[$r['id']] = true;
             $old = $data['segments'][$r['id']]['text'];
             $new = $r['text'];
             if (trim($new) === '' || mb_strlen($new) > max(500, mb_strlen($old) * 3) || preg_match('/[<>\[\]]|https?:\/\//iu', $new)) {
                 throw new RuntimeException('Et tekstforslag indeholder markup, links eller en uventet stor ændring.');
             }
-            if (trim($new) !== trim($old)) { $changes[$r['id']] = $new; }
+            if (self::replacement($old, $new) !== $old) { $changes[$r['id']] = $new; }
         }
         $blocks = $data['blocks'];
         $ignored = [];
@@ -138,6 +147,7 @@ final class AI0R_Content {
             $headings[] = $key;
             $insert[$s['after_block']][] = ['blockName' => 'ai0-refresh/section', 'attrs' => $clean, 'innerBlocks' => [], 'innerHTML' => '', 'innerContent' => []];
         }
+        $report = ['text_changes' => count($changes), 'new_sections' => count($response['sections']), 'unchanged_suggestions' => count($seen) - count($changes)];
         if (!$changes && !$insert) { return $original; }
         $final = [];
         foreach ($blocks as $i => $b) {
