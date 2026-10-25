@@ -18,7 +18,8 @@ final class AI0R_Store {
             'enabled' => 0, 'mode' => 'review', 'model' => self::RECOMMENDED_MODEL, 'api_key' => '',
             'monthly_limit' => 10, 'monthly_tokens' => 250000, 'max_output' => 12000,
             'start_day' => 1, 'hour' => 3, 'post_types' => ['post', 'page'],
-            'tracking' => 1, 'additions' => 1, 'excluded_ids' => '',
+            'tracking' => 1, 'traffic_source' => 'both', 'additions' => 1, 'excluded_ids' => '',
+            'usd_dkk' => 7.0, 'custom_rates' => [],
             'google_client_id' => '', 'google_secret' => '', 'property' => '',
             'prompt' => "Forbedr aktivt siden på dansk i dens eksisterende tone og til dens målgruppe. Find konkrete svagheder i indledning, læsbarhed, gentagelser, sprogfejl og svar på læserens spørgsmål, og ret dem i de redigerbare tekster. Gør værdien og forskellene mellem sidens tilbud tydeligere. Omformulér gerne væsentligt, når det gør indholdet mere konkret og let at forstå; bevar de eksisterende fakta og forbehold. Overvej et kort resumé, en relevant sammenligningstabel, tjekliste eller FAQ ud fra sidens egne oplysninger, hvis det giver overblik og ikke allerede findes. Bevar billeder, videoer, links, bannere og layout. Opfind aldrig priser, garantier, resultater, citater, erfaringer eller nye faktuelle påstande. Oplist de konkrete forbedringsmuligheder. Foreslå kun ingen ændringer, hvis du efter en reel gennemgang ikke kan finde en nyttig forbedring, og forklar præcist hvorfor.",
         ];
@@ -26,6 +27,29 @@ final class AI0R_Store {
 
     public static function settings(): array {
         return array_merge(self::defaults(), (array) get_option('ai0r_settings', []));
+    }
+
+    public static function uses_internal(): bool {
+        $s = self::settings();
+        return (bool) $s['tracking'] && in_array($s['traffic_source'], ['internal','both'], true);
+    }
+
+    public static function uses_google(): bool {
+        return in_array(self::settings()['traffic_source'], ['google','both'], true);
+    }
+
+    public static function view_cutoff(?DateTimeImmutable $today = null): string {
+        $today = $today ?: current_datetime();
+        $target = $today->setDate((int) $today->format('Y') - 1, (int) $today->format('m'), 1);
+        return $target->setDate((int) $target->format('Y'), (int) $target->format('m'), min((int) $today->format('d'), (int) $target->format('t')))->format('Y-m-d');
+    }
+
+    public static function purge_views(): void {
+        global $wpdb;
+        $wpdb->query($wpdb->prepare('DELETE FROM ' . self::table('views') . ' WHERE day < %s', self::view_cutoff()));
+        // Also remove expired, short-lived abuse counters; never touch content-generation history.
+        $names = $wpdb->get_col($wpdb->prepare("SELECT option_name FROM $wpdb->options WHERE option_name LIKE %s AND CAST(option_value AS UNSIGNED) < %d", $wpdb->esc_like('_transient_timeout_ai0r_rate_') . '%', time()));
+        foreach ($names as $name) { delete_transient(substr($name, strlen('_transient_timeout_'))); }
     }
 
     public static function excluded(int $id): bool {
@@ -98,6 +122,10 @@ final class AI0R_Store {
         if (!wp_next_scheduled('ai0r_google_sync')) {
             wp_schedule_event(time() + 600, 'daily', 'ai0r_google_sync');
         }
+        if (!wp_next_scheduled('ai0r_cleanup')) {
+            wp_schedule_event(time() + 60, 'daily', 'ai0r_cleanup');
+        }
+        self::purge_views();
     }
 
     // Secrets are never returned to the browser. WP salts bind encrypted values to this site.

@@ -1,13 +1,15 @@
-# Ai0 Content Refresh 1.1.0
+# Ai0 Content Refresh 1.2.0
 
 Historisk version til AI-assisteret SEO-optimering og vedligeholdelse af eksisterende WordPress-indhold.
 
-- Anbefalet model med valgknap.
-- Søgbar dropdown med flervalg til udelukkede sider og blogindlæg.
-- Mere aktiv redaktionel prompt og bedre kontekst omkring tekstfragmenter.
-- Rettelse af manglende mellemrum ved inline-formatering.
-- Faktiske ændringstal, tydelig besked ved identiske svar og mulighed for manuel gentagelse.
-- Eksisterende API-nøgle, modelvalg, prompt og historik bevares ved opdatering.
+- Vælg Search Console, indbygget besøgstæller eller begge til prioriteringen.
+- Alle indloggede roller udelades fra tælleren, også på cachede sider, via cookiebevarende AJAX.
+- Intern besøgssporing ældre end ét kalenderår ryddes op ved opgradering og dagligt via WP-Cron.
+- Rigtig model-dropdown med kontoens modelnavne og feltet Anden model.
+- Prisoverslag pr. side før generering og estimat fra rapporteret tokenforbrug bagefter.
+- Egne modeltakster, manuel DKK-kurs og historiske snapshots af priser og kurs.
+
+Ryd WordPress/CDN-cache efter opdatering, så den nye sporingskode bliver brugt.
 
 ## Krav
 

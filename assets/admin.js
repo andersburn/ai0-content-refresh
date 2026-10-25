@@ -1,15 +1,46 @@
 (function () {
     'use strict';
-    document.querySelectorAll('[data-recommended-model]').forEach(function (button) {
-        button.addEventListener('click', function () {
-            var input = document.querySelector('input[name="model"]');
-            if (input) {
-                input.value = button.dataset.recommendedModel;
-                input.dispatchEvent(new Event('change', { bubbles: true }));
-                input.focus();
+    var model = document.querySelector('[data-model-choice]');
+    if (model) {
+        var custom = document.querySelector('[name="custom_model"]');
+        var customWrap = document.querySelector('[data-custom-model-wrap]');
+        var pricing = document.querySelector('[data-custom-pricing]');
+        var priceFields = document.querySelector('[data-price-fields]');
+        var description = document.querySelector('[data-rate-description]');
+        var prices = JSON.parse(document.getElementById('ai0r-prices').textContent);
+        function chosenModel() { return model.value === '__other__' ? custom.value.trim() : model.value; }
+        function updatePricing(reset) {
+            var id = chosenModel();
+            var own = prices.custom[id];
+            var rates = own || prices.catalog[id];
+            if (reset) {
+                pricing.checked = !!own;
+                ['input', 'output', 'cached', 'write'].forEach(function (key) {
+                    document.querySelector('[name="rate_' + key + '"]').value = own ? own[key] : '';
+                });
             }
+            priceFields.hidden = !pricing.checked;
+            priceFields.querySelectorAll('input').forEach(function (field) { field.disabled = !pricing.checked; field.required = pricing.checked; });
+            description.textContent = pricing.checked ? 'Egne takster gemmes for ' + id + '.' : rates ? 'Standard: input $' + rates.input + ', output $' + rates.output + ', cache-læsning $' + rates.cached + ', cache-skrivning $' + rates.write + ' pr. million tokens.' : 'Ingen indbygget pris for denne model. Angiv egne takster for at få et prisestimat.';
+        }
+        function updateModel(reset) {
+            customWrap.hidden = model.value !== '__other__';
+            custom.required = model.value === '__other__';
+            custom.disabled = model.value !== '__other__';
+            updatePricing(reset);
+        }
+        model.addEventListener('change', function () { updateModel(true); if (model.value === '__other__') custom.focus(); });
+        custom.addEventListener('input', function () { updatePricing(true); });
+        pricing.addEventListener('change', function () { updatePricing(false); });
+        document.querySelectorAll('[data-recommended-model]').forEach(function (button) {
+            button.addEventListener('click', function () {
+                model.value = button.dataset.recommendedModel;
+                model.dispatchEvent(new Event('change', { bubbles: true }));
+                model.focus();
+            });
         });
-    });
+        updateModel(false);
+    }
     document.querySelectorAll('[data-exclusions]').forEach(function (picker) {
         var search = picker.querySelector('[data-exclusion-search]');
         var rows = Array.from(picker.querySelectorAll('[data-exclusion-option]'));
