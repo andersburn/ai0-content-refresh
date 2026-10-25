@@ -9,7 +9,7 @@ final class AI0R_Media {
         preg_match_all('/<h[2-4]\b[^>]*>(.*?)<\/h[2-4]>/is', $post->post_content, $headings);
         $text = mb_strtolower(remove_accents(wp_strip_all_tags($post->post_title . ' ' . implode(' ', array_slice($headings[1], 0, 8)))));
         $words = preg_split('/[^\p{L}\p{N}]+/u', $text, -1, PREG_SPLIT_NO_EMPTY);
-        $stop = explode(' ', 'dette denne dine deres vores dine alle eller ikke mere mest bedste saadan sådan hvordan hvorfor hvad hvor naar med uden samt til fra for som det den der har kan skal vil ved over under side siden indlaeg blogindlaeg guide integration');
+        $stop = explode(' ', 'dette denne dine deres vores dine alle eller ikke mere mest bedste saadan sådan hvordan hvorfor hvad hvor naar med uden samt til fra for som det den der har kan skal vil ved over under side siden indlaeg blogindlaeg guide integration this that these those your their ours with without from about more most best what when where which why how have does will should would could into over under page post article blog');
         $filter = static fn($words) => array_values(array_unique(array_filter($words, static fn($word) => mb_strlen($word) >= 4 && mb_strlen($word) <= 50 && !in_array($word, $stop, true))));
         $terms = $filter($words);
         if (count($terms) < 2) {
@@ -115,16 +115,16 @@ final class AI0R_Media {
     }
 
     public static function insertions(string $original, array $requests, array $allowed, bool $enabled, array $blocks, array &$chosen): array {
-        if (count($requests) > 2 || (!$enabled && $requests)) { throw new RuntimeException('Højst to nye billeder er tilladt, og billedadgang skal være slået til.'); }
+        if (count($requests) > 2 || (!$enabled && $requests)) { throw new RuntimeException(__('At most two new images are allowed, and media access must be enabled.', 'ai0-content-refresh')); }
         $references = $requests ? self::references($original) : null;
         $ids = array_column($allowed, 'id'); $insert = []; $seen = []; $seen_urls = []; $chosen = [];
         foreach ($requests as $r) {
             $id = $r['attachment_id'] ?? null; $at = $r['after_block'] ?? null;
-            if (!is_int($id) || !in_array($id, $ids, true) || isset($seen[$id]) || !is_int($at) || !isset($blocks[$at]) || !is_string($r['reason'] ?? null) || trim($r['reason']) === '' || mb_strlen($r['reason']) > 800) { throw new RuntimeException('Et billedvalg har en ugyldig kilde, begrundelse eller placering.'); }
+            if (!is_int($id) || !in_array($id, $ids, true) || isset($seen[$id]) || !is_int($at) || !isset($blocks[$at]) || !is_string($r['reason'] ?? null) || trim($r['reason']) === '' || mb_strlen($r['reason']) > 800) { throw new RuntimeException(__('An image selection has an invalid source, reason or position.', 'ai0-content-refresh')); }
             $image = self::image($id);
-            if (!$image || self::already_used($original, $image, $references)) { throw new RuntimeException('Billedet er ikke længere tilgængeligt eller findes allerede på siden.'); }
+            if (!$image || self::already_used($original, $image, $references)) { throw new RuntimeException(__('The image is no longer available or is already on the page.', 'ai0-content-refresh')); }
             $url_key = self::canonical($image['url']);
-            if (isset($seen_urls[$url_key])) { throw new RuntimeException('Det samme billede må ikke indsættes to gange.'); }
+            if (isset($seen_urls[$url_key])) { throw new RuntimeException(__('The same image cannot be inserted twice.', 'ai0-content-refresh')); }
             $seen[$id] = true; $seen_urls[$url_key] = true;
             $html = '<figure class="wp-block-image size-large"><img src="' . esc_url($image['url']) . '" alt="' . esc_attr($image['alt']) . '" class="wp-image-' . $id . '"/>';
             if ($image['caption'] !== '') { $html .= '<figcaption class="wp-element-caption">' . esc_html($image['caption']) . '</figcaption>'; }
@@ -138,12 +138,12 @@ final class AI0R_Media {
     public static function check_publication(WP_Post $post, array $details): void {
         $images = $details['images'] ?? [];
         if (!$images) { return; }
-        if (empty(AI0R_Store::settings()['media_library'])) { throw new RuntimeException('Billedadgang er slået fra. Forslaget med nye billeder er bevaret.'); }
+        if (empty(AI0R_Store::settings()['media_library'])) { throw new RuntimeException(__('Media access is disabled. The proposal with new images has been retained.', 'ai0-content-refresh')); }
         $references = self::references($post->post_content);
         foreach ($images as $snapshot) {
             $image = self::image((int) $snapshot['id']);
             if (!$image || $image['url'] !== $snapshot['url'] || (int) get_post_thumbnail_id($post->ID) === $image['id'] || self::already_used($post->post_content, $image, $references)) {
-                throw new RuntimeException('Et foreslået billede er ændret, fjernet, gjort privat eller findes allerede på siden. Lav et nyt forslag.');
+                throw new RuntimeException(__('A proposed image has changed, been removed, made private or is already on the page. Generate a new proposal.', 'ai0-content-refresh'));
             }
         }
     }

@@ -38,8 +38,8 @@ final class AI0R_Exchange {
     }
 
     public static function description(?array $exchange): string {
-        if (!$exchange) { return 'Valutakursen kunne ikke hentes endnu. Priser vises i USD, indtil en onlinekurs er tilgængelig.'; }
-        return ($exchange['stale'] ? 'Senest kendte kurs – opdatering afventer. ' : '')
-            . '1 USD ≈ ' . number_format($exchange['rate'], 4, ',', '.') . ' DKK · kursdato ' . $exchange['date'] . ' · ' . ($exchange['source'] ?? self::SOURCE);
+        if (!$exchange) { return __('The exchange rate could not be retrieved yet. Prices are shown in USD until an online rate is available.', 'ai0-content-refresh'); }
+        return ($exchange['stale'] ? (__('Last known rate — update pending.', 'ai0-content-refresh') . ' ') : '')
+            . '1 USD ≈ ' . number_format_i18n($exchange['rate'], 4) . (' ' . __('DKK · rate date', 'ai0-content-refresh') . ' ') . $exchange['date'] . ' · ' . ($exchange['source'] ?? self::SOURCE);
     }
 }

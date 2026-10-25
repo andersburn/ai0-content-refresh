@@ -21,7 +21,7 @@ final class AI0R_Store {
             'tracking' => 1, 'traffic_source' => 'both', 'additions' => 1, 'media_library' => 1, 'excluded_ids' => '',
             'custom_rates' => [],
             'google_client_id' => '', 'google_secret' => '', 'property' => '',
-            'prompt' => "Forbedr aktivt siden på dansk i dens eksisterende tone og til dens målgruppe. Find konkrete svagheder i indledning, læsbarhed, gentagelser, sprogfejl og svar på læserens spørgsmål, og ret dem i de redigerbare tekster. Gør værdien og forskellene mellem sidens tilbud tydeligere. Omformulér gerne væsentligt, når det gør indholdet mere konkret og let at forstå; bevar de eksisterende fakta og forbehold. Overvej et kort resumé, en relevant sammenligningstabel, tjekliste eller FAQ ud fra sidens egne oplysninger, hvis det giver overblik og ikke allerede findes. Bevar billeder, videoer, links, bannere og layout. Opfind aldrig priser, garantier, resultater, citater, erfaringer eller nye faktuelle påstande. Oplist de konkrete forbedringsmuligheder. Foreslå kun ingen ændringer, hvis du efter en reel gennemgang ikke kan finde en nyttig forbedring, og forklar præcist hvorfor.",
+            'prompt' => "Actively improve the existing page in its current language, tone and for its audience. Identify concrete weaknesses in the introduction, readability, repetition, grammar and answers to reader questions, and fix them in editable text. Clarify the value and differences between offerings. Substantial rewriting is welcome when it makes content clearer and more useful; preserve existing facts and caveats. Consider a short summary, comparison table, checklist or FAQ drawn only from the page's information when helpful and not already present. Preserve images, videos, links, banners and layout. Never invent prices, guarantees, results, quotations, experiences or new factual claims. List specific improvement opportunities. Suggest no changes only after a real review finds no useful improvement, and explain exactly why. Keep the content in its existing language unless the saved editorial prompt explicitly requests a different language.",
         ];
     }
 
@@ -100,7 +100,7 @@ final class AI0R_Store {
             KEY day (day)
         ) $charset;");
         if (!$wpdb->get_var("SHOW COLUMNS FROM $history LIKE 'details'")) {
-            update_option('ai0r_install_error', 'Pluginets historiktabel kunne ikke opdateres. Kontakt webhotellet; eksisterende historik er bevaret.', false);
+            update_option('ai0r_install_error', __('The plugin history table could not be upgraded. Contact your hosting provider; existing history has been retained.', 'ai0-content-refresh'), false);
             return;
         }
         delete_option('ai0r_install_error');
@@ -135,12 +135,12 @@ final class AI0R_Store {
     public static function encrypt(string $plain): string {
         if ($plain === '') { return ''; }
         if (!function_exists('openssl_encrypt')) {
-            throw new RuntimeException('Serveren mangler OpenSSL til sikker opbevaring af nøgler.');
+            throw new RuntimeException(__('The server is missing OpenSSL for secure key storage.', 'ai0-content-refresh'));
         }
         $iv = random_bytes(12);
         $tag = '';
         $cipher = openssl_encrypt($plain, 'aes-256-gcm', hash('sha256', wp_salt('auth'), true), OPENSSL_RAW_DATA, $iv, $tag);
-        if ($cipher === false) { throw new RuntimeException('Nøglen kunne ikke krypteres.'); }
+        if ($cipher === false) { throw new RuntimeException(__('The key could not be encrypted.', 'ai0-content-refresh')); }
         return base64_encode($iv . $tag . $cipher);
     }
 
@@ -161,7 +161,7 @@ final class AI0R_Store {
             wp_cache_delete($key, 'options');
         }
         if (!add_option($key, $value, '', false)) {
-            throw new RuntimeException('En anden kørsel er i gang. Prøv igen om lidt.');
+            throw new RuntimeException(__('Another run is in progress. Try again shortly.', 'ai0-content-refresh'));
         }
         return $value;
     }
@@ -193,14 +193,14 @@ final class AI0R_Store {
         $data += ['post_id' => 0, 'created_at' => gmdate('Y-m-d H:i:s'), 'actor_id' => get_current_user_id(),
             'status' => 'running', 'model' => '', 'prompt' => '', 'summary' => '', 'details' => '', 'before_content' => '',
             'after_content' => '', 'before_hash' => '', 'after_hash' => '', 'input_tokens' => 0, 'output_tokens' => 0];
-        if (!$wpdb->insert(self::table('history'), $data)) { throw new RuntimeException('Historikken kunne ikke gemmes. Ingen API-kald blev startet.'); }
+        if (!$wpdb->insert(self::table('history'), $data)) { throw new RuntimeException(__('History could not be saved. No API request was started.', 'ai0-content-refresh')); }
         return (int) $wpdb->insert_id;
     }
 
     public static function update(int $id, array $data): void {
         global $wpdb;
         if ($wpdb->update(self::table('history'), $data, ['id' => $id]) === false) {
-            throw new RuntimeException('Historikken kunne ikke opdateres.');
+            throw new RuntimeException(__('History could not be updated.', 'ai0-content-refresh'));
         }
     }
 

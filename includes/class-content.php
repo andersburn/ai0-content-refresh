@@ -62,7 +62,7 @@ final class AI0R_Content {
             $segments[$id] = ['id' => $id, 'text' => $text, 'context' => mb_substr(wp_strip_all_tags($html), 0, 1400)];
             if (array_key_exists($id, $changes)) {
                 if (!$p->set_modifiable_text(self::replacement($text, $changes[$id]))) {
-                    throw new RuntimeException('En tekst kunne ikke ændres sikkert.');
+                    throw new RuntimeException(__('A text segment could not be changed safely.', 'ai0-content-refresh'));
                 }
             }
         }
@@ -92,7 +92,7 @@ final class AI0R_Content {
 
     public static function extract(string $content): array {
         if (!method_exists('WP_HTML_Tag_Processor', 'set_modifiable_text')) {
-            throw new RuntimeException('Pluginet kræver WordPress 6.7 eller nyere.');
+            throw new RuntimeException(__('This plugin requires WordPress 6.7 or later.', 'ai0-content-refresh'));
         }
         $blocks = parse_blocks($content);
         $segments = [];
@@ -109,17 +109,17 @@ final class AI0R_Content {
         $changes = [];
         $seen = [];
         if (!isset($response['replacements'], $response['sections'], $response['summary']) || !is_array($response['replacements']) || !is_array($response['sections']) || !is_string($response['summary'])) {
-            throw new RuntimeException('Modellen returnerede et ugyldigt svar.');
+            throw new RuntimeException(__('The model returned an invalid response.', 'ai0-content-refresh'));
         }
         foreach ($response['replacements'] as $r) {
             if (!is_array($r) || !is_string($r['id'] ?? null) || !isset($data['segments'][$r['id']]) || !is_string($r['text'] ?? null) || isset($seen[$r['id']])) {
-                throw new RuntimeException('Modellen forsøgte at ændre et ukendt eller gentaget tekstfelt.');
+                throw new RuntimeException(__('The model tried to change an unknown or repeated text segment.', 'ai0-content-refresh'));
             }
             $seen[$r['id']] = true;
             $old = $data['segments'][$r['id']]['text'];
             $new = $r['text'];
             if (trim($new) === '' || mb_strlen($new) > max(500, mb_strlen($old) * 3) || preg_match('/[<>\[\]]|https?:\/\//iu', $new)) {
-                throw new RuntimeException('Et tekstforslag indeholder markup, links eller en uventet stor ændring.');
+                throw new RuntimeException(__('A text proposal contains markup, links or an unexpectedly large change.', 'ai0-content-refresh'));
             }
             if (self::replacement($old, $new) !== $old) { $changes[$r['id']] = $new; }
         }
@@ -135,20 +135,20 @@ final class AI0R_Content {
             }
         }
         if (count($response['sections']) > 4 || count($response['sections']) + $existing > 4 || (!$allow_additions && $response['sections'])) {
-            throw new RuntimeException('For mange nye elementer, eller nye elementer er slået fra.');
+            throw new RuntimeException(__('Too many new elements, or new elements are disabled.', 'ai0-content-refresh'));
         }
         $insert = [];
         foreach ($response['sections'] as $s) {
             if (!is_array($s) || !is_int($s['after_block'] ?? null) || !isset($blocks[$s['after_block']])) {
-                throw new RuntimeException('Et nyt element har en ugyldig placering.');
+                throw new RuntimeException(__('A new element has an invalid position.', 'ai0-content-refresh'));
             }
             $clean = self::validate_section($s, $allowed_urls);
             $key = mb_strtolower($clean['heading']);
-            if (in_array($key, $headings, true)) { throw new RuntimeException('Et nyt element gentager en eksisterende overskrift.'); }
+            if (in_array($key, $headings, true)) { throw new RuntimeException(__('A new element repeats an existing heading.', 'ai0-content-refresh')); }
             $headings[] = $key;
             $insert[$s['after_block']][] = ['blockName' => 'ai0-refresh/section', 'attrs' => $clean, 'innerBlocks' => [], 'innerHTML' => '', 'innerContent' => []];
         }
-        if (array_key_exists('images', $response) && !is_array($response['images'])) { throw new RuntimeException('Modellen returnerede en ugyldig billedliste.'); }
+        if (array_key_exists('images', $response) && !is_array($response['images'])) { throw new RuntimeException(__('The model returned an invalid image list.', 'ai0-content-refresh')); }
         $chosen = [];
         $image_insert = AI0R_Media::insertions($original, $response['images'] ?? [], $allowed_images, $allow_media, $blocks, $chosen);
         foreach ($image_insert as $at => $images) { $insert[$at] = array_merge($insert[$at] ?? [], $images); }
@@ -162,35 +162,35 @@ final class AI0R_Content {
         $result = serialize_blocks($final);
         // Every original block must survive, in the same order, with identical attributes.
         $roundtrip = parse_blocks($result);
-        if (count($roundtrip) !== count($final)) { throw new RuntimeException('Blokkene kunne ikke valideres efter ændringen.'); }
+        if (count($roundtrip) !== count($final)) { throw new RuntimeException(__('The blocks could not be validated after the change.', 'ai0-content-refresh')); }
         return $result;
     }
 
     private static function plain($text, int $limit = 4000): string {
         if (!is_string($text) || mb_strlen($text) > $limit || preg_match('/[<>\[\]]/u', $text)) {
-            throw new RuntimeException('Et nyt element indeholder ugyldig tekst.');
+            throw new RuntimeException(__('A new element contains invalid text.', 'ai0-content-refresh'));
         }
         return sanitize_textarea_field($text);
     }
 
     private static function validate_section(array $s, array $urls): array {
         if (!in_array($s['kind'] ?? '', ['summary','faq','checklist','table','callout','cta','related'], true) || !is_array($s['items'] ?? null) || count($s['items']) > 12) {
-            throw new RuntimeException('Ugyldig elementtype eller for mange punkter.');
+            throw new RuntimeException(__('Invalid element type or too many items.', 'ai0-content-refresh'));
         }
         $clean = ['kind' => $s['kind'], 'heading' => self::plain($s['heading'] ?? null, 180), 'text' => self::plain($s['text'] ?? null), 'items' => []];
-        if (!$clean['heading']) { throw new RuntimeException('Et nyt element mangler overskrift.'); }
+        if (!$clean['heading']) { throw new RuntimeException(__('A new element is missing a heading.', 'ai0-content-refresh')); }
         foreach ($s['items'] as $item) {
             $url = $item['url'] ?? '';
             if (!is_string($url) || ($url !== '' && !in_array($url, $urls, true))) {
-                throw new RuntimeException('Modellen foreslog et link uden for de godkendte sider.');
+                throw new RuntimeException(__('The model suggested a link outside the approved pages.', 'ai0-content-refresh'));
             }
             $clean['items'][] = ['label' => self::plain($item['label'] ?? null, 240), 'text' => self::plain($item['text'] ?? null, 1400), 'url' => esc_url_raw($url)];
         }
         if (in_array($clean['kind'], ['faq','checklist','table','cta','related'], true) && !$clean['items']) {
-            throw new RuntimeException('Elementet mangler indhold.');
+            throw new RuntimeException(__('The element has no content.', 'ai0-content-refresh'));
         }
         if (in_array($clean['kind'], ['cta','related'], true)) {
-            foreach ($clean['items'] as $item) { if (!$item['url'] || !$item['label']) { throw new RuntimeException('Et link mangler destination eller linktekst.'); } }
+            foreach ($clean['items'] as $item) { if (!$item['url'] || !$item['label']) { throw new RuntimeException(__('A link is missing its destination or label.', 'ai0-content-refresh')); } }
         }
         return $clean;
     }
@@ -202,7 +202,7 @@ final class AI0R_Content {
         if (!empty($a['text'])) { $out .= '<p>' . nl2br(esc_html($a['text'])) . '</p>'; }
         $items = array_slice(is_array($a['items'] ?? null) ? $a['items'] : [], 0, 12);
         if ($kind === 'table') {
-            $out .= '<div class="ai0r-table-scroll"><table><thead><tr><th scope="col">Emne</th><th scope="col">Forklaring</th></tr></thead><tbody>';
+            $out .= ('<div class="ai0r-table-scroll"><table><thead><tr><th scope="col">' . esc_html__('Topic', 'ai0-content-refresh') . '</th><th scope="col">' . esc_html__('Explanation', 'ai0-content-refresh') . '</th></tr></thead><tbody>');
             foreach ($items as $i) { $out .= '<tr><th scope="row">' . esc_html($i['label'] ?? '') . '</th><td>' . esc_html($i['text'] ?? '') . '</td></tr>'; }
             $out .= '</tbody></table></div>';
         } elseif ($kind === 'faq') {

@@ -1,101 +1,104 @@
 # Ai0 Content Refresh
 
-**AI-assisteret SEO-optimering og vedligeholdelse af eksisterende indhold i WordPress.**
+**AI-assisted SEO improvements and ongoing maintenance for existing WordPress content.**
 
-Ai0 Content Refresh hjælper dig med at forbedre sider og blogindlæg, du allerede har skrevet. Pluginet finder indhold, der bør gennemgås, bruger din valgte OpenAI-model til at foreslå konkrete forbedringer og gemmer en ændringshistorik, så du kan se, godkende og gendanne resultatet.
+Ai0 Content Refresh reviews pages and blog posts you have already written. It uses your chosen OpenAI model to propose clearer writing, better structure and useful additions while preserving Gutenberg layouts, images, videos, banners and links. A complete history lets you inspect changes, publish proposals and restore previous content.
 
-Det er lavet til websites, der vil arbejde løbende med indholdsbaseret SEO: tydeligere tekster, bedre struktur, færre gentagelser, mere brugbare svar og relevante interne links. Eksisterende billeder, videoer, bannere, links og Gutenberg-layout bevares.
+**Latest version: 1.5.0.** [Download the installation ZIP](https://github.com/andersburn/ai0-content-refresh/releases/latest) · [All releases](https://github.com/andersburn/ai0-content-refresh/releases) · [Changelog](CHANGELOG.md)
 
-**Seneste version: 1.4.0.** [Hent installations-ZIP](https://github.com/andersburn/ai0-content-refresh/releases/latest) · [Alle releases](https://github.com/andersburn/ai0-content-refresh/releases) · [Versionshistorik](CHANGELOG.md)
+## What it does
 
-## Hvad pluginet kan
+- **Improve existing text:** clearer introductions, readability, grammar and explanations without inventing new facts.
+- **Add useful content:** summaries, FAQs, checklists, comparison tables, callouts and relevant internal links. At most four plugin text elements per page in total.
+- **Reuse your images:** search the WordPress media library, provide metadata for up to 12 relevant candidates and add at most two native Gutenberg image blocks. Image files are not sent to OpenAI.
+- **Prioritize reviews:** use Google Search Console, the built-in view counter or both, alongside manual priorities, Yoast cornerstone markers, search opportunities and content age.
+- **Schedule work:** choose a monthly start day, hour, generation limit and token limit. Save proposals for review or publish automatically after technical validation. Automation is off initially.
+- **Enforce a six-month cooldown:** a page is eligible only six calendar months after its latest publication or content modification, including manual edits and content updates by this plugin.
+- **Estimate costs:** forecasts before generation and token-based estimates afterwards, with automatic USD/DKK conversion using dated Frankfurter/ECB rates. Custom model rates are supported.
+- **Keep a review history:** before/after differences, model, saved prompt, token usage, image choices, reasons and status. Direct links open the public page and WordPress editor. Restore is blocked if the content has changed since.
+- **Exclude content:** a searchable selection list shared with the editor. Privacy policy pages, password-protected content and Yoast noindex pages are excluded automatically.
+- **Use your preferred interface language:** English source strings with bundled Danish PHP and JavaScript translations. The interface follows the WordPress user's language; untranslated locales fall back to English. Existing custom prompts and content are preserved.
+- **Receive WordPress updates from GitHub:** version 1.5.0 and later integrate with the native plugin update screen. No GitHub token is required for this public repository.
 
-- **Forbedre eksisterende tekster:** mere konkrete indledninger, bedre læsbarhed, sprog og struktur uden at opfinde nye fakta.
-- **Tilføje nyttige elementer:** resumé, FAQ, tjekliste, sammenligningstabel, faktaboks og relevante interne links. Højst fire nye tekstelementer pr. side i alt.
-- **Genbruge billeder fra WordPress:** lokal søgning i mediebiblioteket med højst 12 kandidater og to nye billeder pr. gennemgang. Billeder tilføjes som native Gutenberg-blokke. Modellen vælger ud fra titler, filnavne, alt-tekster og billedtekster; billedfiler sendes ikke til OpenAI.
-- **Prioritere indhold:** vælg Google Search Console, den indbyggede besøgstæller eller begge. Manuelle markeringer, Yoast-hjørnestensindhold, trafik, søgepotentiale og alder indgår.
-- **Automatisere gennemgange:** vælg startdag, tidspunkt, månedligt antal og tokenloft. Gem forslag til gennemgang, eller vælg automatisk publicering efter teknisk kontrol.
-- **Holde seks måneders pause:** en side behandles tidligst seks kalendermåneder efter seneste udgivelse eller indholdsændring, også manuelle ændringer.
-- **Vise forbrug:** prisoverslag pr. side før kørsel og et estimat baseret på rapporterede tokens bagefter. Automatisk USD/DKK-omregning bruger Frankfurter/ECB med synlig kursdato.
-- **Dokumentere ændringer:** før/efter-diff, prompt, model, tokens, billeder, begrundelser og status. Links til både frontend og editor. Gendan tidligere indhold, hvis siden ikke siden er ændret.
-- **Udelukke indhold:** søgbar liste med flervalg samt udelukkelse i editoren. Privatlivssiden, adgangskodebeskyttet indhold og Yoast-noindex springes automatisk over.
+The SEO goal is useful, relevant and well-maintained content. The plugin changes `post_content`; titles, URLs, categories, featured images, Yoast fields and theme metadata are preserved. It does not perform external research or fact-checking, and it cannot guarantee higher rankings. FAQ elements do not promise FAQ schema or rich results. Technical validation checks format, preservation and permitted images. Review the first proposals, particularly pages with prices, guarantees or other important factual claims.
 
-### Formål og afgrænsning
+## Requirements and compatibility
 
-SEO-målet er mere relevant, overskueligt og vedligeholdt indhold for læseren. Pluginet arbejder i `post_content`; URL, titel, kategori, featured image, Yoast-felter og temaets metadata bevares. Det foretager ikke ekstern research eller faktatjek og giver ingen garanti for højere placeringer. FAQ-blokke er indholdselementer; der loves ikke særskilt FAQ-schema eller rich results.
-
-Teknisk kontrol sikrer format, bevaring og adgang til valgte billeder. Gennemgå de første forslag, især på sider med priser, garantier og andre vigtige faktuelle oplysninger. Pluginet kan vælge ingen ændringer, hvis modellen ikke leverer en nyttig forbedring; det vises tydeligt i historikken.
-
-## Krav og kompatibilitet
-
-| Område | Krav / status |
+| Area | Requirement / status |
 | --- | --- |
-| PHP | **8.1 eller nyere**; OpenSSL og mbstring skal være tilgængelige |
-| WordPress | **6.7 eller nyere** ifølge pluginets minimumskrav |
-| Editor | **Gutenberg / WordPress-blokeditoren er det primære format** |
-| Klassisk editor | Understøtter redigerbar, almindelig HTML-tekst i `post_content`; shortcodes og ukendte specialelementer beskyttes |
-| Elementor | **Not tested with Elementor / Ikke testet med Elementor. Kompatibilitet garanteres ikke** |
-| Andre page builders | Ikke testet; indhold gemt som builder-metadata behandles ikke |
-| Database | InnoDB til WordPress-indhold, metadata og pluginets historik er nødvendigt for sikker publicering |
-| OpenAI | Din egen API-nøgle, API-kredit og en model med **Responses API + Structured Outputs** |
-| Automatik | Fungerende WP-Cron; webhotellets system-cron anbefales til stabil tidsstyring |
-| Netværk | Udgående HTTPS til OpenAI og de valgte eksterne tjenester |
-| Search Console | Valgfrit: Google-konto med adgang til websitet, egen OAuth Client ID/Secret og HTTPS-administration |
+| PHP | **8.1+**, with OpenSSL and mbstring |
+| WordPress | **6.7+** |
+| Main editor | **Gutenberg / the WordPress block editor** |
+| Classic editor | Editable ordinary HTML in `post_content` is supported; shortcodes and unknown elements are protected |
+| Elementor | **Not tested with Elementor. Compatibility is not guaranteed** |
+| Other page builders | Not tested; content stored in builder metadata is not processed |
+| Database | InnoDB for posts, post metadata and plugin history when publishing |
+| OpenAI | Your own API key, API credit and access to a model supporting **Responses API + Structured Outputs** |
+| Scheduling | Working WP-Cron; a hosting cron job is recommended for reliable scheduling |
+| Network | Outbound HTTPS to OpenAI and enabled external services; GitHub for update checks/downloads |
+| Search Console | Optional: an authorized Google Account, your own OAuth Client ID/Secret and HTTPS administration |
 
-Minimumskrav er ikke det samme som en fuld testmatrix: den lokale validering blev kørt med **PHP 8.5.2 og WordPress 7.1.3**, inklusive WordPress' officielle SQLite-kompatibilitetslag. Produktionspublicering kræver InnoDB. Se [TESTING.md](TESTING.md) for den konkrete validering og dens begrænsninger.
+Minimum requirements are not a complete compatibility matrix. Local validation used **PHP 8.5.2 and WordPress 7.1.3**, including the official WordPress SQLite compatibility layer. Production publishing requires InnoDB. See [TESTING.md](TESTING.md) for evidence and limitations.
 
-## Installation og første kørsel
+## Installation
 
-1. Hent **ai0-content-refresh-1.4.0.zip** fra [seneste release](https://github.com/andersburn/ai0-content-refresh/releases/latest). Brug release-asset'en frem for GitHubs automatisk genererede kildekode-ZIP.
-2. Åbn **Plugins → Tilføj plugin → Upload plugin** i WordPress. Upload ZIP og aktivér.
-3. Åbn **Content Refresh → Indstillinger**, indsæt din OpenAI API-nøgle og gem.
-4. Tryk **Test nøgle og hent modeller**. Vælg en kompatibel tekstmodel i dropdownen, eller brug **Anden model**. Kontoen skal have adgang til den valgte model.
-5. Tilpas prompt, indholdstyper, udelukkelser, billedadgang, trafikkilde og forbrugsgrænser.
-6. Generér et forslag til en side, som har passeret seksmånedersgrænsen. Gennemgå ændringer og billedvalg i historikken.
-7. Aktivér planlagt gennemgang, når opsætningen er klar. Automatik er som udgangspunkt slået fra; manuelle kørsler gemmer altid forslag.
+1. Download **ai0-content-refresh-1.5.0.zip** from the [latest release](https://github.com/andersburn/ai0-content-refresh/releases/latest). Choose the named installation asset, rather than GitHub's generated source archive.
+2. In WordPress, open **Plugins → Add New Plugin → Upload Plugin**, upload the ZIP and activate it.
+3. Open **Content Refresh → Settings**, enter your OpenAI API key and save.
+4. Click **Test key and retrieve models**. Choose a compatible text model from the dropdown or enter an ID under **Other model**. The list includes all account model names, including models unsuitable for generation.
+5. Configure the prompt, content types, exclusions, media access, traffic source and usage limits.
+6. Generate a proposal for an eligible page and inspect its history, changes and image choices.
+7. Enable scheduled reviews when ready. Manual generations always save proposals.
+
+The recommendation is a starting point, subject to model availability and your own review. New installations use an English editorial prompt that preserves the article's existing language. Updating the interface does not translate articles or replace existing saved prompts.
 
 ### Google Search Console
 
-Search Console er valgfrit. Forbindelsen bruger Google-login, men kræver en engangsopsætning af din egen OAuth-klient i Google Cloud. Indtast Client ID/Secret i pluginet og kopiér den viste redirect-URI. Forbind derefter Google og vælg det website, kontoen har adgang til.
+The optional connection uses Google login after a one-time setup of your own OAuth client in Google Cloud. Enable Search Console API, configure read-only consent, create a Web application client and copy the exact redirect URI shown in Settings. Save the Client ID/Secret, connect Google and select a property covering this site.
 
-Pluginet anmoder om læseadgang og sammenligner to perioder på 28 dage med tre dages forsinkelse. Data ældre end syv dage ignoreres i prioriteringen. Google-klik er organiske søgeklik og er ikke det samme som alle besøg på websitet. Der er ingen fælles hosted login-service eller fælles Google-nøgler indbygget.
+The plugin compares two 28-day periods with a three-day delay; data older than seven days is ignored in priorities. Missing rows do not prove zero traffic. Google clicks measure organic search clicks, rather than all website visits. There is no shared hosted login service or shared Google secret. Testing-mode OAuth apps may require frequent reconnection; Google's publishing and verification rules still apply.
 
-### Lokal besøgstæller
+### Built-in view counter
 
-- Viser sidevisninger for **90 dage / 1 år**, fra installationstidspunktet.
-- Udelader alle indloggede brugere, også når de ser cachede sider, samt kendte bots og forhåndsvisninger.
-- Respekterer DNT/GPC og sætter ingen sporingscookies.
-- Gemmer dato, indholds-ID og antal visninger. En kortvarig misbrugsbegrænsning bruger en envejsværdi af IP-adressen.
-- Sletter intern besøgssporing ældre end ét kalenderår ved opdatering og derefter dagligt via WP-Cron. Genereringshistorik bevares.
+The counter shows **90 days / 1 year**, starting at installation. It excludes all logged-in users, including on cached pages, plus known bots and previews. It respects DNT/GPC and sets no tracking cookies. Stored data contains a date, content ID and count; a short-lived abuse limit uses a one-way value derived from the IP address. Data older than one calendar year is removed on upgrade and daily through a separate WP-Cron job. Generation history is retained.
 
-Tælleren er et omtrentligt mål og måler ikke unikke besøgende. Ryd WordPress/CDN-cache efter installation, opdatering eller ændring af sporingen. Websiteejeren afgør den nødvendige samtykke-/privatlivsopsætning; filteret `ai0r_tracking_allowed` kan bruges til integration.
+Counts are approximate and are not unique visitors. Clear WordPress/CDN caches after installation, upgrades or tracking changes. The website owner determines consent requirements; `ai0r_tracking_allowed` supports local integration. See [readme.txt](readme.txt) for details.
 
-## Opdatering og versioner
+## Updates and versions
 
-Hver version findes som et separat **Git-tag og en GitHub-release** med den oprindelige installations-ZIP. De historiske ZIP-filer er bevaret uændret. Brug den nyeste version til nye installationer.
+**Upgrade from 1.0–1.4:** install the 1.5.0 ZIP once using WordPress' replace-existing-plugin flow. Older versions do not contain an update client and therefore cannot discover this first upgrade themselves. Settings, encrypted credentials, custom prompts and history are retained.
 
-| Version | Vigtigste ændringer |
+**After installing 1.5.0:** WordPress checks this repository's latest stable release and uses the named plugin ZIP and matching `update.json` compatibility manifest. Checks are cached for six hours; opening **Dashboard → Updates** clears the plugin's cache for a fresh WordPress check. Failures are retried after a short delay. Drafts, prereleases, foreign packages and mismatched metadata are ignored. GitHub's public API limits can delay discovery.
+
+New versions appear in **Plugins / Dashboard → Updates**. WordPress keeps the administrator's existing auto-update preference; this plugin does not enable auto-updates for you. To install future releases automatically, use WordPress' normal **Enable auto-updates** control. Content-review automation is a separate setting.
+
+| Version | Main changes |
 | --- | --- |
-| [1.0.0](https://github.com/andersburn/ai0-content-refresh/releases/tag/v1.0.0) | Første version: OpenAI, planlægning, Search Console, tæller, prioritering, historik og gendannelse |
-| [1.1.0](https://github.com/andersburn/ai0-content-refresh/releases/tag/v1.1.0) | Modelanbefaling, søgbare udelukkelser og bedre forbedrings-/ingen-ændring-håndtering |
-| [1.2.0](https://github.com/andersburn/ai0-content-refresh/releases/tag/v1.2.0) | Valg af trafikkilde, login-filtrering, ét års retention, model-dropdown og prisestimater |
-| [1.3.0](https://github.com/andersburn/ai0-content-refresh/releases/tag/v1.3.0) | Automatisk valutaomregning, 90 dage / 1 år, linjeskift og frontend-/editorlinks |
-| [1.4.0](https://github.com/andersburn/ai0-content-refresh/releases/tag/v1.4.0) | Billedsøgning og genbrug fra WordPress-mediebiblioteket |
+| [1.5.0](https://github.com/andersburn/ai0-content-refresh/releases/tag/v1.5.0) | English interface and documentation, bundled Danish translation, language-preserving defaults and native GitHub updates |
+| [1.4.0](https://github.com/andersburn/ai0-content-refresh/releases/tag/v1.4.0) | WordPress media library search and image reuse |
+| [1.3.0](https://github.com/andersburn/ai0-content-refresh/releases/tag/v1.3.0) | Online currency conversion, 90-day/year views and frontend/editor links |
+| [1.2.0](https://github.com/andersburn/ai0-content-refresh/releases/tag/v1.2.0) | Traffic-source selection, logged-in exclusions, one-year retention, model dropdown and cost estimates |
+| [1.1.0](https://github.com/andersburn/ai0-content-refresh/releases/tag/v1.1.0) | Model recommendation, searchable exclusions and improved editorial/no-change handling |
+| [1.0.0](https://github.com/andersburn/ai0-content-refresh/releases/tag/v1.0.0) | Initial standalone plugin |
 
-Upload den nye release-ZIP i WordPress, og vælg **erstat eksisterende version**. Indstillinger, API-nøgle og historik bevares. GitHub-releases organiserer versionerne; denne udgave har **ingen indbygget automatisk GitHub-opdateringsklient i WordPress**.
+Each release has a Git tag, release notes and installation asset. Historical 1.0–1.4 ZIP files remain unchanged, with their original Danish interface. Cost estimates exclude VAT, fees and negotiated discounts; the API invoice is authoritative. Historic rates and exchange observations are not recalculated.
 
-Prisestimater er uden moms, gebyrer og aftalerabatter. API-fakturaen er afgørende. Ved ukendt modelpris kan du angive egne takster; historiske priser og valutakurser ændres ikke efterfølgende.
+## Languages and contributions
 
-## Data og eksterne tjenester
+The source language is English. Danish (`da_DK`) is bundled in `languages/` as PO/MO and WordPress JavaScript JSON catalogues. A POT template is provided for additional languages. Choose a language under **Users → Profile → Language**, or use the site default under **Settings → General**. Frontend labels use the site's locale. Changing interface language does not rewrite saved history or prompts.
 
-Ved generering sendes sidens tekst, titel, URL, prompt, et begrænset katalog af offentlige interne links og eventuelle billedmetadata til OpenAI med `store=false`. Billedfiler og rå besøgstal sendes ikke. API-nøgler og Google-tokens gemmes krypteret i WordPress-databasen med en nøgle afledt af WordPress' salts; saltændring kræver ny opsætning.
+Translators can edit the PO file in Poedit or another gettext editor, compile the MO, and produce JSON catalogues for `ai0r-admin` and `ai0r-block`. The text domain is `ai0-content-refresh`. Keep `%s`, `%d` and numbered placeholders intact. See [languages/README.md](languages/README.md).
 
-Valutakurser hentes via Frankfurter/ECB uden ekstra nøgle. Google bruges kun efter opsætning. Se [readme.txt](readme.txt) for endpoints, begrænsninger, hooks og den detaljerede brugervejledning.
+## Data and external services
 
-## Teststatus
+Generation sends the selected page's text, title, URL, editorial prompt, a bounded list of public internal links and optional image metadata to OpenAI with `store=false`. Image files and raw view counts are not sent. Credentials and Google tokens are encrypted with a key derived from WordPress salts; changing salts requires reconfiguration.
 
-1.4.0 har bestået **76 regressionstjek og 107 WordPress-integrationstjek** i det lokale testmiljø. OpenAI- og Google-svar var simulerede; dette er ikke en evaluering af live-modelkvalitet eller en Elementor-test. En offentlig valutakurs er også afprøvet gennem WordPress. Se [TESTING.md](TESTING.md).
+Frankfurter/ECB provides exchange rates without a key. Google is used after configuration and consent. Update checks contact GitHub's public release API and download a small compatibility manifest; they send a plugin-version user agent and normal server network information, with no OpenAI key, Google token, article content or view statistics. No GitHub credentials are needed. See [readme.txt](readme.txt) for endpoints, limits and developer hooks.
 
-## Licens
+## Validation
 
-GNU GPL **version 2 eller senere** (`GPL-2.0-or-later`). Se [LICENSE](LICENSE).
+Version 1.5.0 passed **76 regression checks, 107 WordPress integration checks and 33 language/update checks** locally, plus PHP and JavaScript syntax checks. The update suite exercises WordPress core's actual update discovery, English/Danish switching and JavaScript catalogues. OpenAI, Google and update-service responses were simulated; this is not a live-model quality evaluation or Elementor test. Earlier public currency access was also verified through WordPress. See [TESTING.md](TESTING.md).
+
+## License
+
+GNU GPL **version 2 or later** (`GPL-2.0-or-later`). See [LICENSE](LICENSE).

@@ -1,0 +1,1452 @@
+# Ai0 Content Refresh translations.
+# Copyright (C) 2026 Ai0
+# Distributed under the GPL-2.0-or-later license.
+msgid ""
+msgstr "Project-Id-Version: Ai0 Content Refresh 1.5.0\nReport-Msgid-Bugs-To: https://github.com/andersburn/ai0-content-refresh/issues\nPOT-Creation-Date: 2026-10-25 15:00+0100\nPO-Revision-Date: 2026-10-25 15:00+0100\nLanguage: \nMIME-Version: 1.0\nContent-Type: text/plain; charset=UTF-8\nContent-Transfer-Encoding: 8bit\nPlural-Forms: nplurals=2; plural=(n != 1);\nX-Domain: ai0-content-refresh\n"
+
+#: assets/admin.js:63
+#, javascript-format
+msgid "(%d selected)"
+msgstr ""
+
+#: includes/class-admin.php:424
+msgid "(Content deleted)"
+msgstr ""
+
+#: includes/class-cost.php:59
+msgid "(DKK awaiting exchange rate)"
+msgstr ""
+
+#: includes/class-admin.php:219 includes/class-admin.php:257
+msgid "(Untitled)"
+msgstr ""
+
+#: includes/class-admin.php:391
+msgid "(empty in the media library)"
+msgstr ""
+
+#: includes/class-cost.php:65
+msgid "(estimate; usage unknown)"
+msgstr ""
+
+#: includes/class-admin.php:283
+msgid "(recommended)"
+msgstr ""
+
+#: includes/class-cost.php:65
+msgid "(reported token usage)"
+msgstr ""
+
+#: includes/class-google.php:99
+msgid "). Check access and the selected property."
+msgstr ""
+
+#: includes/class-plugin.php:233
+msgid "). Check the model, key and API account balance."
+msgstr ""
+
+#: includes/class-admin.php:278
+msgid ", and review the first proposals."
+msgstr ""
+
+#: includes/class-admin.php:241
+msgid ". Data older than seven days is excluded from priorities."
+msgstr ""
+
+#: includes/class-admin.php:241
+msgid ". Last retrieved"
+msgstr ""
+
+#: includes/class-admin.php:340
+msgid ". Period:"
+msgstr ""
+
+#: includes/class-admin.php:216
+msgid "28 days"
+msgstr ""
+
+#: includes/class-admin.php:216
+msgid "90 days / 1 year"
+msgstr ""
+
+#: includes/class-content.php:193
+msgid "A link is missing its destination or label."
+msgstr ""
+
+#: includes/class-content.php:171
+msgid "A new element contains invalid text."
+msgstr ""
+
+#: includes/class-content.php:143
+msgid "A new element has an invalid position."
+msgstr ""
+
+#: includes/class-content.php:181
+msgid "A new element is missing a heading."
+msgstr ""
+
+#: includes/class-content.php:147
+msgid "A new element repeats an existing heading."
+msgstr ""
+
+#: includes/class-media.php:146
+msgid "A proposed image has changed, been removed, made private or is already on the page. Generate a new proposal."
+msgstr ""
+
+#: includes/class-content.php:122
+msgid "A text proposal contains markup, links or an unexpectedly large change."
+msgstr ""
+
+#: includes/class-content.php:65
+msgid "A text segment could not be changed safely."
+msgstr ""
+
+#: includes/class-updater.php:81
+msgid "AI-assisted SEO improvements for existing WordPress pages and posts, with preserved media, traffic-based priorities and review history."
+msgstr ""
+
+#: includes/class-admin.php:274
+msgid "API and editorial preferences"
+msgstr ""
+
+#: includes/class-admin.php:16 includes/class-admin.php:46 includes/class-admin.php:95
+msgid "Access denied."
+msgstr ""
+
+#: assets/block.js:50
+msgid "Add item"
+msgstr ""
+
+#: includes/class-admin.php:343
+msgid "Add this redirect URI:"
+msgstr ""
+
+#: includes/class-admin.php:415
+msgid "After"
+msgstr ""
+
+#: includes/class-admin.php:422
+msgid "All attempts are saved, including errors and reviews without changes. Proposals change the published page only when published."
+msgstr ""
+
+#: includes/class-admin.php:306
+msgid "All logged-in users are excluded, including on cached pages. Data older than one calendar year is deleted on upgrade and then daily through WP-Cron, even when automation is disabled. Only the date, content ID and view count are stored. No tracking cookies or visitor profiles are created. A short-lived abuse limit uses a one-way value derived from the IP address for up to two minutes. Respects DNT/GPC. Clear your page cache after activation or changes."
+msgstr ""
+
+#: includes/class-admin.php:295
+msgid "Allow searching and reusing existing images"
+msgstr ""
+
+#: includes/class-admin.php:294
+msgid "Allow summaries, FAQs, checklists, tables, callouts and relevant links"
+msgstr ""
+
+#: includes/class-plugin.php:104
+msgid "Already has a proposal or a run in progress."
+msgstr ""
+
+#: includes/class-admin.php:391
+msgid "Alt text:"
+msgstr ""
+
+#: includes/class-media.php:123
+msgid "An image selection has an invalid source, reason or position."
+msgstr ""
+
+#: includes/class-store.php:164
+msgid "Another run is in progress. Try again shortly."
+msgstr ""
+
+#: assets/block.js:45
+msgid "Answer"
+msgstr ""
+
+#: includes/class-admin.php:294
+msgid "At most four new elements per page in total. Existing media and custom blocks are preserved."
+msgstr ""
+
+#: includes/class-media.php:118
+msgid "At most two new images are allowed, and media access must be enabled."
+msgstr ""
+
+#: includes/class-admin.php:318
+msgid "Authorized redirect URI"
+msgstr ""
+
+#: includes/class-admin.php:292
+msgid "Automatic USD → DKK"
+msgstr ""
+
+#: includes/class-admin.php:205
+msgid "Automation"
+msgstr ""
+
+#: includes/class-admin.php:307
+msgid "Automation and usage limits"
+msgstr ""
+
+#: includes/class-admin.php:409 includes/class-admin.php:415
+msgid "Before"
+msgstr ""
+
+#: includes/class-admin.php:396
+msgid "Before and after are identical."
+msgstr ""
+
+#: includes/class-admin.php:219 includes/class-admin.php:257
+msgid "Blog post"
+msgstr ""
+
+#: includes/class-admin.php:297
+msgid "Blog posts"
+msgstr ""
+
+#: includes/class-admin.php:291
+msgid "Built-in standard rates are dated 25 October 2026. Other models need custom rates to show a cost estimate. Custom rates are used without automatic long-context surcharges."
+msgstr ""
+
+#: includes/class-admin.php:304
+msgid "Built-in view counter only"
+msgstr ""
+
+#: includes/class-admin.php:287
+msgid "Cache writes"
+msgstr ""
+
+#: includes/class-admin.php:287
+msgid "Cached input"
+msgstr ""
+
+#: assets/block.js:14
+msgid "Callout"
+msgstr ""
+
+#: includes/class-admin.php:229
+msgid "Cannot estimate this content"
+msgstr ""
+
+#: includes/class-admin.php:400
+msgid "Change the model or prompt and try again. The run counts towards monthly usage; the six-month cooldown still applies."
+msgstr ""
+
+#: includes/class-admin.php:317
+msgid "Changing the client requires a new Google login."
+msgstr ""
+
+#: assets/block.js:13
+msgid "Checklist"
+msgstr ""
+
+#: includes/class-admin.php:64
+msgid "Choose a Search Console property that covers this WordPress domain."
+msgstr ""
+
+#: includes/class-admin.php:132
+msgid "Choose a model or complete the Other model field."
+msgstr ""
+
+#: includes/class-admin.php:269
+msgid "Clear all selections"
+msgstr ""
+
+#: includes/class-admin.php:415
+msgid "Complete content before and after"
+msgstr ""
+
+#: includes/class-admin.php:343
+msgid "Configure OAuth consent with read-only access"
+msgstr ""
+
+#: includes/class-google.php:72
+msgid "Connect Google Search Console first."
+msgstr ""
+
+#: includes/class-admin.php:329
+msgid "Connect with Google"
+msgstr ""
+
+#: includes/class-admin.php:228
+msgid "Conservative scenario:"
+msgstr ""
+
+#: assets/block.js:14
+msgid "Contact box"
+msgstr ""
+
+#: includes/class-admin.php:216 includes/class-admin.php:422
+msgid "Content"
+msgstr ""
+
+#: includes/class-admin.php:186
+msgid "Content & priorities"
+msgstr ""
+
+#: assets/block.js:18
+msgid "Content Refresh — content element"
+msgstr ""
+
+#: includes/class-plugin.php:145
+msgid "Content age"
+msgstr ""
+
+#: includes/class-admin.php:407
+msgid "Content changes"
+msgstr ""
+
+#: includes/class-admin.php:370
+msgid "Content deleted"
+msgstr ""
+
+#: includes/class-admin.php:205
+msgid "Content in the overview"
+msgstr ""
+
+#: includes/class-plugin.php:214
+msgid "Content not found."
+msgstr ""
+
+#: includes/class-admin.php:414
+msgid "Content preview"
+msgstr ""
+
+#: includes/class-admin.php:411
+msgid "Content preview (without the theme header/footer)"
+msgstr ""
+
+#: includes/class-admin.php:86
+msgid "Content restored. The six-month cooldown still applies."
+msgstr ""
+
+#: includes/class-admin.php:298
+msgid "Content types"
+msgstr ""
+
+#: includes/class-admin.php:318
+msgid "Copy this exact address to the OAuth client in Google Cloud."
+msgstr ""
+
+#: includes/class-admin.php:243
+msgid "Cost forecasts use the selected model, prompt and response limit. Token counts are estimates; actual usage, including reasoning, may differ. The conservative scenario is not a guaranteed maximum. Views are counted from installation, are not unique visitors and may be affected by blockers and bots."
+msgstr ""
+
+#: includes/class-cost.php:63
+msgid "Cost not recorded"
+msgstr ""
+
+#: includes/class-admin.php:343
+msgid "Create a Web application OAuth client."
+msgstr ""
+
+#: includes/class-admin.php:343
+msgid "Create or select your project in"
+msgstr ""
+
+#: includes/class-admin.php:292
+msgid "Currency conversion"
+msgstr ""
+
+#: includes/class-cost.php:17
+msgid "Custom rates"
+msgstr ""
+
+#: assets/admin.js:26
+#, javascript-format
+msgid "Custom rates are saved for %s."
+msgstr ""
+
+#: includes/class-admin.php:293
+msgid "Customize the prompt. The plugin's preservation rules and six-month cooldown cannot be disabled by the prompt."
+msgstr ""
+
+#: includes/class-exchange.php:43
+msgid "DKK · rate date"
+msgstr ""
+
+#: includes/class-admin.php:342
+msgid "Data is retrieved daily and compares two 28-day periods. The latest three days are excluded to avoid preliminary figures. Missing rows do not necessarily mean zero traffic; Search Console may omit data. Search queries and visitor profiles are not sent to OpenAI."
+msgstr ""
+
+#: includes/class-admin.php:422
+msgid "Date"
+msgstr ""
+
+#: includes/class-plugin.php:142
+msgid "Declining Google clicks"
+msgstr ""
+
+#: includes/class-admin.php:205
+msgid "Disabled"
+msgstr ""
+
+#: includes/class-admin.php:337
+msgid "Disconnect Google"
+msgstr ""
+
+#: includes/class-admin.php:168
+msgid "Earliest next update:"
+msgstr ""
+
+#: includes/class-admin.php:359
+msgid "Edit in WordPress ↗"
+msgstr ""
+
+#: assets/block.js:19
+msgid "Editable summary, FAQ, checklist, table or link box."
+msgstr ""
+
+#: assets/block.js:35
+msgid "Element type"
+msgstr ""
+
+#: includes/class-admin.php:308
+msgid "Enable scheduled reviews"
+msgstr ""
+
+#: includes/class-admin.php:343
+msgid "Enable the Google Search Console API."
+msgstr ""
+
+#: includes/class-admin.php:306
+msgid "Enable the built-in view counter"
+msgstr ""
+
+#: includes/class-admin.php:317
+msgid "Enter Client Secret"
+msgstr ""
+
+#: includes/class-admin.php:140
+msgid "Enter all four rates as numbers from 0 to 100,000 USD per million tokens."
+msgstr ""
+
+#: includes/class-admin.php:277
+msgid "Enter your API key"
+msgstr ""
+
+#: includes/class-admin.php:347
+msgid "Error"
+msgstr ""
+
+#: includes/class-admin.php:216 includes/class-admin.php:422
+msgid "Estimated cost"
+msgstr ""
+
+#: includes/class-admin.php:373
+msgid "Estimated cost:"
+msgstr ""
+
+#: includes/class-admin.php:292
+msgid "Exchange rate source ↗"
+msgstr ""
+
+#: includes/class-admin.php:225
+msgid "Exclude"
+msgstr ""
+
+#: includes/class-admin.php:299
+msgid "Exclude pages and posts"
+msgstr ""
+
+#: includes/class-admin.php:167
+msgid "Exclude this page"
+msgstr ""
+
+#: includes/class-plugin.php:98
+msgid "Excluded from automatic improvement."
+msgstr ""
+
+#: includes/class-content.php:205
+msgid "Explanation"
+msgstr ""
+
+#: assets/block.js:45
+msgid "Explanation / right table column"
+msgstr ""
+
+#: assets/block.js:13
+msgid "FAQ"
+msgstr ""
+
+#: includes/class-admin.php:213
+msgid "Find content"
+msgstr ""
+
+#: includes/class-admin.php:210
+msgid "Generate a proposal for the next page"
+msgstr ""
+
+#: includes/class-admin.php:232
+msgid "Generate proposal"
+msgstr ""
+
+#: includes/class-admin.php:186 includes/class-admin.php:422
+msgid "Generation history"
+msgstr ""
+
+#: includes/class-admin.php:205
+msgid "Generations this month"
+msgstr ""
+
+#: includes/class-admin.php:216
+msgid "Google"
+msgstr ""
+
+#: includes/class-admin.php:316 includes/class-admin.php:316
+msgid "Google Client ID"
+msgstr ""
+
+#: includes/class-admin.php:317 includes/class-admin.php:317
+msgid "Google Client Secret"
+msgstr ""
+
+#: includes/class-admin.php:343
+msgid "Google Cloud"
+msgstr ""
+
+#: includes/class-admin.php:186 includes/class-admin.php:326
+msgid "Google Search Console"
+msgstr ""
+
+#: includes/class-admin.php:304
+msgid "Google Search Console only"
+msgstr ""
+
+#: includes/class-google.php:50
+msgid "Google access could not be created or refreshed. Check the client configuration and reconnect the account."
+msgstr ""
+
+#: includes/class-google.php:47
+msgid "Google could not be reached. Try again later."
+msgstr ""
+
+#: includes/class-google.php:87
+msgid "Google credentials could not be read. Reconnect the account."
+msgstr ""
+
+#: includes/class-google.php:38
+msgid "Google did not grant background access. Reconnect the account."
+msgstr ""
+
+#: includes/class-google.php:53
+msgid "Google did not grant the required read-only Search Console access."
+msgstr ""
+
+#: includes/class-admin.php:331
+msgid "Google is connected"
+msgstr ""
+
+#: includes/class-admin.php:17
+msgid "Google is connected. Select a property below."
+msgstr ""
+
+#: includes/class-google.php:34
+msgid "Google login has expired or belongs to another user. Start the connection again."
+msgstr ""
+
+#: includes/class-admin.php:315
+msgid "Google — one-time setup"
+msgstr ""
+
+#: assets/block.js:40
+msgid "Heading"
+msgstr ""
+
+#: includes/class-store.php:196
+msgid "History could not be saved. No API request was started."
+msgstr ""
+
+#: includes/class-store.php:203
+msgid "History could not be updated."
+msgstr ""
+
+#: includes/class-admin.php:369
+msgid "History entry not found."
+msgstr ""
+
+#: includes/class-admin.php:389
+msgid "Images in the proposal"
+msgstr ""
+
+#: includes/class-admin.php:164 includes/class-admin.php:224
+msgid "Important"
+msgstr ""
+
+#: ai0-content-refresh.php:4
+msgid "Improve existing pages and posts with OpenAI, Search Console priorities and a complete change history."
+msgstr ""
+
+#: includes/class-admin.php:343
+msgid "Initial Google login setup"
+msgstr ""
+
+#: includes/class-admin.php:287
+msgid "Input"
+msgstr ""
+
+#: includes/class-content.php:178
+msgid "Invalid element type or too many items."
+msgstr ""
+
+#: assets/block.js:44
+msgid "Item / left table column"
+msgstr ""
+
+#: includes/class-admin.php:277
+msgid "Key saved — leave blank to keep it"
+msgstr ""
+
+#: includes/class-exchange.php:42
+msgid "Last known rate — update pending."
+msgstr ""
+
+#: includes/class-admin.php:340
+msgid "Last synced:"
+msgstr ""
+
+#: assets/block.js:46
+msgid "Link (optional)"
+msgstr ""
+
+#: includes/class-admin.php:313
+msgid "Manual attempts, rejected proposals and runs without changes also count. A token limit is not an exact money budget. A conservative reservation is retained when API usage is unknown."
+msgstr ""
+
+#: includes/class-admin.php:211
+msgid "Manual generations always save a proposal and count towards the monthly limit. Automation processes at most one page per hour from the selected day of the month."
+msgstr ""
+
+#: includes/class-plugin.php:140
+msgid "Manual: important"
+msgstr ""
+
+#: includes/class-plugin.php:140
+msgid "Manual: very important"
+msgstr ""
+
+#: includes/class-plugin.php:143
+msgid "Many Google impressions and a low click-through rate"
+msgstr ""
+
+#: includes/class-admin.php:310
+msgid "Max. generations per month"
+msgstr ""
+
+#: includes/class-admin.php:310
+msgid "Max. response tokens per run"
+msgstr ""
+
+#: includes/class-admin.php:310
+msgid "Max. tokens per month"
+msgstr ""
+
+#: includes/class-media.php:141
+msgid "Media access is disabled. The proposal with new images has been retained."
+msgstr ""
+
+#: includes/class-admin.php:295
+msgid "Media library images"
+msgstr ""
+
+#: includes/class-admin.php:386
+msgid "Media library: searched for"
+msgstr ""
+
+#: includes/class-admin.php:282 includes/class-admin.php:285
+msgid "Model"
+msgstr ""
+
+#: includes/class-admin.php:422
+msgid "Model / tokens"
+msgstr ""
+
+#: includes/class-admin.php:284
+msgid "Model ID (other)"
+msgstr ""
+
+#: includes/class-admin.php:380
+msgid "Model assessment"
+msgstr ""
+
+#: includes/class-admin.php:396
+msgid "Model explanation:"
+msgstr ""
+
+#: includes/class-admin.php:291
+msgid "Model rates · USD per 1M tokens"
+msgstr ""
+
+#: includes/class-admin.php:294
+msgid "New content elements"
+msgstr ""
+
+#: includes/class-admin.php:241
+msgid "No Google data yet. Connect Search Console using the tab above."
+msgstr ""
+
+#: assets/admin.js:26
+msgid "No built-in rates for this model. Enter custom rates for a cost estimate."
+msgstr ""
+
+#: includes/class-admin.php:347
+msgid "No changes suggested"
+msgstr ""
+
+#: includes/class-plugin.php:264
+msgid "No changes suggested."
+msgstr ""
+
+#: includes/class-admin.php:396
+msgid "No changes were proposed or published."
+msgstr ""
+
+#: includes/class-admin.php:410
+msgid "No content changes."
+msgstr ""
+
+#: includes/class-admin.php:269
+msgid "No pages match your search."
+msgstr ""
+
+#: assets/admin.js:77
+msgid "No pages or posts are manually excluded."
+msgstr ""
+
+#: includes/class-admin.php:235
+msgid "No published pages or posts found."
+msgstr ""
+
+#: includes/class-admin.php:426
+msgid "No runs yet."
+msgstr ""
+
+#: includes/class-admin.php:164 includes/class-admin.php:224
+msgid "Normal"
+msgstr ""
+
+#: includes/class-plugin.php:96
+msgid "Not a public page or post in the selected content types."
+msgstr ""
+
+#: includes/class-admin.php:220 includes/class-admin.php:220
+msgid "Not selected"
+msgstr ""
+
+#: includes/class-admin.php:315
+msgid "Once the client is configured, connect with Google login on the Google Search Console tab."
+msgstr ""
+
+#: includes/class-admin.php:299
+msgid "Open the list, search and select multiple pages.\nSelections are shared with Content & priorities and the editor.\nSave settings to apply them.\nThe privacy policy page, password-protected content and Yoast noindex content are automatically excluded."
+msgstr ""
+
+#: includes/class-admin.php:277 includes/class-admin.php:277
+msgid "OpenAI API key"
+msgstr ""
+
+#: includes/class-admin.php:278
+msgid "OpenAI Docs ↗"
+msgstr ""
+
+#: includes/class-plugin.php:174
+msgid "OpenAI could not be reached."
+msgstr ""
+
+#: includes/class-plugin.php:239
+msgid "OpenAI did not complete the response. Try another model or increase the response limit."
+msgstr ""
+
+#: includes/class-plugin.php:175
+msgid "OpenAI rejected the connection (HTTP"
+msgstr ""
+
+#: includes/class-plugin.php:233
+msgid "OpenAI rejected the generation (HTTP"
+msgstr ""
+
+#: includes/class-cost.php:20
+msgid "OpenAI standard rates, 25 October 2026"
+msgstr ""
+
+#: includes/class-admin.php:284
+msgid "Other model …"
+msgstr ""
+
+#: includes/class-admin.php:347
+msgid "Outdated proposal"
+msgstr ""
+
+#: includes/class-admin.php:287
+msgid "Output"
+msgstr ""
+
+#: includes/class-admin.php:219 includes/class-admin.php:257
+msgid "Page"
+msgstr ""
+
+#: includes/class-admin.php:306
+msgid "Page views"
+msgstr ""
+
+#: includes/class-admin.php:297
+msgid "Pages"
+msgstr ""
+
+#: includes/class-admin.php:265
+msgid "Pages and posts to exclude"
+msgstr ""
+
+#: includes/class-admin.php:347
+msgid "Pending review"
+msgstr ""
+
+#: includes/class-admin.php:220
+msgid "Position"
+msgstr ""
+
+#: includes/class-admin.php:376
+msgid "Previous manual exchange rate:"
+msgstr ""
+
+#: includes/class-admin.php:261
+msgid "Previously excluded content · ID"
+msgstr ""
+
+#: includes/class-admin.php:208
+msgid "Priorities use your selections, Yoast cornerstone content, the selected traffic source and content age. The six-month cooldown starts at the latest publication, manual content change or content update by this plugin."
+msgstr ""
+
+#: includes/class-admin.php:216 includes/class-admin.php:223
+msgid "Priority"
+msgstr ""
+
+#: includes/class-admin.php:163
+msgid "Priority for the next content review:"
+msgstr ""
+
+#: includes/class-admin.php:98
+msgid "Priority saved."
+msgstr ""
+
+#: includes/class-admin.php:293 includes/class-admin.php:293
+msgid "Prompt"
+msgstr ""
+
+#: includes/class-admin.php:405
+msgid "Prompt used for this run"
+msgstr ""
+
+#: includes/class-admin.php:333
+msgid "Property"
+msgstr ""
+
+#: includes/class-admin.php:68
+msgid "Property selected and search data retrieved."
+msgstr ""
+
+#: includes/class-admin.php:409
+msgid "Proposal"
+msgstr ""
+
+#: includes/class-admin.php:309
+msgid "Publish automatically after technical validation"
+msgstr ""
+
+#: includes/class-admin.php:403
+msgid "Publish this proposal"
+msgstr ""
+
+#: includes/class-admin.php:347
+msgid "Published"
+msgstr ""
+
+#: includes/class-admin.php:205
+msgid "Publishes automatically"
+msgstr ""
+
+#: includes/class-admin.php:309
+msgid "Publishing"
+msgstr ""
+
+#: assets/block.js:44
+msgid "Question"
+msgstr ""
+
+#: includes/class-admin.php:373
+msgid "Rates and the exchange rate are saved with each run. Excludes VAT, fees and negotiated discounts. API usage may be unknown on failure."
+msgstr ""
+
+#: includes/class-admin.php:205 includes/class-admin.php:232
+msgid "Ready for review"
+msgstr ""
+
+#: includes/class-admin.php:278
+msgid "Recommended: GPT-6.1 Sol"
+msgstr ""
+
+#: includes/class-google.php:80
+msgid "Reconnect Google; the saved credentials could not be read."
+msgstr ""
+
+#: includes/class-admin.php:336
+msgid "Refresh search data now"
+msgstr ""
+
+#: includes/class-admin.php:403
+msgid "Reject proposal"
+msgstr ""
+
+#: includes/class-admin.php:347
+msgid "Rejected"
+msgstr ""
+
+#: assets/block.js:14
+msgid "Related links"
+msgstr ""
+
+#: assets/block.js:47
+msgid "Remove item"
+msgstr ""
+
+#: includes/class-admin.php:277
+msgid "Remove saved API key"
+msgstr ""
+
+#: includes/class-admin.php:404
+msgid "Restore content from before this update"
+msgstr ""
+
+#: includes/class-admin.php:347
+msgid "Restored"
+msgstr ""
+
+#: includes/class-admin.php:285
+msgid "Retrieve the list from your API account using the button below. It includes all model names on the account; choose a text model with Responses and Structured Outputs. Choose Other model to enter an ID yourself."
+msgstr ""
+
+#: includes/class-admin.php:180
+msgid "Review your existing content. Preserve media and layout, and track every change."
+msgstr ""
+
+#: includes/class-admin.php:347
+msgid "Running"
+msgstr ""
+
+#: includes/class-plugin.php:295
+msgid "Safe publishing requires InnoDB tables for content, metadata and history. Contact your hosting provider; the proposal has been retained."
+msgstr ""
+
+#: includes/class-admin.php:225
+msgid "Save"
+msgstr ""
+
+#: includes/class-plugin.php:217
+msgid "Save an API key and choose a model in Settings."
+msgstr ""
+
+#: includes/class-plugin.php:172
+msgid "Save an OpenAI API key first."
+msgstr ""
+
+#: includes/class-admin.php:321
+msgid "Save changed keys before testing. The test retrieves model names; it does not generate content."
+msgstr ""
+
+#: includes/class-admin.php:309
+msgid "Save proposals for review"
+msgstr ""
+
+#: includes/class-admin.php:319
+msgid "Save settings"
+msgstr ""
+
+#: includes/class-admin.php:343
+msgid "Save the Client ID and Client Secret in the plugin Settings. Return here and connect Google."
+msgstr ""
+
+#: includes/class-google.php:14
+msgid "Save the Google Client ID and Client Secret in Settings first."
+msgstr ""
+
+#: includes/class-admin.php:317
+msgid "Saved — leave blank to keep the value"
+msgstr ""
+
+#: includes/class-admin.php:205
+msgid "Saves proposals"
+msgstr ""
+
+#: includes/class-admin.php:308
+msgid "Scheduled review"
+msgstr ""
+
+#: includes/class-admin.php:221
+msgid "Score"
+msgstr ""
+
+#: includes/class-admin.php:213
+msgid "Search"
+msgstr ""
+
+#: includes/class-admin.php:304
+msgid "Search Console + built-in view counter"
+msgstr ""
+
+#: includes/class-admin.php:239
+msgid "Search Console + view counter"
+msgstr ""
+
+#: includes/class-google.php:97
+msgid "Search Console could not be reached."
+msgstr ""
+
+#: includes/class-admin.php:327
+msgid "Search Console is not selected as a traffic source. Automatic syncing is disabled and Google data is excluded from priorities. You can still retrieve data manually here."
+msgstr ""
+
+#: includes/class-admin.php:239
+msgid "Search Console only"
+msgstr ""
+
+#: includes/class-google.php:99
+msgid "Search Console rejected the request (HTTP"
+msgstr ""
+
+#: includes/class-google.php:101
+msgid "Search Console returned an invalid response."
+msgstr ""
+
+#: includes/class-admin.php:264
+msgid "Search by title or ID …"
+msgstr ""
+
+#: includes/class-admin.php:69
+msgid "Search data updated."
+msgstr ""
+
+#: includes/class-admin.php:264
+msgid "Search pages and blog posts"
+msgstr ""
+
+#: includes/class-admin.php:333
+msgid "Select a property"
+msgstr ""
+
+#: includes/class-admin.php:335
+msgid "Select and retrieve data"
+msgstr ""
+
+#: includes/class-admin.php:151
+msgid "Select at least one content type."
+msgstr ""
+
+#: includes/class-admin.php:263
+msgid "Select pages and posts"
+msgstr ""
+
+#: assets/admin.js:69
+msgid "Selected pages and posts:"
+msgstr ""
+
+#: includes/class-admin.php:239
+msgid "Selected traffic source:"
+msgstr ""
+
+#: includes/class-admin.php:186
+msgid "Settings"
+msgstr ""
+
+#: includes/class-admin.php:53
+msgid "Settings saved."
+msgstr ""
+
+#: includes/class-plugin.php:100
+msgid "Six-month cooldown until"
+msgstr ""
+
+#: assets/admin.js:26
+#, javascript-format
+msgid "Standard: input $%1$s, output $%2$s, cached input $%3$s, cache writes $%4$s per million tokens."
+msgstr ""
+
+#: includes/class-admin.php:310
+msgid "Start day of the month"
+msgstr ""
+
+#: includes/class-admin.php:310
+msgid "Start time (hour)"
+msgstr ""
+
+#: includes/class-admin.php:422
+msgid "Status"
+msgstr ""
+
+#: includes/class-admin.php:216
+msgid "Status / action"
+msgstr ""
+
+#: includes/class-admin.php:278
+msgid "Suggested for this task: good writing quality with a balance of quality and cost. Start with"
+msgstr ""
+
+#: assets/block.js:13
+msgid "Summary"
+msgstr ""
+
+#: assets/block.js:13
+msgid "Table"
+msgstr ""
+
+#: includes/class-admin.php:309
+msgid "Technical validation checks format and preservation. It does not guarantee factual accuracy or better Google rankings."
+msgstr ""
+
+#: includes/class-admin.php:320
+msgid "Test key and retrieve models"
+msgstr ""
+
+#: assets/block.js:41
+msgid "Text"
+msgstr ""
+
+#: includes/class-admin.php:118
+msgid "The API key has an invalid format."
+msgstr ""
+
+#: includes/class-admin.php:56
+msgid "The API key works. Retrieved"
+msgstr ""
+
+#: includes/class-admin.php:343
+msgid "The Google Account must have access to your Search Console property. An external OAuth app in testing mode may receive short-lived refresh tokens and require frequent logins. For ongoing use, check the app's publishing status and any Google verification requirements."
+msgstr ""
+
+#: includes/class-admin.php:58
+msgid "The Google connection has been removed locally. You can also revoke access in your Google Account."
+msgstr ""
+
+#: includes/class-google.php:17
+msgid "The Google connection requires HTTPS for WordPress administration."
+msgstr ""
+
+#: includes/class-google.php:36
+msgid "The Google connection was not approved."
+msgstr ""
+
+#: includes/class-plugin.php:231
+msgid "The OpenAI request was interrupted. Usage is unknown; the token reservation is retained."
+msgstr ""
+
+#: includes/class-content.php:165
+msgid "The blocks could not be validated after the change."
+msgstr ""
+
+#: includes/class-plugin.php:192
+msgid "The content has no safely editable text or more than 600 text segments."
+msgstr ""
+
+#: includes/class-plugin.php:188
+msgid "The content is too large for automatic processing (max. 250 KB)."
+msgstr ""
+
+#: includes/class-content.php:190
+msgid "The element has no content."
+msgstr ""
+
+#: includes/class-exchange.php:41
+msgid "The exchange rate could not be retrieved yet. Prices are shown in USD until an online rate is available."
+msgstr ""
+
+#: includes/class-plugin.php:292
+msgid "The history content has changed and cannot be used."
+msgstr ""
+
+#: includes/class-media.php:125
+msgid "The image is no longer available or is already on the page."
+msgstr ""
+
+#: includes/class-store.php:143
+msgid "The key could not be encrypted."
+msgstr ""
+
+#: includes/class-admin.php:277
+msgid "The key is stored encrypted on this WordPress installation and is sent only to OpenAI."
+msgstr ""
+
+#: includes/class-admin.php:292
+msgid "The latest reference rate is retrieved automatically and cached locally for up to one day. No extra API key is needed. Weekends and holidays use the last published rate. Estimates exclude VAT, fees and negotiated discounts."
+msgstr ""
+
+#: includes/class-admin.php:133
+msgid "The model name has an invalid format."
+msgstr ""
+
+#: includes/class-plugin.php:244
+msgid "The model refused to generate a proposal."
+msgstr ""
+
+#: includes/class-plugin.php:249
+msgid "The model response could not be read as structured changes."
+msgstr ""
+
+#: includes/class-content.php:151
+msgid "The model returned an invalid image list."
+msgstr ""
+
+#: includes/class-content.php:112
+msgid "The model returned an invalid response."
+msgstr ""
+
+#: includes/class-plugin.php:261
+msgid "The model returned no concrete changes and gave no separate explanation."
+msgstr ""
+
+#: includes/class-content.php:185
+msgid "The model suggested a link outside the approved pages."
+msgstr ""
+
+#: includes/class-admin.php:75
+msgid "The model suggested no changes. The page is unchanged; see the explanation in the history."
+msgstr ""
+
+#: includes/class-content.php:116
+msgid "The model tried to change an unknown or repeated text segment."
+msgstr ""
+
+#: includes/class-plugin.php:261
+msgid "The model's text proposals were identical to the existing text."
+msgstr ""
+
+#: includes/class-plugin.php:219
+msgid "The monthly generation limit has been reached."
+msgstr ""
+
+#: includes/class-plugin.php:226
+msgid "The monthly token limit has no room for this run. Increase the limit or wait until next month."
+msgstr ""
+
+#: includes/class-admin.php:81
+msgid "The next page has been reviewed."
+msgstr ""
+
+#: includes/class-plugin.php:304
+msgid "The page has changed since this version. Newer content will not be overwritten."
+msgstr ""
+
+#: includes/class-plugin.php:99
+msgid "The page is marked noindex in Yoast."
+msgstr ""
+
+#: includes/class-store.php:103
+msgid "The plugin history table could not be upgraded. Contact your hosting provider; existing history has been retained."
+msgstr ""
+
+#: includes/class-admin.php:157
+msgid "The prompt must not exceed 12,000 characters."
+msgstr ""
+
+#: includes/class-plugin.php:288
+msgid "The proposal does not have the required status."
+msgstr ""
+
+#: includes/class-admin.php:86
+msgid "The proposal has been published."
+msgstr ""
+
+#: includes/class-admin.php:92
+msgid "The proposal has been rejected."
+msgstr ""
+
+#: includes/class-admin.php:75
+msgid "The run has been saved in the history. A proposal does not change the published page."
+msgstr ""
+
+#: includes/class-plugin.php:157
+msgid "The run was interrupted. The token reservation is retained because API usage is unknown."
+msgstr ""
+
+#: includes/class-media.php:127
+msgid "The same image cannot be inserted twice."
+msgstr ""
+
+#: includes/class-store.php:138
+msgid "The server is missing OpenSSL for secure key storage."
+msgstr ""
+
+#: includes/class-admin.php:80
+msgid "There are no pages eligible for an update right now."
+msgstr ""
+
+#: includes/class-plugin.php:308
+msgid "This content type cannot be restored."
+msgstr ""
+
+#: includes/class-admin.php:305
+msgid "This determines which traffic data affects the order. Search Console only stops internal view counting. Built-in view counter only stops automatic Google syncing. Your manual priorities are always used."
+msgstr ""
+
+#: includes/class-content.php:95
+msgid "This plugin requires WordPress 6.7 or later."
+msgstr ""
+
+#: includes/class-admin.php:89
+msgid "This proposal cannot be rejected."
+msgstr ""
+
+#: includes/class-admin.php:314
+msgid "Time zone"
+msgstr ""
+
+#: includes/class-content.php:138
+msgid "Too many new elements, or new elements are disabled."
+msgstr ""
+
+#: includes/class-content.php:205
+msgid "Topic"
+msgstr ""
+
+#: includes/class-plugin.php:144
+msgid "Traffic"
+msgstr ""
+
+#: includes/class-admin.php:303 includes/class-admin.php:305
+msgid "Traffic source for priorities"
+msgstr ""
+
+#: includes/class-admin.php:399
+msgid "Try another review"
+msgstr ""
+
+#: assets/block.js:36
+msgid "Type"
+msgstr ""
+
+#: includes/class-admin.php:288
+msgid "USD per million tokens"
+msgstr ""
+
+#: includes/class-admin.php:99
+msgid "Unknown action."
+msgstr ""
+
+#: includes/class-cost.php:64
+msgid "Unknown cost — enter the model rates"
+msgstr ""
+
+#: includes/class-admin.php:313
+msgid "Usage this month"
+msgstr ""
+
+#: includes/class-admin.php:286
+msgid "Use custom rates for the selected model"
+msgstr ""
+
+#: includes/class-admin.php:326
+msgid "Use search clicks, impressions, click-through rate and position to prioritize existing pages. The plugin requests read-only access."
+msgstr ""
+
+#: includes/class-admin.php:278
+msgid "Use the recommended model"
+msgstr ""
+
+#: includes/class-admin.php:295
+msgid "Uses WordPress to search titles, filenames, alt text and captions based on the page topics. The model receives metadata for up to 12 relevant images and can insert at most two. Image files are not sent to OpenAI. Existing images and metadata are preserved. Images attached to private or unpublished pages are excluded."
+msgstr ""
+
+#: includes/class-admin.php:164 includes/class-admin.php:224
+msgid "Very important"
+msgstr ""
+
+#: includes/class-admin.php:239
+msgid "View counter only"
+msgstr ""
+
+#: includes/class-admin.php:219 includes/class-admin.php:355
+msgid "View page ↗"
+msgstr ""
+
+#: includes/class-admin.php:216
+msgid "Views"
+msgstr ""
+
+#: includes/class-admin.php:314
+msgid "WP-Cron depends on traffic. Use your hosting provider's cron to run wp-cron.php for a more reliable schedule."
+msgstr ""
+
+#: includes/class-plugin.php:147
+msgid "Waiting for the next assessment after the latest run."
+msgstr ""
+
+#: includes/class-admin.php:309
+msgid "When a proposal is ready"
+msgstr ""
+
+#: includes/class-plugin.php:313
+msgid "WordPress could not save the change."
+msgstr ""
+
+#: includes/class-plugin.php:315
+msgid "WordPress or another plugin modified the content during saving. The update was cancelled to preserve your elements."
+msgstr ""
+
+#: includes/class-plugin.php:141
+msgid "Yoast cornerstone content"
+msgstr ""
+
+#: includes/class-admin.php:72 includes/class-plugin.php:289
+msgid "You are not allowed to edit this content."
+msgstr ""
+
+#: includes/class-admin.php:61
+msgid "You do not have access to the selected property."
+msgstr ""
+
+#: includes/class-admin.php:220
+msgid "clicks"
+msgstr ""
+
+#: includes/class-admin.php:386
+msgid "eligible candidates."
+msgstr ""
+
+#: includes/class-admin.php:220
+msgid "impressions"
+msgstr ""
+
+#: includes/class-admin.php:370
+msgid "input tokens +"
+msgstr ""
+
+#: includes/class-admin.php:56
+msgid "model names. Choose a text model that supports Responses and Structured Outputs."
+msgstr ""
+
+#: includes/class-admin.php:378
+msgid "new elements ·"
+msgstr ""
+
+#: includes/class-admin.php:378
+msgid "new image"
+msgstr ""
+
+#: includes/class-admin.php:378
+msgid "new images"
+msgstr ""
+
+#: includes/class-admin.php:370
+msgid "output tokens (or reserved tokens when usage is unknown)."
+msgstr ""
+
+#: includes/class-admin.php:216
+msgid "per review"
+msgstr ""
+
+#: includes/class-admin.php:263
+msgid "selected)"
+msgstr ""
+
+#: includes/class-admin.php:378
+msgid "text changes ·"
+msgstr ""
+
+#: includes/class-admin.php:313
+msgid "tokens / reservations"
+msgstr ""

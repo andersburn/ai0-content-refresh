@@ -1,0 +1,32 @@
+{
+  "translation-revision-date": "2026-10-25 15:00+0100",
+  "generator": "Ai0 Content Refresh",
+  "domain": "ai0-content-refresh",
+  "locale_data": {
+    "ai0-content-refresh": {
+      "": {
+        "domain": "ai0-content-refresh",
+        "lang": "da_DK",
+        "plural-forms": "nplurals=2; plural=(n != 1);"
+      },
+      "(%d selected)": [
+        "(%d valgt)"
+      ],
+      "Custom rates are saved for %s.": [
+        "Egne takster gemmes for %s."
+      ],
+      "No built-in rates for this model. Enter custom rates for a cost estimate.": [
+        "Ingen indbygget pris for denne model. Angiv egne takster for at få et prisestimat."
+      ],
+      "No pages or posts are manually excluded.": [
+        "Ingen sider eller indlæg er manuelt udelukket."
+      ],
+      "Selected pages and posts:": [
+        "Valgte sider og indlæg:"
+      ],
+      "Standard: input $%1$s, output $%2$s, cached input $%3$s, cache writes $%4$s per million tokens.": [
+        "Standard: input $%1$s, output $%2$s, cache-læsning $%3$s, cache-skrivning $%4$s pr. million tokens."
+      ]
+    }
+  }
+}

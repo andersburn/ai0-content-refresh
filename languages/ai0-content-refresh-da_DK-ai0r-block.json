@@ -1,0 +1,74 @@
+{
+  "translation-revision-date": "2026-10-25 15:00+0100",
+  "generator": "Ai0 Content Refresh",
+  "domain": "ai0-content-refresh",
+  "locale_data": {
+    "ai0-content-refresh": {
+      "": {
+        "domain": "ai0-content-refresh",
+        "lang": "da_DK",
+        "plural-forms": "nplurals=2; plural=(n != 1);"
+      },
+      "Add item": [
+        "Tilføj punkt"
+      ],
+      "Answer": [
+        "Svar"
+      ],
+      "Callout": [
+        "Faktaboks"
+      ],
+      "Checklist": [
+        "Tjekliste"
+      ],
+      "Contact box": [
+        "Kontaktboks"
+      ],
+      "Content Refresh — content element": [
+        "Content Refresh – indholdselement"
+      ],
+      "Editable summary, FAQ, checklist, table or link box.": [
+        "Redigerbart resumé, FAQ, tjekliste, tabel eller linkboks."
+      ],
+      "Element type": [
+        "Elementtype"
+      ],
+      "Explanation / right table column": [
+        "Forklaring / højre tabelkolonne"
+      ],
+      "FAQ": [
+        "FAQ"
+      ],
+      "Heading": [
+        "Overskrift"
+      ],
+      "Item / left table column": [
+        "Punkt / venstre tabelkolonne"
+      ],
+      "Link (optional)": [
+        "Link (valgfrit)"
+      ],
+      "Question": [
+        "Spørgsmål"
+      ],
+      "Related links": [
+        "Relaterede links"
+      ],
+      "Remove item": [
+        "Fjern punkt"
+      ],
+      "Summary": [
+        "Resumé"
+      ],
+      "Table": [
+        "Tabel"
+      ],
+      "Text": [
+        "Tekst"
+      ],
+      "Type": [
+        "Type"
+      ]
+    }
+  }
+}
