@@ -131,9 +131,7 @@ final class AI0R_Admin {
         if ($s['model'] === '') { throw new RuntimeException('Vælg en model, eller udfyld feltet Anden model.'); }
         if (strlen($s['model']) > 160 || preg_match('/[^a-zA-Z0-9._:\-]/', $s['model'])) { throw new RuntimeException('Modelnavnet har et ugyldigt format.'); }
         $s['traffic_source'] = in_array($_POST['traffic_source'] ?? '', ['google','internal','both'], true) ? $_POST['traffic_source'] : $s['traffic_source'];
-        $exchange = str_replace(',', '.', (string) ($_POST['usd_dkk'] ?? $s['usd_dkk']));
-        if (!is_numeric($exchange) || (float) $exchange <= 0 || (float) $exchange > 1000) { throw new RuntimeException('Angiv en beregningskurs mellem 0 og 1.000 kr. pr. USD.'); }
-        $s['usd_dkk'] = (float) $exchange;
+        unset($s['usd_dkk']); // Old manual setting is no longer used; historical snapshots remain intact.
         if (!empty($_POST['custom_pricing'])) {
             $rates = [];
             foreach (['input','output','cached','write'] as $type) {
@@ -205,7 +203,7 @@ final class AI0R_Admin {
         foreach (['Indhold i oversigten' => count($rows), 'Klar til gennemgang' => $eligible, 'Genereringer denne måned' => (int) $usage['attempts'] . ' / ' . $s['monthly_limit'], 'Automatik' => $s['enabled'] ? ($s['mode'] === 'auto' ? 'Publicerer automatisk' : 'Gemmer forslag') : 'Slået fra'] as $label => $value) {
             echo '<div class="ai0r-card"><span>' . esc_html($label) . '</span><strong>' . esc_html((string) $value) . '</strong></div>';
         }
-        echo '</div><p>Prioriteringen bruger dine markeringer, Yoast-hjørnestensindhold, den valgte trafikkilde og indholdets alder. Seks måneders pause regnes fra seneste udgivelse, manuel indholdsændring eller pluginopdatering.</p>';
+        echo '</div><p class="description">' . esc_html(AI0R_Exchange::description(AI0R_Exchange::current())) . '</p><p>Prioriteringen bruger dine markeringer, Yoast-hjørnestensindhold, den valgte trafikkilde og indholdets alder. Seks måneders pause regnes fra seneste udgivelse, manuel indholdsændring eller pluginopdatering.</p>';
         foreach (['ai0r_worker_error', 'ai0r_google_error'] as $option) { if (get_option($option)) { echo '<p class="ai0r-warning">' . esc_html(get_option($option)) . '</p>'; } }
         self::button('next', 'Generér forslag til næste side', [], 'queue', true);
         echo '<p class="description">Manuelle genereringer gemmer altid et forslag. De tæller med i månedens loft. Automatikken arbejder højst på én side i timen fra den valgte månedsdag.</p>';
@@ -213,11 +211,11 @@ final class AI0R_Admin {
         echo '<form method="get" class="ai0r-search"><input type="hidden" name="page" value="ai0-refresh"><label for="ai0r-search">Find indhold </label><input id="ai0r-search" type="search" name="s" value="' . esc_attr($search) . '"><button class="button">Søg</button></form>';
         if ($search) { $rows = array_values(array_filter($rows, static fn($r) => mb_stripos($r['post']->post_title, $search) !== false)); }
         $page = max(1, absint($_GET['paged'] ?? 1));
-        echo '<div class="ai0r-scroll"><table class="widefat striped"><thead><tr><th>Indhold</th><th>Visninger<br>30 / 90 dage</th><th>Google<br>28 dage</th><th>Prioritering</th><th>Estimeret pris<br>pr. gennemgang</th><th>Status / handling</th></tr></thead><tbody>';
+        echo '<div class="ai0r-scroll"><table class="widefat striped"><thead><tr><th>Indhold</th><th>Visninger<br>90 dage / 1 år</th><th>Google<br>28 dage</th><th>Prioritering</th><th>Estimeret pris<br>pr. gennemgang</th><th>Status / handling</th></tr></thead><tbody>';
         foreach (array_slice($rows, ($page - 1) * 25, 25) as $r) {
             $p = $r['post']; $g = $r['google'];
             echo '<tr><td><strong><a href="' . esc_url(get_edit_post_link($p->ID)) . '">' . esc_html($p->post_title ?: '(Uden titel)') . '</a></strong><br>' . esc_html($p->post_type === 'page' ? 'Side' : 'Blogindlæg') . ' · ID ' . (int) $p->ID . '<br><a target="_blank" rel="noopener" href="' . esc_url($r['url']) . '">Se siden ↗</a></td>';
-            echo '<td>' . (AI0R_Store::uses_internal() ? (int) $r['views']['v30'] . ' / ' . (int) $r['views']['v90'] : 'Ikke valgt') . '</td><td>' . (AI0R_Store::uses_google() ? (int) $g['clicks'] . ' klik<br>' . (int) $g['impressions'] . ' visninger<br>' . esc_html(number_format_i18n($g['ctr'] * 100, 1)) . '% CTR<br>Position ' . esc_html(number_format_i18n($g['position'], 1)) : 'Ikke valgt') . '</td>';
+            echo '<td>' . (AI0R_Store::uses_internal() ? (int) $r['views']['v90'] . ' / ' . (int) $r['views']['vyear'] : 'Ikke valgt') . '</td><td>' . (AI0R_Store::uses_google() ? (int) $g['clicks'] . ' klik<br>' . (int) $g['impressions'] . ' visninger<br>' . esc_html(number_format_i18n($g['ctr'] * 100, 1)) . '% CTR<br>Position ' . esc_html(number_format_i18n($g['position'], 1)) : 'Ikke valgt') . '</td>';
             echo '<td><strong>Score ' . esc_html((string) $r['score']) . '</strong><p>' . esc_html($r['why']) . '</p>';
             self::form('priority', ['post_id' => $p->ID]);
             echo '<select aria-label="Prioritet" name="priority">';
@@ -244,7 +242,7 @@ final class AI0R_Admin {
     }
 
     private static function row(string $label, string $html, string $help = ''): void {
-        echo '<tr><th scope="row">' . esc_html($label) . '</th><td>' . $html . ($help ? '<p class="description">' . esc_html($help) . '</p>' : '') . '</td></tr>';
+        echo '<tr><th scope="row">' . esc_html($label) . '</th><td>' . $html . ($help ? '<p class="description">' . nl2br(esc_html($help)) . '</p>' : '') . '</td></tr>';
     }
 
     private static function exclusions(): string {
@@ -266,7 +264,7 @@ final class AI0R_Admin {
         foreach ($items as $id => $label) {
             $out .= '<label class="ai0r-picker-option" data-exclusion-option><input type="checkbox" name="excluded_ids[]" value="' . (int) $id . '" ' . checked(in_array($id, $selected_ids, true), true, false) . '> <span>' . esc_html($label) . '</span></label>';
         }
-        return $out . '</div><p data-no-matches hidden>Ingen sider matcher din søgning.</p><button type="button" class="button button-small" data-clear-exclusions>Ryd alle valg</button></div></details><p class="description" data-selected-exclusions aria-live="polite"></p>';
+        return $out . '</div><p data-no-matches hidden>Ingen sider matcher din søgning.</p><button type="button" class="button button-small" data-clear-exclusions>Ryd alle valg</button></div></details><div class="description ai0r-selected-exclusions" data-selected-exclusions aria-live="polite"></div>';
     }
 
     private static function settings(): void {
@@ -289,13 +287,13 @@ final class AI0R_Admin {
         }
         $pricing .= '</div><p data-rate-description aria-live="polite"></p><script type="application/json" id="ai0r-prices">' . wp_json_encode(['catalog' => AI0R_Cost::catalog(), 'custom' => $s['custom_rates']], JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT) . '</script>';
         self::row('Modelpriser · USD pr. 1 mio. tokens', $pricing, 'Indbyggede standardtakster er dateret 25.10.2026. Andre modeller kræver egne takster for at vise et prisestimat. Egne takster bruges uden automatiske tillæg for lang kontekst.');
-        self::row('Beregningskurs · DKK pr. USD', '<input aria-label="Beregningskurs DKK pr. USD" name="usd_dkk" type="number" min="0.01" max="1000" step="0.01" value="' . esc_attr((string) $s['usd_dkk']) . '">', 'Manuel beregningskurs, ikke en live valutakurs. Estimater er uden moms, gebyrer og aftalerabatter. Fakturaen fra OpenAI er afgørende.');
+        self::row('Valutaomregning', '<strong>Automatisk USD → DKK</strong><p>' . esc_html(AI0R_Exchange::description(AI0R_Exchange::current())) . '</p><a href="https://frankfurter.dev/" target="_blank" rel="noopener">Valutakilde ↗</a>', 'Seneste referencekurs hentes automatisk og gemmes lokalt i op til et døgn. Ingen ekstra API-nøgle nødvendig. Weekender og helligdage bruger seneste offentliggjorte kurs. Estimater er uden moms, gebyrer og aftalerabatter.');
         self::row('Prompt', '<textarea aria-label="Prompt" name="prompt" rows="9" class="large-text">' . esc_textarea($s['prompt']) . '</textarea>', 'Prompten kan tilpasses. Pluginets faste bevaringsregler og seksmånedersgrænse kan ikke slås fra med prompten.');
         self::row('Nye indholdselementer', '<label><input type="checkbox" name="additions" value="1" ' . checked((bool) $s['additions'], true, false) . '> Tillad resumé, FAQ, tjekliste, tabel, faktaboks og relevante links</label>', 'Højst fire nye elementer pr. side i alt. Eksisterende medier og specialblokke bliver bevaret.');
         $types = '';
         foreach (['page' => 'Sider','post' => 'Blogindlæg'] as $k => $label) { $types .= '<label class="ai0r-check"><input name="post_types[]" type="checkbox" value="' . esc_attr($k) . '" ' . checked(in_array($k, $s['post_types'], true), true, false) . '> ' . esc_html($label) . '</label>'; }
         self::row('Indholdstyper', $types);
-        self::row('Udeluk sider og indlæg', self::exclusions(), 'Åbn listen, søg og vælg flere sider. Valgene er de samme som under Indhold & prioritering og i editoren. Gem indstillingerne for at anvende dem. Privatlivssiden, adgangskodebeskyttet indhold og Yoast-noindex er automatisk udelukket.');
+        self::row('Udeluk sider og indlæg', self::exclusions(), "Åbn listen, søg og vælg flere sider.\nValgene er de samme som under Indhold & prioritering og i editoren.\nGem indstillingerne for at anvende dem.\nPrivatlivssiden, adgangskodebeskyttet indhold og Yoast-noindex er automatisk udelukket.");
         $sources = '<select aria-label="Trafikkilde til prioritering" name="traffic_source">';
         foreach (['both' => 'Search Console + indbygget besøgstæller', 'google' => 'Kun Google Search Console', 'internal' => 'Kun indbygget besøgstæller'] as $value => $label) { $sources .= '<option value="' . esc_attr($value) . '" ' . selected($s['traffic_source'], $value, false) . '>' . esc_html($label) . '</option>'; }
         self::row('Trafikkilde til prioritering', $sources . '</select>', 'Valget bestemmer, hvilke trafiktal der påvirker rækkefølgen. Kun Search Console stopper intern optælling. Kun indbygget besøgstæller stopper automatisk Google-synkronisering. Dine manuelle prioriteringer bruges altid.');
@@ -343,6 +341,20 @@ final class AI0R_Admin {
         return ['running' => 'Kører', 'pending' => 'Afventer gennemgang', 'applied' => 'Publiceret', 'rolled_back' => 'Gendannet', 'rejected' => 'Afvist', 'stale' => 'Forældet forslag', 'no_change' => 'Ingen ændringer foreslået', 'error' => 'Fejl'];
     }
 
+    private static function post_links(int $post_id): string {
+        $p = get_post($post_id);
+        if (!$p) { return ''; }
+        $links = [];
+        if ($p->post_status === 'publish') {
+            $links[] = '<a href="' . esc_url(get_permalink($p)) . '" target="_blank" rel="noopener">Se siden ↗</a>';
+        }
+        if (current_user_can('edit_post', $post_id)) {
+            $edit = get_edit_post_link($post_id, 'raw');
+            if ($edit) { $links[] = '<a href="' . esc_url($edit) . '" target="_blank" rel="noopener">Redigér i WordPress ↗</a>'; }
+        }
+        return $links ? '<p class="ai0r-post-links">' . implode(' · ', $links) . '</p>' : '';
+    }
+
     private static function history(): void {
         global $wpdb;
         $id = absint($_GET['id'] ?? 0);
@@ -350,9 +362,12 @@ final class AI0R_Admin {
             $h = AI0R_Store::history($id);
             if (!$h) { echo '<p>Historikken findes ikke.</p>'; return; }
             echo '<div class="ai0r-panel"><h2>' . esc_html(get_the_title($h->post_id) ?: 'Indhold slettet') . '</h2><p>' . esc_html(self::statuses()[$h->status] ?? $h->status) . ' · ' . esc_html($h->model) . ' · ' . esc_html(get_date_from_gmt($h->created_at, 'd.m.Y H:i')) . '</p><p>' . nl2br(esc_html($h->summary)) . '</p><p>' . (int) $h->input_tokens . ' inputtokens + ' . (int) $h->output_tokens . ' outputtokens (eller reserverede tokens ved ukendt forbrug).</p>';
+            echo self::post_links((int) $h->post_id);
             $details = json_decode($h->details ?? '', true);
             echo '<p><strong>Estimeret pris: ' . esc_html(AI0R_Cost::label($details['cost'] ?? null)) . '</strong></p><p class="description">Priser og beregningskurs gemmes sammen med kørslen. Uden moms, gebyrer og aftalerabatter. Ved fejl kan API-forbruget være ukendt.</p>';
-            if (!empty($details['cost']['rates']['source'])) { echo '<p class="description">' . esc_html($details['cost']['rates']['source']) . ' · ' . esc_html((string) $details['cost']['usd_dkk']) . ' DKK/USD</p>'; }
+            if (!empty($details['cost']['rates']['source'])) { echo '<p class="description">' . esc_html($details['cost']['rates']['source']) . '</p>'; }
+            if (array_key_exists('exchange', $details['cost'] ?? [])) { echo '<p class="description">' . esc_html(AI0R_Exchange::description($details['cost']['exchange'])) . '</p>'; }
+            elseif (!empty($details['cost']['usd_dkk'])) { echo '<p class="description">Tidligere manuel beregningskurs: ' . esc_html((string) $details['cost']['usd_dkk']) . ' DKK/USD</p>'; }
             if (is_array($details) && isset($details['text_changes'], $details['new_sections'])) {
                 echo '<p class="ai0r-change-count"><strong>' . (int) $details['text_changes'] . ' tekstændringer · ' . (int) $details['new_sections'] . ' nye elementer</strong></p>';
                 if (!empty($details['findings'])) {
@@ -390,7 +405,7 @@ final class AI0R_Admin {
         $rows = $wpdb->get_results($wpdb->prepare("SELECT id,post_id,created_at,status,model,summary,input_tokens,output_tokens,details FROM $t ORDER BY id DESC LIMIT 20 OFFSET %d", ($page - 1) * 20));
         echo '<div class="ai0r-panel"><h2>Genereringshistorik</h2><p>Alle forsøg gemmes, også fejl og gennemgange uden ændringer. Forslag ændrer først den udgivne side, når de publiceres.</p><table class="widefat striped"><thead><tr><th>Dato</th><th>Indhold</th><th>Status</th><th>Model / tokens</th><th>Estimeret pris</th></tr></thead><tbody>';
         foreach ($rows as $h) {
-            echo '<tr><td>' . esc_html(get_date_from_gmt($h->created_at, 'd.m.Y H:i')) . '</td><td><a href="' . esc_url(add_query_arg(['page' => 'ai0-refresh', 'tab' => 'history', 'id' => $h->id], admin_url('admin.php'))) . '">' . esc_html(get_the_title($h->post_id) ?: '(Indhold slettet)') . '</a><p>' . esc_html(mb_substr($h->summary, 0, 180)) . '</p></td><td>' . esc_html(self::statuses()[$h->status] ?? $h->status) . '</td><td>' . esc_html($h->model) . '<br>' . ((int) $h->input_tokens + (int) $h->output_tokens) . '</td><td>' . esc_html(AI0R_Cost::label(json_decode($h->details ?? '', true)['cost'] ?? null)) . '</td></tr>';
+            echo '<tr><td>' . esc_html(get_date_from_gmt($h->created_at, 'd.m.Y H:i')) . '</td><td><a href="' . esc_url(add_query_arg(['page' => 'ai0-refresh', 'tab' => 'history', 'id' => $h->id], admin_url('admin.php'))) . '">' . esc_html(get_the_title($h->post_id) ?: '(Indhold slettet)') . '</a>' . self::post_links((int) $h->post_id) . '<p>' . esc_html(mb_substr($h->summary, 0, 180)) . '</p></td><td>' . esc_html(self::statuses()[$h->status] ?? $h->status) . '</td><td>' . esc_html($h->model) . '<br>' . ((int) $h->input_tokens + (int) $h->output_tokens) . '</td><td>' . esc_html(AI0R_Cost::label(json_decode($h->details ?? '', true)['cost'] ?? null)) . '</td></tr>';
         }
         if (!$rows) { echo '<tr><td colspan="5">Ingen kørsler endnu.</td></tr>'; }
         echo '</tbody></table>';

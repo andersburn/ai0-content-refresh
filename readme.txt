@@ -3,7 +3,7 @@ Contributors: ai0
 Tags: gutenberg, content, openai, search-console
 Requires at least: 6.7
 Requires PHP: 8.1
-Stable tag: 1.2.0
+Stable tag: 1.3.0
 License: GPLv2 or later
 
 Et separat plugin til at forbedre eksisterende sider og blogindlæg med OpenAI og Search Console.
@@ -19,10 +19,10 @@ Et separat plugin til at forbedre eksisterende sider og blogindlæg med OpenAI o
 
 Automatik er slået fra ved installation. Manuelle genereringer gemmer altid et forslag. Pluginet ændrer aldrig URL, titel, kategori, featured image, Yoast-felter eller temaets metadata. Kun post_content ændres. Det eksisterende AI Blog Writer-plugin berøres ikke.
 
-== Opdatering fra 1.0.0 / 1.1.0 ==
+== Opdatering fra 1.0.0 / 1.1.0 / 1.2.0 ==
 Upload den nye ZIP, og vælg at erstatte den eksisterende pluginversion. API-nøgle, Google-forbindelse, modelvalg og historik bevares. Den oprindelige standardprompt erstattes af en mere aktiv forbedringsprompt; en prompt, du selv har ændret, bevares.
 
-Indstillinger > Udeluk sider og indlæg er en søgbar dropdown med flervalg. Søg på titel eller ID, markér de sider og indlæg, der skal udelukkes, og gem. Valgene er fælles med editorens og prioriteringsoversigtens udelukkelse. Tidligere indtastede ID’er og per-side-markeringer overføres automatisk. Filtrering af listen rydder ikke valgte sider.
+Indstillinger > Udeluk sider og indlæg er en søgbar dropdown med flervalg. Søg på titel eller ID, markér de sider og indlæg, der skal udelukkes, og gem. Valgene er fælles med editorens og prioriteringsoversigtens udelukkelse. Tidligere indtastede ID’er og per-side-markeringer overføres automatisk. Filtrering af listen rydder ikke valgte sider. Valgte sider vises med én side pr. linje under dropdownen. Hjælpeteksten er også opdelt på flere linjer.
 
 Model vælges i en rigtig dropdown. Test nøgle og hent modeller henter alle model-ID’er fra din API-konto, inklusive modeller der ikke er kompatible med indholdsgenerering. Vælg en tekstmodel med Responses og Structured Outputs. Anden model åbner et frit Model-ID-felt.
 
@@ -47,7 +47,7 @@ De nye elementer kræver det aktive plugin for frontend-rendering. Ved deaktiver
 == Prioritering og seks måneder ==
 I Indstillinger > Trafikkilde til prioritering vælger du Kun Google Search Console, Kun indbygget besøgstæller eller begge. Kun Google stopper al intern optælling. Kun intern stopper den automatiske Google-synkronisering. Den separate tæller-afbryder kan også slå intern optælling og brug af tællerdata fra. Eksisterende data og Google-forbindelse bevares ved skift, med den normale retention. Ingen kilde erstattes i stilhed af den anden. Manuelle markeringer og alder bruges altid.
 
-Manuel prioritet > Yoast-hjørnestensmarkering > trafik, tab af Google-klik, søgepotentiale og alder. Oversigten forklarer hver score. Manglende data giver prioritering efter manuelle markeringer og alder.
+Manuel prioritet > Yoast-hjørnestensmarkering > trafik, tab af Google-klik, søgepotentiale og alder. Interne trafiktal vises for 90 dage og det seneste kalenderår; 90-dages-tallet indgår i prioriteringsscoren. Dagens dato og datoen ét kalenderår tilbage er inkluderet i årstallet. Tal fra før installationen genskabes ikke. Oversigten forklarer hver score. Manglende data giver prioritering efter manuelle markeringer og alder.
 
 En side må først behandles seks kalendermåneder efter seneste udgivelse eller indholdsændring, også en manuel ændring. Efter en pluginopdatering går der igen mindst seks måneder. Reglen gælder både generering og publicering og kan ikke omgås med en manuel knap eller prompt. Månedslængder og skudår håndteres. En gendannelse tæller som en indholdsændring og omgår ikke pausen.
 
@@ -77,9 +77,17 @@ https://developers.openai.com/api/docs/models/gpt-6-luna
 
 Andre modeller og snapshots kræver egne takster. Slå Brug egne takster til, og udfyld input, output og cache-takster i USD pr. million tokens. Egne takster tilsidesætter indbyggede takster for den valgte model; uden markering anvendes indbyggede takster igen. Egne takster har ingen automatisk kontekstmultiplikator. Ændring af model nulstiller formularen til den models egne gemte takster eller standardtakster.
 
-DKK-beløb bruger en manuel beregningskurs, som starter på 7,00 DKK/USD; det er ikke en live valutakurs. Eksempel med GPT-6.1 Sol: 10.000 input + 4.000 output uden cacherabat = $0,06, cirka 0,42 kr. ved kurs 7. Alle beløb er estimater uden moms, gebyrer og aftalerabatter. Priser kan ændre sig; opdatér egne takster ved behov. API-fakturaen er afgørende. Prisestimatet er ikke et valutabudget eller en garanti for, at et forslag forbedrer indholdet.
+Fra version 1.3.0 vises Valutaomregning som automatisk USD → DKK. Ingen manuel kurs eller ekstra API-nøgle er nødvendig. Pluginet henter ECB’s seneste daglige referencekurs via Frankfurter:
+https://api.frankfurter.dev/v2/providers/ecb/rate/usd/dkk
+Dokumentation: https://frankfurter.dev/
+
+Kursen hentes på WordPress-serveren og caches i et døgn. En selvstændig daglig WP-Cron-opgave opdaterer også kursen, når AI-automatikken er slået fra. Ved fejl forsøges højst én gang i timen. Kilde og kursdato vises i Indstillinger, oversigten og historikkens detaljer. Weekender og helligdage bruger seneste offentliggjorte kurs. Ved nedbrud bruges seneste gyldige kurs med en tydelig markering; uden tidligere kurs vises USD alene. Fejl i valutakilden blokerer ikke indholdsgenerering. Der sendes ingen API-nøgle, besøgstal eller sideindhold til valutakilden. Tjenesten modtager serverens normale netværksforespørgsel om USD/DKK.
+
+Historikkens eksisterende priser genberegnes ikke. Tidligere manuelt beregnede beløb bevares og markeres som en tidligere manuel kurs. Nye historikposter gemmer den anvendte onlinekurs, kursdato og kilde sammen med beløbet. Eksempel med GPT-6.1 Sol: 10.000 input + 4.000 output uden cacherabat = $0,06; DKK-beløbet beregnes med den hentede kurs. Alle beløb er estimater uden moms, gebyrer og aftalerabatter. Priser kan ændre sig; opdatér egne takster ved behov. API-fakturaen er afgørende. Prisestimatet er ikke et valutabudget eller en garanti for, at et forslag forbedrer indholdet.
 
 == Historik og gendannelse ==
+Både historikoversigten og den enkelte kørsel har Se siden til frontenden og Redigér i WordPress til editoren. Links åbner i en ny fane. Slettet indhold får ingen brudte links; ikke-udgivet indhold har kun editorlink.
+
 Historikken gemmer model, redaktionel prompt, før/efter-indhold, hashes, datoer, status og tokens/reservationer. Forslag kan gennemgås, publiceres eller afvises. Publiceret indhold kan gendannes, hvis indholdet ikke er ændret siden. En nyere manuel ændring bliver ikke overskrevet. Seks måneders regel kontrolleres igen ved publicering. Ved ændringer i WordPress’ lagringsfiltre annulleres opdateringen, hvis indholdet ikke længere matcher det validerede forslag.
 
 Fra version 1.1.0 gemmes også faktiske antal tekstændringer og nye elementer samt modellens konkrete vurdering. Identiske tekstforslag tæller ikke som ændringer. Et svar uden effektive ændringer vises som Ingen ændringer foreslået, med begrundelse og mulighed for en ny manuel gennemgang. Det publiceres ikke, starter ikke en ny seksmånedersperiode og vises ikke som to identiske før/efter-versioner. Månedens kvoter gælder også ved en ny gennemgang. Modellen kan fortsat vælge ingen ændringer; pluginet tvinger ikke en unyttig omskrivning igennem.
@@ -98,6 +106,9 @@ OpenAI: Der sendes ved generering den valgte sides tekst, titel, URL, redaktione
 Udvikler-hook: ai0r_content_applied($post_id, $history_id, $is_restore) til eksplicit cachepurge eller andre lokale integrationer. WordPress’ normale post-update-hooks køres også.
 
 == Changelog ==
+= 1.3.0 =
+Automatisk USD/DKK-omregning via Frankfurter/ECB med kursdato, cache, fejlhåndtering og gemte historikkurser; udelukkede sider som liste med linjeskift; visninger for 90 dage og ét kalenderår; frontend- og editorlinks i historikoversigt og historikdetaljer.
+
 = 1.2.0 =
 Valg af trafikkilde; frasortering af alle indloggede roller via cookiebevarende AJAX, også på cachede sider; ét kalenderårs retention med selvstændig daglig oprydning; model-dropdown med alle kontoens model-ID’er og Anden model-felt; prisoverslag pr. side og tokenbaseret estimat i historikken; gemte takst/valutakurssnapshots og egne modelpriser.
 

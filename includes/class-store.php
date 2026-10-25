@@ -19,7 +19,7 @@ final class AI0R_Store {
             'monthly_limit' => 10, 'monthly_tokens' => 250000, 'max_output' => 12000,
             'start_day' => 1, 'hour' => 3, 'post_types' => ['post', 'page'],
             'tracking' => 1, 'traffic_source' => 'both', 'additions' => 1, 'excluded_ids' => '',
-            'usd_dkk' => 7.0, 'custom_rates' => [],
+            'custom_rates' => [],
             'google_client_id' => '', 'google_secret' => '', 'property' => '',
             'prompt' => "Forbedr aktivt siden på dansk i dens eksisterende tone og til dens målgruppe. Find konkrete svagheder i indledning, læsbarhed, gentagelser, sprogfejl og svar på læserens spørgsmål, og ret dem i de redigerbare tekster. Gør værdien og forskellene mellem sidens tilbud tydeligere. Omformulér gerne væsentligt, når det gør indholdet mere konkret og let at forstå; bevar de eksisterende fakta og forbehold. Overvej et kort resumé, en relevant sammenligningstabel, tjekliste eller FAQ ud fra sidens egne oplysninger, hvis det giver overblik og ikke allerede findes. Bevar billeder, videoer, links, bannere og layout. Opfind aldrig priser, garantier, resultater, citater, erfaringer eller nye faktuelle påstande. Oplist de konkrete forbedringsmuligheder. Foreslå kun ingen ændringer, hvis du efter en reel gennemgang ikke kan finde en nyttig forbedring, og forklar præcist hvorfor.",
         ];
@@ -125,6 +125,9 @@ final class AI0R_Store {
         if (!wp_next_scheduled('ai0r_cleanup')) {
             wp_schedule_event(time() + 60, 'daily', 'ai0r_cleanup');
         }
+        if (!wp_next_scheduled('ai0r_exchange_sync')) {
+            wp_schedule_event(time() + 60, 'daily', 'ai0r_exchange_sync');
+        }
         self::purge_views();
     }
 
@@ -203,11 +206,11 @@ final class AI0R_Store {
 
     public static function views(): array {
         global $wpdb;
-        $start = wp_date('Y-m-d', time() - 89 * DAY_IN_SECONDS);
-        $cut = wp_date('Y-m-d', time() - 29 * DAY_IN_SECONDS);
-        $prior = wp_date('Y-m-d', time() - 59 * DAY_IN_SECONDS);
+        $today = current_datetime();
+        $cut = $today->modify('-89 days')->format('Y-m-d');
+        $start = self::view_cutoff($today);
         $t = self::table('views');
-        $rows = $wpdb->get_results($wpdb->prepare("SELECT post_id, SUM(views) v90, SUM(CASE WHEN day >= %s THEN views ELSE 0 END) v30, SUM(CASE WHEN day >= %s AND day < %s THEN views ELSE 0 END) previous30 FROM $t WHERE day >= %s GROUP BY post_id", $cut, $prior, $cut, $start), ARRAY_A);
+        $rows = $wpdb->get_results($wpdb->prepare("SELECT post_id, SUM(CASE WHEN day >= %s THEN views ELSE 0 END) v90, SUM(views) vyear FROM $t WHERE day >= %s AND day <= %s GROUP BY post_id", $cut, $start, $today->format('Y-m-d')), ARRAY_A);
         return array_column($rows, null, 'post_id');
     }
 }

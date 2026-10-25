@@ -6,6 +6,7 @@ final class AI0R_Plugin {
         add_action('init', [self::class, 'blocks']);
         add_action('ai0r_tick', [self::class, 'tick']);
         add_action('ai0r_cleanup', [AI0R_Store::class, 'purge_views']);
+        add_action('ai0r_exchange_sync', [AI0R_Exchange::class, 'current']);
         add_action('ai0r_google_sync', static function () {
             if (!AI0R_Store::uses_google()) { return; }
             try { AI0R_Google::sync(); } catch (Throwable $e) { /* Displayed in the admin, never expose credentials in logs. */ }
@@ -124,14 +125,14 @@ final class AI0R_Plugin {
             $url = get_permalink($p);
             $key = self::url_key($url);
             $g = $current[$key] ?? ['clicks' => 0, 'impressions' => 0, 'ctr' => 0, 'position' => 0];
-            $v = $views[$p->ID] ?? ['v30' => 0, 'v90' => 0, 'previous30' => 0];
+            $v = $views[$p->ID] ?? ['v90' => 0, 'vyear' => 0];
             $manual = max(0, min(2, (int) get_post_meta($p->ID, '_ai0r_priority', true)));
             $cornerstone = get_post_meta($p->ID, '_yoast_wpseo_is_cornerstone', true) === '1';
             $prior_clicks = (int) ($previous[$key]['clicks'] ?? 0);
             // Missing Search Console rows can be omitted top-data, so do not infer a 100% decline.
             $decline = $prior_clicks >= 5 && isset($current[$key]) ? max(0, ($prior_clicks - $g['clicks']) / $prior_clicks) : 0;
             $age = max(0, (time() - (get_post_datetime($p, 'modified', 'gmt') ?: current_datetime())->getTimestamp()) / DAY_IN_SECONDS);
-            $score = $manual * 1000 + ($cornerstone ? 100 : 0) + min(30, log(1 + (int) $v['v30']) * 4) + min(30, log(1 + $g['clicks']) * 4) + $decline * 35 + min(20, $age / 30);
+            $score = $manual * 1000 + ($cornerstone ? 100 : 0) + min(30, log(1 + (int) $v['v90']) * 4) + min(30, log(1 + $g['clicks']) * 4) + $decline * 35 + min(20, $age / 30);
             $opportunity = $g['impressions'] >= 50 && $g['ctr'] < 0.03 && $g['position'] >= 3 && $g['position'] <= 20;
             if ($opportunity) { $score += min(30, log(1 + $g['impressions']) * 3); }
             $why = [];
@@ -139,7 +140,7 @@ final class AI0R_Plugin {
             if ($cornerstone) { $why[] = 'Yoast-hjørnestensindhold'; }
             if ($decline > 0) { $why[] = 'Faldende Google-klik'; }
             if ($opportunity) { $why[] = 'Mange Google-visninger og lav klikrate'; }
-            if ($v['v30'] || $g['clicks']) { $why[] = 'Trafik'; }
+            if ($v['v90'] || $g['clicks']) { $why[] = 'Trafik'; }
             $why[] = 'Indholdets alder';
             $reason = self::reason($p);
             if (!$reason && (int) get_post_meta($p->ID, '_ai0r_retry_after', true) > time()) { $reason = 'Afventer næste vurdering efter seneste kørsel.'; }

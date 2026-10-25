@@ -1,15 +1,13 @@
-# Ai0 Content Refresh 1.2.0
+# Ai0 Content Refresh 1.3.0
 
 Historisk version til AI-assisteret SEO-optimering og vedligeholdelse af eksisterende WordPress-indhold.
 
-- Vælg Search Console, indbygget besøgstæller eller begge til prioriteringen.
-- Alle indloggede roller udelades fra tælleren, også på cachede sider, via cookiebevarende AJAX.
-- Intern besøgssporing ældre end ét kalenderår ryddes op ved opgradering og dagligt via WP-Cron.
-- Rigtig model-dropdown med kontoens modelnavne og feltet Anden model.
-- Prisoverslag pr. side før generering og estimat fra rapporteret tokenforbrug bagefter.
-- Egne modeltakster, manuel DKK-kurs og historiske snapshots af priser og kurs.
-
-Ryd WordPress/CDN-cache efter opdatering, så den nye sporingskode bliver brugt.
+- Automatisk USD/DKK-omregning via Frankfurter/ECB med kursdato og daglig cache.
+- Ved udfald bruges seneste kendte kurs med markering; uden kurs vises kun USD.
+- Udelukkede sider og indlæg vises på separate linjer.
+- Interne visninger vises for 90 dage / 1 år; 90-dages-tallet bruges i prioriteringen.
+- Links til frontend og WordPress-editoren i historikoversigt og historikdetaljer.
+- Eksisterende prisberegninger i historikken bevarer deres oprindelige kurs.
 
 ## Krav
 

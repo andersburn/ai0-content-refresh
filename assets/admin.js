@@ -60,7 +60,20 @@
             });
             count.textContent = '(' + names.length + ' valgt)';
             empty.hidden = visible > 0;
-            if (selected) selected.textContent = names.length ? 'Valgt: ' + names.join('; ') : 'Ingen sider eller indlæg er manuelt udelukket.';
+            if (selected) {
+                selected.replaceChildren();
+                if (names.length) {
+                    var title = document.createElement('strong');
+                    title.textContent = 'Valgte sider og indlæg:';
+                    var list = document.createElement('ul');
+                    names.forEach(function (name) {
+                        var item = document.createElement('li');
+                        item.textContent = name;
+                        list.appendChild(item);
+                    });
+                    selected.append(title, list);
+                } else selected.textContent = 'Ingen sider eller indlæg er manuelt udelukket.';
+            }
         }
         search.addEventListener('input', update);
         picker.addEventListener('change', update);

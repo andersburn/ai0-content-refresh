@@ -33,7 +33,8 @@ final class AI0R_Cost {
 
     public static function forecast(array $body, string $content, array $s): array {
         $rates = self::rates($body['model'], $s);
-        $result = ['state' => $rates ? 'forecast' : 'unavailable', 'model' => $body['model'], 'rates' => $rates, 'usd_dkk' => (float) $s['usd_dkk']];
+        $exchange = AI0R_Exchange::current();
+        $result = ['state' => $rates ? 'forecast' : 'unavailable', 'model' => $body['model'], 'rates' => $rates, 'usd_dkk' => $exchange['rate'] ?? null, 'exchange' => $exchange];
         if (!$rates) { return $result; }
         // Heuristic, not a tokenizer. Include instructions and schema, not only article text.
         $input = (int) ceil(mb_strlen(wp_json_encode($body, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES)) / 3);
@@ -54,13 +55,13 @@ final class AI0R_Cost {
         return $cost;
     }
 
-    public static function amount(float $usd, float $exchange): string {
-        return '$' . number_format($usd, 4, ',', '.') . ' ≈ ' . number_format($usd * $exchange, 2, ',', '.') . ' kr.';
+    public static function amount(float $usd, ?float $exchange): string {
+        return '$' . number_format($usd, 4, ',', '.') . ($exchange !== null ? ' ≈ ' . number_format($usd * $exchange, 2, ',', '.') . ' kr.' : ' (DKK afventer valutakurs)');
     }
 
     public static function label(?array $cost): string {
         if (!$cost) { return 'Pris ikke registreret'; }
         if (!isset($cost['usd'])) { return 'Ukendt pris – angiv modellens takster'; }
-        return self::amount($cost['usd'], $cost['usd_dkk']) . ($cost['state'] === 'usage' ? ' (rapporteret tokenforbrug)' : ' (overslag; forbrug ukendt)');
+        return self::amount($cost['usd'], $cost['usd_dkk'] ?? null) . ($cost['state'] === 'usage' ? ' (rapporteret tokenforbrug)' : ' (overslag; forbrug ukendt)');
     }
 }
