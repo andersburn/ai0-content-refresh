@@ -1,5 +1,7 @@
 (function () {
     'use strict';
+    var __ = wp.i18n.__;
+    var sprintf = wp.i18n.sprintf;
     var model = document.querySelector('[data-model-choice]');
     if (model) {
         var custom = document.querySelector('[name="custom_model"]');
@@ -21,7 +23,7 @@
             }
             priceFields.hidden = !pricing.checked;
             priceFields.querySelectorAll('input').forEach(function (field) { field.disabled = !pricing.checked; field.required = pricing.checked; });
-            description.textContent = pricing.checked ? 'Egne takster gemmes for ' + id + '.' : rates ? 'Standard: input $' + rates.input + ', output $' + rates.output + ', cache-læsning $' + rates.cached + ', cache-skrivning $' + rates.write + ' pr. million tokens.' : 'Ingen indbygget pris for denne model. Angiv egne takster for at få et prisestimat.';
+            description.textContent = pricing.checked ? sprintf(__('Custom rates are saved for %s.', 'ai0-content-refresh'), id) : rates ? sprintf(__('Standard: input $%1$s, output $%2$s, cached input $%3$s, cache writes $%4$s per million tokens.', 'ai0-content-refresh'), rates.input, rates.output, rates.cached, rates.write) : __('No built-in rates for this model. Enter custom rates for a cost estimate.', 'ai0-content-refresh');
         }
         function updateModel(reset) {
             customWrap.hidden = model.value !== '__other__';
@@ -48,23 +50,23 @@
         var empty = picker.querySelector('[data-no-matches]');
         var selected = picker.nextElementSibling;
         function update() {
-            var query = search.value.trim().toLocaleLowerCase('da');
+            var query = search.value.trim().toLocaleLowerCase(document.documentElement.lang || undefined);
             var visible = 0;
             var names = [];
             rows.forEach(function (row) {
                 var input = row.querySelector('input');
                 var label = row.querySelector('span').textContent;
-                row.hidden = query !== '' && !label.toLocaleLowerCase('da').includes(query);
+                row.hidden = query !== '' && !label.toLocaleLowerCase(document.documentElement.lang || undefined).includes(query);
                 if (!row.hidden) visible++;
                 if (input.checked) names.push(label);
             });
-            count.textContent = '(' + names.length + ' valgt)';
+            count.textContent = sprintf(__('(%d selected)', 'ai0-content-refresh'), names.length);
             empty.hidden = visible > 0;
             if (selected) {
                 selected.replaceChildren();
                 if (names.length) {
                     var title = document.createElement('strong');
-                    title.textContent = 'Valgte sider og indlæg:';
+                    title.textContent = __('Selected pages and posts:', 'ai0-content-refresh');
                     var list = document.createElement('ul');
                     names.forEach(function (name) {
                         var item = document.createElement('li');
@@ -72,7 +74,7 @@
                         list.appendChild(item);
                     });
                     selected.append(title, list);
-                } else selected.textContent = 'Ingen sider eller indlæg er manuelt udelukket.';
+                } else selected.textContent = __('No pages or posts are manually excluded.', 'ai0-content-refresh');
             }
         }
         search.addEventListener('input', update);

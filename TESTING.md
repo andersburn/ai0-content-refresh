@@ -1,4 +1,4 @@
-# Validation for 1.4.0
+# Validation for 1.5.0
 
 Run date: 25 October 2026 (Europe/Copenhagen).
 
@@ -38,3 +38,18 @@ Currency tests cover validation, exact base/quote, invalid numbers/dates, daily 
 Version 1.4.0 adds native WordPress media fixtures, using copies of a bundled Twenty Twenty-Five image only in the disposable uploads directory. Coverage includes title/alt search, introduction keyword fallback, excluding private-parent/tiny/logo/unrelated/featured images, disabled search, bounded metadata-only input, native image-only suggestions, preservation of attachment alt/caption metadata, rejecting unknown IDs/duplicate IDs/over-limit/disabled insertions, excluding existing legacy/Gutenberg/reusable-block images, history display, rechecking privacy and permission before publish, transactional image publication, and exact restoration without deleting media. The model's image-choice responses were simulated; metadata relevance is not a live-model visual-quality evaluation.
 
 Browser checks confirm image choice/reason/alt in history and recognition as a native Image block in Gutenberg's document overview, with no block-validation errors logged. The browser's blob-based editor canvas did not render, so the editor canvas itself was not visually verified; the history image preview rendered normally. No test-only compatibility plugin is included in the ZIP.
+
+## Version 1.5.0: language and release updates
+
+- 76 regression checks and 107 existing WordPress integration checks pass. The integration suite also runs against the bundled Danish catalogue to preserve existing translated behavior.
+- 33 additional checks exercise actual WordPress English/Danish locale switching, fallback for an untranslated locale, administration/model labels, WordPress loading both JavaScript JSON catalogues, language-neutral new editorial defaults and preservation of saved settings.
+- Update checks exercise WordPress core's actual `wp_update_plugins()` discovery, same-version no-update behavior, the native plugin-information popup, version-specific compatibility metadata, correct installation asset selection, positive/negative caching, network errors, rate limits, draft/prerelease exclusion, foreign URL rejection and mismatched/malformed manifest rejection.
+- The updater does not enable auto-updates; WordPress retains the administrator's preference. Sites running 1.0–1.4 require a one-time manual ZIP upgrade because they have no updater.
+- GitHub and manifest responses in repeatable tests are simulated. This does not claim a live unattended future upgrade or a complete PHP/WordPress version matrix. No production WordPress installation was modified.
+- The English default prompt applies to new installs; existing saved prompts, article text and historic reports are not translated by an interface update.
+
+Additional command:
+
+```sh
+php tests/i18n-updates.php /absolute/path/to/disposable/wordpress
+```

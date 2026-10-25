@@ -1,133 +1,161 @@
 === Ai0 Content Refresh ===
 Contributors: ai0
-Tags: gutenberg, content, openai, search-console
+Tags: seo, gutenberg, content, openai, search-console
 Requires at least: 6.7
 Requires PHP: 8.1
-Stable tag: 1.4.0
+Tested up to: 7.1.3
+Stable tag: 1.5.0
 License: GPLv2 or later
+License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-Et separat plugin til at forbedre eksisterende sider og blogindlæg med OpenAI og Search Console.
+AI-assisted SEO improvements for existing WordPress pages and posts, with preserved media, priorities and review history.
+
+== Description ==
+
+Review content you have already written. Ai0 Content Refresh uses your own OpenAI API key and chosen model to improve clarity, readability and useful structure while preserving existing media and Gutenberg layouts. Review proposals manually or enable scheduled publication after technical validation. The plugin changes post_content; titles, URLs, categories, featured images, Yoast fields and theme metadata are preserved.
+
+English is the source language. Danish translations are bundled for PHP administration screens and JavaScript/Gutenberg controls. Administration follows the WordPress user's language, frontend labels follow the site language, and other locales fall back to English. New installation prompts preserve the article's existing language. Existing prompts, generated findings and historical content are not translated or overwritten by an interface-language change.
+
+Requirements: PHP 8.1+ with OpenSSL and mbstring; WordPress 6.7+; your own OpenAI API key/credit and a model with Responses API and Structured Outputs. Gutenberg is the primary editor. Editable ordinary classic HTML is supported, with protected shortcodes and unknown elements. Not tested with Elementor or other page builders; builder metadata is not processed. Safe publishing requires InnoDB for posts, post metadata and history. Scheduling requires working WP-Cron. Minimum requirements are not a full test matrix; see TESTING.md.
 
 == Installation ==
-1. Upload ai0-content-refresh.zip under Plugins > Tilføj plugin > Upload plugin.
-2. Aktivér pluginet og åbn Content Refresh > Indstillinger.
-3. Indtast din egen OpenAI API-nøgle. Gem, og tryk Test nøgle og hent modeller.
-4. Brug den anbefalede GPT-6.1 Sol (gpt-6.1-sol), eller vælg et andet kompatibelt model-ID. Modellen skal understøtte Responses API og Structured Outputs, og din konto skal have adgang til modellen.
-5. Tilpas prompt, indholdstyper, månedligt antal genereringer og tokenloft.
-6. Generér et forslag, og gennemgå historikkens ændringer og forhåndsvisning.
-7. Aktivér planlagt gennemgang og vælg automatisk publicering, når du er klar.
 
-Automatik er slået fra ved installation. Manuelle genereringer gemmer altid et forslag. Pluginet ændrer aldrig URL, titel, kategori, featured image, Yoast-felter eller temaets metadata. Kun post_content ændres. Det eksisterende AI Blog Writer-plugin berøres ikke.
+1. Download ai0-content-refresh-1.5.0.zip from https://github.com/andersburn/ai0-content-refresh/releases/latest. Choose the named installation asset rather than the generated source archive.
+2. Open Plugins > Add New Plugin > Upload Plugin, upload the ZIP and activate it.
+3. Open Content Refresh > Settings, enter your OpenAI API key and save.
+4. Click Test key and retrieve models. Choose a compatible model from the dropdown or enter an ID under Other model. The list includes every model name on the account, including incompatible models.
+5. Configure the prompt, content types, exclusions, media access, traffic source and monthly generation/token limits.
+6. Generate a proposal for a page that has passed the six-month cooldown. Inspect the changes and preview in Generation history.
+7. Enable scheduled reviews when ready. Automation is disabled initially; manual runs always save proposals.
 
-== Opdatering fra 1.0.0 / 1.1.0 / 1.2.0 / 1.3.0 ==
-Upload den nye ZIP, og vælg at erstatte den eksisterende pluginversion. API-nøgle, Google-forbindelse, modelvalg og historik bevares. Den oprindelige standardprompt erstattes af en mere aktiv forbedringsprompt; en prompt, du selv har ændret, bevares.
+The recommended model is a starting point, subject to access and your review. Your existing model choice is retained. Use the recommendation button and then save to change it.
 
-Indstillinger > Udeluk sider og indlæg er en søgbar dropdown med flervalg. Søg på titel eller ID, markér de sider og indlæg, der skal udelukkes, og gem. Valgene er fælles med editorens og prioriteringsoversigtens udelukkelse. Tidligere indtastede ID’er og per-side-markeringer overføres automatisk. Filtrering af listen rydder ikke valgte sider. Valgte sider vises med én side pr. linje under dropdownen. Hjælpeteksten er også opdelt på flere linjer.
+== Upgrades and GitHub updates ==
 
-Model vælges i en rigtig dropdown. Test nøgle og hent modeller henter alle model-ID’er fra din API-konto, inklusive modeller der ikke er kompatible med indholdsgenerering. Vælg en tekstmodel med Responses og Structured Outputs. Anden model åbner et frit Model-ID-felt.
+From versions 1.0–1.4, upload the 1.5.0 installation ZIP once and choose to replace the existing plugin. Those versions have no update client and cannot discover this first upgrade. Settings, encrypted API credentials, Google connection, custom prompts, exclusions and history are retained. The older 1.0 migration replaces only its exact original shipped prompt; custom editorial prompts are retained.
 
-Modelanbefalingen er et redaktionelt udgangspunkt, ikke en garanti for resultat eller adgang. GPT-6.1 Sol er valgt som balance mellem kvalitet og pris ud fra OpenAI Docs: https://developers.openai.com/api/docs/models (kontrolleret 25. oktober 2026). Et eksisterende modelvalg ændres ikke automatisk; knappen Brug den anbefalede model udfylder feltet, og du gemmer derefter indstillingerne.
+From 1.5.0, updates use WordPress' native Plugins / Dashboard > Updates screen. The plugin checks the latest stable release at https://api.github.com/repos/andersburn/ai0-content-refresh/releases/latest and reads the matching update.json release asset. It accepts only the named installation ZIP and manifest URLs from this exact GitHub repository, with matching versions and valid WordPress/PHP compatibility metadata. Drafts, prereleases, missing assets, foreign URLs and invalid metadata are ignored. No GitHub token is needed.
 
-== Search Console: Google-login ==
-Login-knappen er inkluderet, men en egen OAuth-klient skal konfigureres én gang. Pluginet indeholder ikke en fælles hosted Google-login-service eller en indbygget fælles Client Secret.
+Successful checks are cached for six hours; failures for five minutes. Opening Dashboard > Updates clears the plugin cache so WordPress can perform a fresh check. GitHub API rate limits can delay discovery. Your normal WordPress auto-update preference is preserved. To install future releases automatically, choose Enable auto-updates in WordPress. This is separate from automatic content reviews.
 
-Opret et Google Cloud-projekt, aktivér Search Console API, konfigurér samtykke og opret en OAuth-klient af typen Web application. Brug læseadgangen https://www.googleapis.com/auth/webmasters.readonly og redirect-URI’en, som vises i pluginets Indstillinger. Gem Client ID og Client Secret. Klik derefter Forbind med Google, godkend adgang og vælg website. WordPress-administrationen skal bruge HTTPS. Google-kontoen skal have adgang til ejendommen.
+Historical 1.0–1.4 installation ZIPs remain unchanged and retain their original Danish interface. The repository documentation and release descriptions are maintained in English.
 
-En ekstern OAuth-app i Testing kan få refresh-tokens, som udløber efter syv dage. Konfigurér publiceringsstatus og eventuel verifikation til dit konkrete brug. Pluginet fornyer gyldige adgangstokens automatisk, men kan ikke omgå Googles samtykke-, publicerings- eller tilbagekaldelsesregler.
+== Priorities and exclusions ==
 
-Data hentes dagligt: to 28-dages perioder med tre dages forsinkelse. Søgeklik, eksponeringer, CTR og gennemsnitlig position bruges i prioriteringen. Forældede data (>7 dage) ignoreres. API’et returnerer primært topdata og garanterer ikke alle rækker. En manglende URL er ikke bevis for nul trafik. Klik er organiske Google-klik, ikke samlet trafik. Søgeord indsamles ikke, og rå Google-statistik sendes ikke til OpenAI.
+Choose Google Search Console, the built-in view counter or both under Traffic source for priorities. Google-only stops internal counting. Internal-only stops automatic Google syncing. The separate view-counter setting also disables collection and use of internal counts. Switching sources retains existing data and Google credentials, subject to normal retention. Missing data is not silently substituted with another source.
 
-== Bevaring og nye elementer ==
-Pluginet bruger WordPress’ HTML-tokenprocessor til at ændre tekst i kendte tekstblokke og klassisk HTML. Tags og attributter bevares; linktekster, kode, formularer, medier, dynamiske og ukendte blokke beskyttes. Registrerede shortcodes beskyttes i deres komplette HTML-fragment. Ikke alle specialblokke kan derfor få deres interne tekst omskrevet.
+Manual priority has the greatest weight, followed by Yoast cornerstone markers, traffic, measured declines in Google clicks, search opportunities and content age. The overview explains each score. Search Console data older than seven days is ignored. Missing rows do not prove zero traffic. Without traffic data, manual priorities and content age still apply.
 
-Nye resuméer, FAQ’er, tjeklister, tabeller, faktabokse, kontaktbokse og relaterede links gemmes som redigerbare ai0-refresh/section-blokke. Der tillades højst fire på en side i alt. Billeder og videoer bevares; pluginet genererer ikke nye billeder/videoer. Modellen instrueres til at undgå dubletter og til kun at bruge eksisterende fakta. Den har ikke web research. Teknisk kontrol er ikke faktatjek og garanterer ikke højere placeringer.
+Exclude pages and posts is a searchable selection list. Search by title or ID, select multiple entries and save. Choices are shared with the editor and priority overview. Filtering does not clear selections; selected pages appear on separate lines. Old IDs and per-page exclusion metadata are migrated.
 
-De nye ai0-refresh/section-tekstelementer kræver det aktive plugin for frontend-rendering. Almindelige billedblokke gør ikke. Ved deaktivering bevares blokdata i indholdet, men de dynamiske elementer vises ikke før genaktivering. Gendan originalindholdet inden permanent fjernelse, hvis det ønskes.
+Only published posts/pages without passwords are processed. The privacy policy page, Yoast noindex and manually excluded content are skipped. Custom post types are not processed. Select any additional pages that should not be edited.
 
-== Billeder fra WordPress’ mediebibliotek ==
-Fra 1.4.0 kan pluginet søge og genbruge dine eksisterende uploadede billeder. Indstillinger > Billeder fra mediebiblioteket > Tillad søgning og genbrug af eksisterende billeder styrer adgangen. Den er som udgangspunkt slået til i denne version og kan slås fra separat fra nye tekstelementer. Der oprettes ingen ny WordPress-bruger, og der kræves ingen ny API-nøgle eller ekstern billedtjeneste.
+== Six-month cooldown and scheduling ==
 
-Pluginet søger lokalt med WordPress’ get_posts/WP_Query. Op til fire emneord fra sidens titel og overskrifter bruges mod medietitler/billedtekster samt filnavne og alt-tekster. Sidens indledning bruges, når titel/overskrifter ikke giver nok ord. Op til 12 relevante kandidater sendes til modellen som ID, titel, filnavn, alt-tekst, billedtekst og dimensioner. Billedfiler og billed-URL’er sendes ikke til OpenAI. Dette er søgning i metadata, ikke visuel analyse af billederne. Gode titler og alt-tekster i mediebiblioteket gør derfor billedvalgene bedre.
+A page is eligible only six calendar months after its latest publication or content modification, including manual edits and content updates by this plugin. Updating the plugin software itself does not reset the cooldown. The rule applies to both generation and publication and cannot be bypassed with a prompt or manual action. Month lengths and leap years are handled. Restoring content counts as a content change.
 
-Modellen kan vælge højst to nye billeder og skal forklare relevans og placering. Den må også vælge nul billeder. Serveren accepterer kun ID’er fra det faktiske søgeresultat. JPEG, PNG, WebP, GIF og AVIF er tilladt, når WordPress kan levere et billede på mindst 300 × 180 pixels. Logoer/ikoner med kendte navne og billeder tilknyttet private, ikke-udgivne eller adgangskodebeskyttede sider springes over. Ikke-tilknyttede billeder regnes som tilgængelige, som i det almindelige WordPress-mediebibliotek. Til særlige adgangsregler kan filteret ai0r_media_allowed($allowed, $attachment_id) bruges.
+Automation processes at most one page per hour from the selected day and hour of the month. The monthly generation limit includes manual attempts, errors and runs with no changes. A generation quota is not a promise of the same number of publications. Rejected or unnecessary proposals receive a pause; failures normally receive a seven-day pause. Interrupted runs are marked as errors after ten minutes.
 
-Eksisterende medieblokke, featured image, filer og metadata ændres ikke. Kendte billed-ID’er og billed-URL’er i indholdet og genbrugte blokke bruges til at undgå dubletter. Specialblokke/shortcodes, der selv henter skjulte medier, kan ikke altid genkendes. Nye billeder gemmes som almindelige core/image-blokke med WordPress’ large-størrelse og bibliotekets eksisterende alt-tekst/billedtekst. De kan redigeres i Gutenberg og kræver ikke dette plugin for at blive vist. Højst to nye billeder er en separat grænse fra de fire nye tekstelementer.
+The token limit reserves conservative capacity before a request and replaces it with reported usage after a response. Unknown usage retains the reservation. A token limit is not an exact currency budget. Generation has a 90-second HTTP timeout. Pages exceeding 250 KB or 600 editable segments are skipped. WordPress' time zone is used. WP-Cron depends on traffic; a hosting cron job invoking wp-cron.php improves reliability. Existing hosting cron settings are not changed.
 
-Historikken viser antal nye billeder, miniature, bibliotekstitel, alt-tekst, begrundelse og søgeresultat. Et forslag med kun et nyt billede tæller som en ændring. Ved publicering kontrolleres billedadgang og de valgte mediers tilgængelighed/URL igen; et billede, som siden er blevet gjort privat eller fjernet, publiceres ikke. Gendannelse fjerner de indsatte blokke fra siden, men sletter ingen filer fra mediebiblioteket. Seks måneders pause gælder som før. Metadata fylder lidt ekstra i API-inputtet og indgår automatisk i token- og prisoverslaget.
+== Google Search Console login ==
 
-== Prioritering og seks måneder ==
-I Indstillinger > Trafikkilde til prioritering vælger du Kun Google Search Console, Kun indbygget besøgstæller eller begge. Kun Google stopper al intern optælling. Kun intern stopper den automatiske Google-synkronisering. Den separate tæller-afbryder kan også slå intern optælling og brug af tællerdata fra. Eksisterende data og Google-forbindelse bevares ved skift, med den normale retention. Ingen kilde erstattes i stilhed af den anden. Manuelle markeringer og alder bruges altid.
+Google login requires a one-time setup of your own OAuth client. No shared hosted login service or shared Client Secret is included.
 
-Manuel prioritet > Yoast-hjørnestensmarkering > trafik, tab af Google-klik, søgepotentiale og alder. Interne trafiktal vises for 90 dage og det seneste kalenderår; 90-dages-tallet indgår i prioriteringsscoren. Dagens dato og datoen ét kalenderår tilbage er inkluderet i årstallet. Tal fra før installationen genskabes ikke. Oversigten forklarer hver score. Manglende data giver prioritering efter manuelle markeringer og alder.
+Create/select a Google Cloud project, enable Search Console API, configure consent with https://www.googleapis.com/auth/webmasters.readonly and create a Web application OAuth client. Copy the exact redirect URI displayed in Settings. Save Client ID/Secret, connect with Google and select a property covering this WordPress domain. Administration must use HTTPS and the Google Account must have access to the property.
 
-En side må først behandles seks kalendermåneder efter seneste udgivelse eller indholdsændring, også en manuel ændring. Efter en pluginopdatering går der igen mindst seks måneder. Reglen gælder både generering og publicering og kan ikke omgås med en manuel knap eller prompt. Månedslængder og skudår håndteres. En gendannelse tæller som en indholdsændring og omgår ikke pausen.
+External OAuth apps in testing mode may have short-lived refresh tokens and require repeated login. Configure publishing status and any verification requirements for your usage. Valid access tokens are refreshed automatically; the plugin cannot bypass Google's consent or revocation rules.
 
-Kun udgivne posts/pages uden adgangskode behandles. Privatlivsside, Yoast-noindex og manuelt udelukket indhold springes over. Markér også vilkår, juridiske tekster, særligt følsomt indhold og øvrige sider, der skal udelukkes. Cases og andre custom post types behandles ikke i denne version.
+Daily synchronization compares two 28-day periods, excluding the latest three days to avoid preliminary data. Clicks, impressions, CTR and average position affect priority. Data older than seven days is ignored. The API may omit rows. Search clicks are organic Google clicks, rather than all website visits. Search queries are not collected, and raw Google statistics are not sent to OpenAI.
 
-== Planlægning og budget ==
-Der behandles højst én side i timen fra den valgte dag og time i måneden. Månedens maksimum gælder alle API-genereringer, også manuelle forsøg, fejl og kørsler uden ændringer. En opdateringskvote er derfor ikke et løfte om samme antal publiceringer. Afviste/overflødige forslag får en pause; fejl får normalt syv dages pause. Uafsluttede kørsler markeres som fejl efter ti minutter.
+== Preservation and new elements ==
 
-Tokenloftet reserverer konservativt plads før API-kaldet og erstatter reservationen med kendt faktisk forbrug efter svaret. Ved afbrudt eller ukendt forbrug beholdes reservationen. Loftet er ikke en valutaangivelse; modelpriser og tokenisering kan variere. Generering bruger maksimalt 90 sekunders HTTP-timeout. Store sider (>250 KB eller 600 tekstfelter) springes over.
+WordPress' HTML token processor changes text in known text blocks and ordinary classic HTML. Existing tags and attributes are retained. Link text, code, forms, media, dynamic/unknown blocks and registered shortcodes are protected. Some custom blocks therefore have no safely editable internal text.
 
-WP-Cron kræver trafik. Brug webhotellets system-cron mod wp-cron.php for stabil tidsstyring. Tidszone følger WordPress. Et eksisterende cron-setup ændres ikke automatisk.
+New summaries, FAQs, checklists, comparison tables, callouts, contact boxes and related links use editable ai0-refresh/section blocks. At most four plugin text elements are allowed per page in total. The model is instructed to avoid duplicates, use existing facts and preserve caveats. There is no external research or fact-checking. Technical validation does not guarantee factual accuracy or rankings; FAQ elements do not promise FAQ schema or rich results.
 
-== Prisestimat pr. side og indlæg ==
-Oversigten viser et prisoverslag for hver side med den valgte model, prompt og svargrænse. Input anslås ud fra hele forespørgslen inklusive instruktioner og JSON-skema, ca. tre tegn pr. token. Output anslås ud fra indholdets længde. Det er en heuristik, ikke en rigtig tokenizer. Et separat forsigtigt scenario bruger den konservative inputreservation og hele svargrænsen; det er ikke et garanteret maksimum. Reasoning og faktisk svarlængde kan påvirke forbruget.
+These dynamic text elements require the plugin to remain active for frontend rendering. Their data is retained on deactivation and renders again when reactivated. Restore original content before permanent removal if desired. Ordinary core/image blocks do not require this plugin.
 
-Efter hver kørsel gemmes et estimat ud fra API’ets input/output/cached-tokenforbrug i historikken. Output-tallet omfatter også eventuelle reasoning-tokens. Takster og beregningskurs gemmes sammen med kørslen og ændres ikke, når du senere vælger en anden model/pris. Ved afbrudt svar uden usage bevares et tydeligt mærket overslag; det vises ikke som nul kroner. Ældre historik uden prisdata får ikke opfundet en historisk pris.
+== WordPress media library images ==
 
-Standardtakster pr. million tokens (USD), kontrolleret 25.10.2026:
-Model | Input | Output | Cache-læsning | Cache-skrivning
-GPT-6.1 Sol | 2 | 10 | 0,10 | 2,50
-GPT-6 Astra | 10 | 50 | 1 | 12,50
-GPT-6 Luna | 0,10 | 0,50 | 0,01 | 0,125
-For disse modeller anvendes de dokumenterede tillæg ved over 272.000 inputtokens: input/cache 2x, output 1,5x. Forespørgsler vælger service_tier=default. Kilder:
+Media library images has a separate permission setting, enabled by default. No new WordPress user, external image service or extra API key is created. The plugin reuses existing uploaded images; it does not generate or upload images/videos.
+
+Native get_posts/WP_Query searches use up to four topic terms from the page title/headings, with introductory text as a fallback, against attachment titles, captions, filenames and alt text. English and Danish stop words are excluded. Up to 12 candidates are sent as metadata: attachment ID, title, filename, alt text, caption and dimensions. Image files and image URLs are not sent to OpenAI. Selection uses metadata, not visual image analysis; good library titles and alt text help.
+
+The model may select zero, one or two images and must explain relevance and placement. The server accepts only IDs from its actual shortlist. JPEG, PNG, WebP, GIF and AVIF are allowed when WordPress can provide at least 300 x 180 pixels. Known logo/icon names and images attached to private, unpublished or password-protected pages are skipped. Unattached images are treated as available, as in the regular media library. Use ai0r_media_allowed($allowed, $attachment_id) for additional local rules.
+
+Existing media, featured image, files and metadata are not modified. Known image IDs/URLs, including reusable-block images, prevent duplicates; media hidden behind custom blocks/shortcodes cannot always be recognized. New images are ordinary core/image blocks using WordPress' large size and existing alt text/caption. They remain editable/renderable without this plugin. The two-image limit is separate from the four-text-element limit.
+
+History shows image counts, thumbnails, titles, alt text, placement reasons and search terms. An image-only proposal counts as a change. Permissions, availability and URLs are rechecked before publication. A newly private or removed image is not published. Restore removes added blocks without deleting library assets. Metadata is included in token/cost forecasts. The six-month cooldown still applies.
+
+== Cost estimates and conversion ==
+
+Before generation, each page has a forecast using the chosen model, full request including instructions/schema, saved prompt and output limit. Input uses approximately three characters per token; output uses article length. This is a heuristic, not a tokenizer. A separate conservative scenario uses the input reservation and full output limit; it is not a guaranteed maximum. Reasoning and actual response length affect usage.
+
+History stores a token-based estimate after reported input/output/cached usage, including any reasoning tokens in reported output. Rates and exchange observations are saved with the run and are not recalculated after settings changes. Unknown usage keeps a clearly labelled forecast rather than claiming zero cost. Older history without cost data receives no invented historical cost.
+
+Built-in USD rates per million tokens, dated 25 October 2026:
+Model | Input | Output | Cached input | Cache writes
+GPT-6.1 Sol | 2 | 10 | 0.10 | 2.50
+GPT-6 Astra | 10 | 50 | 1 | 12.50
+GPT-6 Luna | 0.10 | 0.50 | 0.01 | 0.125
+The built-in long-context multipliers above 272,000 input tokens are 2x input/cache and 1.5x output. Requests use service_tier=default. Rates can change; check your provider pricing and invoice. Original rate sources:
 https://developers.openai.com/api/docs/models/gpt-6.1-sol
 https://developers.openai.com/api/docs/models/gpt-6-astra
 https://developers.openai.com/api/docs/models/gpt-6-luna
 
-Andre modeller og snapshots kræver egne takster. Slå Brug egne takster til, og udfyld input, output og cache-takster i USD pr. million tokens. Egne takster tilsidesætter indbyggede takster for den valgte model; uden markering anvendes indbyggede takster igen. Egne takster har ingen automatisk kontekstmultiplikator. Ændring af model nulstiller formularen til den models egne gemte takster eller standardtakster.
+Other models/snapshots need custom rates to show an estimate. Custom rates override built-in rates for that model and have no automatic long-context multiplier. Model changes restore that model's saved custom rates or standard defaults in the form.
 
-Fra version 1.3.0 vises Valutaomregning som automatisk USD → DKK. Ingen manuel kurs eller ekstra API-nøgle er nødvendig. Pluginet henter ECB’s seneste daglige referencekurs via Frankfurter:
+USD/DKK conversion uses Frankfurter's latest daily ECB rate:
 https://api.frankfurter.dev/v2/providers/ecb/rate/usd/dkk
-Dokumentation: https://frankfurter.dev/
+https://frankfurter.dev/
 
-Kursen hentes på WordPress-serveren og caches i et døgn. En selvstændig daglig WP-Cron-opgave opdaterer også kursen, når AI-automatikken er slået fra. Ved fejl forsøges højst én gang i timen. Kilde og kursdato vises i Indstillinger, oversigten og historikkens detaljer. Weekender og helligdage bruger seneste offentliggjorte kurs. Ved nedbrud bruges seneste gyldige kurs med en tydelig markering; uden tidligere kurs vises USD alene. Fejl i valutakilden blokerer ikke indholdsgenerering. Der sendes ingen API-nøgle, besøgstal eller sideindhold til valutakilden. Tjenesten modtager serverens normale netværksforespørgsel om USD/DKK.
+No extra key or manual rate is needed. Results are cached for one day and refreshed by an independent daily WP-Cron task. Failures retry at most hourly. Weekends/holidays use the latest published observation. Outages keep the last valid rate with a warning; without one, prices show USD only. Currency failure does not block generation. No key, content or view count is sent to this service. Historic manual conversions are retained and labelled.
 
-Historikkens eksisterende priser genberegnes ikke. Tidligere manuelt beregnede beløb bevares og markeres som en tidligere manuel kurs. Nye historikposter gemmer den anvendte onlinekurs, kursdato og kilde sammen med beløbet. Eksempel med GPT-6.1 Sol: 10.000 input + 4.000 output uden cacherabat = $0,06; DKK-beløbet beregnes med den hentede kurs. Alle beløb er estimater uden moms, gebyrer og aftalerabatter. Priser kan ændre sig; opdatér egne takster ved behov. API-fakturaen er afgørende. Prisestimatet er ikke et valutabudget eller en garanti for, at et forslag forbedrer indholdet.
+Example: 10,000 input + 4,000 output tokens on GPT-6.1 Sol without caching is $0.06; DKK uses the retrieved rate. Estimates exclude VAT, fees and negotiated discounts. The API invoice is authoritative. The forecast is not a currency budget or a guarantee of editorial improvement.
 
-== Historik og gendannelse ==
-Både historikoversigten og den enkelte kørsel har Se siden til frontenden og Redigér i WordPress til editoren. Links åbner i en ny fane. Slettet indhold får ingen brudte links; ikke-udgivet indhold har kun editorlink.
+== History and restore ==
 
-Historikken gemmer model, redaktionel prompt, før/efter-indhold, hashes, datoer, status og tokens/reservationer. Forslag kan gennemgås, publiceres eller afvises. Publiceret indhold kan gendannes, hvis indholdet ikke er ændret siden. En nyere manuel ændring bliver ikke overskrevet. Seks måneders regel kontrolleres igen ved publicering. Ved ændringer i WordPress’ lagringsfiltre annulleres opdateringen, hvis indholdet ikke længere matcher det validerede forslag.
+Generation history and each detail show View page and Edit in WordPress links in new tabs. Deleted content has no broken links; unpublished content has only an editor link.
 
-Fra version 1.1.0 gemmes også faktiske antal tekstændringer og nye elementer samt modellens konkrete vurdering. Identiske tekstforslag tæller ikke som ændringer. Et svar uden effektive ændringer vises som Ingen ændringer foreslået, med begrundelse og mulighed for en ny manuel gennemgang. Det publiceres ikke, starter ikke en ny seksmånedersperiode og vises ikke som to identiske før/efter-versioner. Månedens kvoter gælder også ved en ny gennemgang. Modellen kan fortsat vælge ingen ændringer; pluginet tvinger ikke en unyttig omskrivning igennem.
+History retains model, editorial prompt, before/after content, hashes, dates, status and usage/reservations. Review, publish or reject proposals. Published changes can be restored only if the page has not changed since. Newer manual edits are not overwritten. Cooldown and image permissions are checked again on publication. If WordPress save filters modify the validated content, the update is cancelled and rolled back.
 
-Databasens posts-, postmeta- og historiktabeller skal understøtte transaktioner (InnoDB) for sikker publicering. Historik slettes ikke automatisk ved deaktivering eller fjernelse. Nye WordPress-revisioner oprettes også, hvis revisioner er aktiveret. Metadata ændres ikke; der er derfor ingen metadata, som skal gendannes.
+Actual text/image/section counts are recorded, rather than trusting the model summary. Identical proposals do not count as changes. No-change runs show a reason and permit another manual assessment when eligible. They are not published and do not start a new six-month period. Monthly quotas still apply. The model may choose no changes; the plugin does not force unnecessary rewriting.
 
-== Besøgstæller og eksterne tjenester ==
-Tælleren gemmer kun indholds-ID, dato og antal visninger på din egen server. Pluginet sætter ingen sporingscookies og gemmer ingen besøgsprofiler, fulde URL’er eller referrers. Eksisterende WordPress-login-cookies medsendes til WordPress for at kunne frasortere indloggede brugere. Indloggede brugere, forhåndsvisninger og kendte bots frasorteres. Browserens DNT/GPC respekteres. En kortvarig misbrugsbegrænsning gemmer en envejsværdi af IP-adressen i op til to minutter. Webserveren modtager som normalt IP og user agent; dens egne logs styres ikke af pluginet. Summer ældre end ét kalenderår slettes ved installation/opgradering og dagligt via en selvstændig WP-Cron-opgave, også når AI-automatik og tæller er slået fra. Skudår håndteres. Genereringshistorikken bevares. Oprydningen kræver, at pluginet er aktivt og WP-Cron kører.
+Publishing requires transactional InnoDB tables. History is not automatically erased by deactivation/removal. WordPress revisions are also created when enabled. Original metadata remains unchanged.
 
-Cachevenligt browserscript kalder admin-ajax.php med et signeret indholds-ID. Både administratorer, redaktører, abonnenter og øvrige indloggede roller udelades på serveren, også hvis de har fået en cachet anonym side. Den gamle REST-sporingsrute tæller ikke længere, så gamle cachede scripts ikke tæller indloggede brugere. Ryd WordPress- og Cloudflare-cache efter aktivering, saltændring eller ændring af tælleren. Browserblokering, ukendte bots og manipulerede forespørgsler betyder, at tælleren kun er et omtrentligt mål. Data bruges ikke til sikkerhedsbeslutninger.
+== View counter and external services ==
 
-For samtykke-/privacyintegration kan filteret ai0r_tracking_allowed bruges til at styre både script og endpoint. Hvis samtykke varierer pr. besøgende på cachede sider, skal CMP’en også blokere scriptet, indtil passende samtykke foreligger. Pluginet afgør ikke kravene til dit konkrete website.
+The internal counter stores only content ID, date and count on your server. It sets no tracking cookies and stores no visitor profiles, full URLs or referrers. Existing WordPress login cookies are sent back to WordPress to exclude every logged-in role, including users served cached anonymous pages. Known bots and previews are excluded; DNT/GPC are respected. An abuse limit stores a one-way IP-derived value for up to two minutes. Hosting logs are outside this plugin's control.
 
-OpenAI: Der sendes ved generering den valgte sides tekst, titel, URL, redaktionelle prompt, et begrænset katalog af offentlige interne links og, når billedadgang er slået til, metadata om op til 12 relevante billeder til https://api.openai.com/v1/responses med store=false. API-nøglen sendes kun til api.openai.com. Modeltesten bruger /v1/models. Googles OAuth- og Search Console-endpoints bruges kun efter opsætning og godkendelse. Nøgler og tokens gemmes krypteret med en nøgle afledt af WordPress’ auth-salt; en ændring af salts kræver genindtastning og nyt Google-login. Databasekopier bør stadig beskyttes.
+The cache-friendly script calls admin-ajax.php with a signed content ID. The legacy REST endpoint no longer counts, preventing old cached scripts from counting logged-in users. Clear WordPress/CDN caches after activation, salt changes or tracking changes. Unknown bots, blockers and manipulated requests make the count approximate; it is not used for security decisions.
 
-Udvikler-hook: ai0r_content_applied($post_id, $history_id, $is_restore) til eksplicit cachepurge eller andre lokale integrationer. WordPress’ normale post-update-hooks køres også.
+Counts older than one calendar year are removed at install/upgrade and daily, including when AI automation or counting is disabled. Leap years are handled. History is retained. Cleanup requires an active plugin and working WP-Cron.
+
+Use ai0r_tracking_allowed to control both script and endpoint for local consent/privacy integration. On cached pages where consent varies per visitor, your CMP must also block the script until appropriate consent. The website owner determines applicable requirements.
+
+OpenAI receives the selected page text, title, URL, prompt, bounded public internal links and optional image metadata at https://api.openai.com/v1/responses with store=false. The key is sent only to api.openai.com; model discovery uses /v1/models. Google OAuth/Search Console endpoints are used after setup/consent. Credentials and tokens are encrypted with a key derived from WordPress auth salts; changing salts requires new credentials/login. Protect database backups.
+
+GitHub update checks send a plugin-version user agent and ordinary server network information, without article content, OpenAI keys, Google tokens or view data. Compatibility manifests and installation assets are retrieved from release URLs in https://github.com/andersburn/ai0-content-refresh. No GitHub credentials are stored.
+
+Developer hooks: ai0r_content_applied($post_id, $history_id, $is_restore) for cache purging/local integrations; ai0r_media_allowed($allowed, $attachment_id) for media access; ai0r_tracking_allowed($allowed, $post_id) for counting. Normal WordPress post-update hooks also run.
 
 == Changelog ==
+
+= 1.5.0 =
+English interface and documentation; bundled Danish PHP/JavaScript translations and POT template; article-language-preserving new default prompt; English media-search stop words; locale-aware numeric display; native GitHub release updates with matching compatibility metadata and administrator-controlled auto-updates. Existing saved prompts/settings/history are retained.
+
 = 1.4.0 =
-Indbygget søgning efter relevante billeder i WordPress-mediebiblioteket; separat adgangsindstilling; højst to nye native Gutenberg-billedblokke; metadata frem for billedfiler til modellen; beskyttelse mod kendte dubletter og private billeder; billedvalg og begrundelser i historikken; kontrol igen ved publicering.
+Native media library search and reuse; separate media permission; at most two new Gutenberg image blocks; bounded metadata-only input; duplicate/private-image protection; image choices and reasons in history; checks before publication.
 
 = 1.3.0 =
-Automatisk USD/DKK-omregning via Frankfurter/ECB med kursdato, cache, fejlhåndtering og gemte historikkurser; udelukkede sider som liste med linjeskift; visninger for 90 dage og ét kalenderår; frontend- og editorlinks i historikoversigt og historikdetaljer.
+Automatic USD/DKK conversion via Frankfurter/ECB with dates, cache, fallback and immutable historic rates; exclusions on separate lines; 90-day/year views; public-page/editor history links.
 
 = 1.2.0 =
-Valg af trafikkilde; frasortering af alle indloggede roller via cookiebevarende AJAX, også på cachede sider; ét kalenderårs retention med selvstændig daglig oprydning; model-dropdown med alle kontoens model-ID’er og Anden model-felt; prisoverslag pr. side og tokenbaseret estimat i historikken; gemte takst/valutakurssnapshots og egne modelpriser.
+Traffic-source selection; logged-in exclusion through cookie-aware AJAX, including cached pages; one-calendar-year retention and daily cleanup; model dropdown with account models and Other field; forecasts and usage-based estimates; saved rate/exchange snapshots and custom model rates.
 
 = 1.1.0 =
-Anbefalet model med valgknap; søgbar dropdown med flervalg og fælles udelukkelsesliste; mere aktiv forbedringsprompt og lokal tekstkontekst; rettelse af manglende mellemrum ved inline-formatering; ændringstal og klarere ingen-ændring-historik; manuel gentagelse af gennemgange uden ændringer; bevaring af egne indstillinger ved opgradering.
+Model recommendation; searchable shared exclusions; more active prompt and local context; missing-space fixes at inline boundaries; actual change counts; clear no-change history and manual retry; upgrade preservation.
 
 = 1.0.0 =
-Separat plugin med brugerindtastet OpenAI-nøgle, modelvalg, prompt, planlægning, Search Console OAuth, lokal tæller, prioritering, bevaring af Gutenberg/klassisk HTML, nye redigerbare elementer, historik og gendannelse.
+Initial standalone plugin with own OpenAI key, model/prompt, monthly scheduling, Search Console OAuth, internal counter, priorities, Gutenberg/classic HTML preservation, editable additions, history and restore.

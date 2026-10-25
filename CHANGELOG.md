@@ -1,57 +1,69 @@
-# Versionshistorik
+# Changelog
 
-Alle fem versioner blev samlet på GitHub den 25. oktober 2026. Tags indeholder hver versions oprindelige pluginkilde; installations-ZIP-filer er udgivet uændret som release-assets.
+The original five versions were imported to GitHub on 25 October 2026. Historical 1.0–1.4 installation ZIPs and tags remain unchanged. Version 1.5.0 introduces English source strings, Danish translations and native WordPress updates.
 
-## 1.4.0 – Billeder fra mediebiblioteket
+## 1.5.0 — English, Danish translation and WordPress updates
 
-- Separat adgang til at søge og genbruge eksisterende WordPress-billeder.
-- Native WordPress-søgninger i titler, filnavne, alt-tekster og billedtekster ud fra sidens emner.
-- Modellen får metadata om højst 12 relevante kandidater og kan tilføje højst to billeder.
-- Nye billeder gemmes som almindelige core/image-blokke i Gutenberg med bibliotekets alt-tekst og billedtekst.
-- Kendte dubletter, featured image, små billeder og billeder fra private/ikke-udgivne sider udelades.
-- Valgte billeder, begrundelser, søgeord og antal vises i historikken.
-- Billedadgang og tilgængelighed kontrolleres igen ved publicering; gendannelse sletter ingen mediefiler.
+- English source strings throughout the administration screens, Gutenberg controls and runtime messages.
+- Bundled Danish PO/MO and JavaScript JSON translations, plus a POT template for additional languages.
+- The interface follows the WordPress user's language, with English fallback. Existing articles, saved prompts, credentials and history are retained.
+- New installation prompts preserve the article's existing language; fixed model instructions no longer force Danish. English stop words improve media search.
+- Locale-aware numeric display and explicit DKK currency labels.
+- Native WordPress update discovery from this public GitHub repository, using the named plugin ZIP and matching update.json compatibility metadata.
+- Administrator-controlled auto-updates, bounded caching and rejection of drafts, prereleases, foreign package URLs and invalid metadata.
+- English documentation and release descriptions.
 
-Billedfiler sendes ikke til OpenAI; billedvalget bygger på metadata. Billedadgang er slået til som standard og kan ændres under Indstillinger.
+**Upgrading from 1.0–1.4:** install the 1.5.0 ZIP manually once. Older versions have no updater and cannot discover this first upgrade. Future updates appear in WordPress after 1.5.0 is installed. Use WordPress' normal Enable auto-updates control if desired; the plugin does not enable it for you.
 
-## 1.3.0 – Automatisk valuta og tydeligere oversigter
+Validation: 76 regression checks, 107 WordPress integration checks and 33 language/update checks, with simulated provider/update responses. PHP and JavaScript syntax checks pass. See TESTING.md for limitations.
 
-- Automatisk USD/DKK-omregning via Frankfurter/ECB med kursdato og daglig cache.
-- Ved udfald bruges seneste kendte kurs med markering; uden kurs vises kun USD.
-- Udelukkede sider og indlæg vises på separate linjer.
-- Interne visninger vises for 90 dage / 1 år; 90-dages-tallet bruges i prioriteringen.
-- Links til frontend og WordPress-editoren i historikoversigt og historikdetaljer.
-- Eksisterende prisberegninger i historikken bevarer deres oprindelige kurs.
+## 1.4.0 — WordPress media library images
 
-## 1.2.0 – Trafikkilder, modelvalg og prisestimat
+- Search and reuse existing WordPress images with a separate media permission.
+- Native searches across attachment titles, filenames, alt text and captions using the page's topics.
+- Metadata for up to 12 candidates; at most two new images with placement reasons.
+- Native Gutenberg core/image blocks using existing library alt text and captions.
+- Protection against known duplicates, featured images, tiny images and images attached to private/unpublished content.
+- Image choices, reasons, search terms and counts in history.
+- Recheck image access and availability before publication; restore never deletes media files.
 
-- Vælg Search Console, indbygget besøgstæller eller begge til prioriteringen.
-- Alle indloggede roller udelades fra tælleren, også på cachede sider, via cookiebevarende AJAX.
-- Intern besøgssporing ældre end ét kalenderår ryddes op ved opgradering og dagligt via WP-Cron.
-- Rigtig model-dropdown med kontoens modelnavne og feltet Anden model.
-- Prisoverslag pr. side før generering og estimat fra rapporteret tokenforbrug bagefter.
-- Egne modeltakster, manuel DKK-kurs og historiske snapshots af priser og kurs.
+Image files are not sent to OpenAI. Selection is based on metadata. Media access is enabled by default and can be changed in Settings.
 
-Ryd WordPress/CDN-cache efter opdatering, så den nye sporingskode bliver brugt.
+## 1.3.0 — Online conversion and clearer overviews
 
-## 1.1.0 – Bedre forbedringsforslag og valg
+- Automatic USD/DKK conversion through Frankfurter/ECB with rate dates and daily caching.
+- Last-known-rate fallback with a warning; USD-only display without a valid rate.
+- Excluded pages and posts on separate lines.
+- Internal views for 90 days / 1 year, with 90-day counts used in priority scores.
+- Frontend and WordPress editor links in history lists and details.
+- Existing historical cost calculations retain their original exchange rates.
 
-- Anbefalet model med valgknap.
-- Søgbar dropdown med flervalg til udelukkede sider og blogindlæg.
-- Mere aktiv redaktionel prompt og bedre kontekst omkring tekstfragmenter.
-- Rettelse af manglende mellemrum ved inline-formatering.
-- Faktiske ændringstal, tydelig besked ved identiske svar og mulighed for manuel gentagelse.
-- Eksisterende API-nøgle, modelvalg, prompt og historik bevares ved opdatering.
+## 1.2.0 — Traffic sources, model selection and costs
 
-## 1.0.0 – Første version
+- Choose Search Console, the built-in view counter or both for priorities.
+- Exclude every logged-in role from counting, including cached pages, through cookie-aware AJAX.
+- Delete internal counts older than one calendar year on upgrade and through daily WP-Cron cleanup.
+- Model dropdown with account model names and an Other model field.
+- Per-page cost forecasts and estimates based on reported token usage.
+- Custom model rates, manual DKK conversion and historic price/exchange snapshots.
 
-Første selvstændige version til AI-assisteret forbedring af eksisterende WordPress-sider og blogindlæg.
+Clear WordPress/CDN caches after upgrading so the updated counting script is used.
 
-- OpenAI API-nøgle, modelvalg og redigerbar prompt.
-- Planlagt månedlig gennemgang, forslag eller automatisk publicering og forbrugsgrænser.
-- Search Console via Google OAuth, lokal besøgstæller og manuel prioritet.
-- Bevaring af Gutenberg-blokke, medier, bannere og links; nye redigerbare indholdselementer.
-- Seks kalendermåneders pause, historik, diff, publicering og gendannelse.
+## 1.1.0 — Better editorial proposals and selections
 
-Dette er en historisk version. Brug 1.4.0 til nye installationer for de efterfølgende rettelser og funktioner.
+- Recommended model with a selection button.
+- Searchable multi-selection list for excluded pages and posts.
+- More active editorial prompt and context around editable segments.
+- Missing-space fixes at rich-text boundaries.
+- Actual change counts, clear no-change results and manual reassessment.
+- Retain existing credentials, model choice, custom prompts and history on upgrade.
 
+## 1.0.0 — Initial standalone release
+
+The first standalone plugin for AI-assisted improvements to existing WordPress pages and posts.
+
+- Your own OpenAI API key, model selection and editable prompt.
+- Monthly scheduling, review or automatic publication, and usage limits.
+- Google Search Console OAuth, internal view counter and manual priorities.
+- Preserve Gutenberg blocks, media, banners and links; add editable content elements.
+- Six-calendar-month cooldown, history, diff, publishing and restore.

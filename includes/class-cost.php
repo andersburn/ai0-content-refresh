@@ -14,10 +14,10 @@ final class AI0R_Cost {
     public static function rates(string $model, array $s): ?array {
         if (isset($s['custom_rates'][$model])) {
             $r = $s['custom_rates'][$model];
-            return $r + ['source' => 'Egne takster', 'long_context' => false];
+            return $r + ['source' => __('Custom rates', 'ai0-content-refresh'), 'long_context' => false];
         }
         $r = self::catalog()[$model] ?? null;
-        return $r ? $r + ['source' => 'OpenAI standardtakster, 25.10.2026', 'long_context' => true] : null;
+        return $r ? $r + ['source' => __('OpenAI standard rates, 25 October 2026', 'ai0-content-refresh'), 'long_context' => true] : null;
     }
 
     public static function calculate(int $input, int $output, int $cached, int $write, array $rates): float {
@@ -56,12 +56,12 @@ final class AI0R_Cost {
     }
 
     public static function amount(float $usd, ?float $exchange): string {
-        return '$' . number_format($usd, 4, ',', '.') . ($exchange !== null ? ' ≈ ' . number_format($usd * $exchange, 2, ',', '.') . ' kr.' : ' (DKK afventer valutakurs)');
+        return '$' . number_format_i18n($usd, 4) . ($exchange !== null ? ' ≈ ' . number_format_i18n($usd * $exchange, 2) . ' DKK' : (' ' . __('(DKK awaiting exchange rate)', 'ai0-content-refresh')));
     }
 
     public static function label(?array $cost): string {
-        if (!$cost) { return 'Pris ikke registreret'; }
-        if (!isset($cost['usd'])) { return 'Ukendt pris – angiv modellens takster'; }
-        return self::amount($cost['usd'], $cost['usd_dkk'] ?? null) . ($cost['state'] === 'usage' ? ' (rapporteret tokenforbrug)' : ' (overslag; forbrug ukendt)');
+        if (!$cost) { return __('Cost not recorded', 'ai0-content-refresh'); }
+        if (!isset($cost['usd'])) { return __('Unknown cost — enter the model rates', 'ai0-content-refresh'); }
+        return self::amount($cost['usd'], $cost['usd_dkk'] ?? null) . ($cost['state'] === 'usage' ? (' ' . __('(reported token usage)', 'ai0-content-refresh')) : (' ' . __('(estimate; usage unknown)', 'ai0-content-refresh')));
     }
 }

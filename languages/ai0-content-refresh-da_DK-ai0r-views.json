@@ -1,0 +1,14 @@
+{
+  "translation-revision-date": "2026-10-25 15:00+0100",
+  "generator": "Ai0 Content Refresh",
+  "domain": "ai0-content-refresh",
+  "locale_data": {
+    "ai0-content-refresh": {
+      "": {
+        "domain": "ai0-content-refresh",
+        "lang": "da_DK",
+        "plural-forms": "nplurals=2; plural=(n != 1);"
+      }
+    }
+  }
+}
