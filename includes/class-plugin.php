@@ -225,7 +225,7 @@ final class AI0R_Plugin {
             $reservation = strlen($encoded) + 2048;
             if ((int) $usage['tokens'] + $reservation + (int) $s['max_output'] > (int) $s['monthly_tokens']) { throw new RuntimeException(__('The monthly token limit has no room for this run. Increase the limit or wait until next month.', 'ai0-content-refresh')); }
             $cost = AI0R_Cost::forecast($body, $p->post_content, $s);
-            $history_id = AI0R_Store::record(['details' => wp_json_encode(['cost' => $cost]), 'post_id' => $post_id, 'model' => $s['model'], 'prompt' => $s['prompt'], 'before_content' => $p->post_content, 'before_hash' => hash('sha256', $p->post_content), 'input_tokens' => $reservation, 'output_tokens' => (int) $s['max_output']]);
+            $history_id = AI0R_Store::record(['details' => wp_json_encode(['cost' => $cost, 'publication_mode' => $auto ? 'auto' : 'review']), 'post_id' => $post_id, 'model' => $s['model'], 'prompt' => $s['prompt'], 'before_content' => $p->post_content, 'before_hash' => hash('sha256', $p->post_content), 'input_tokens' => $reservation, 'output_tokens' => (int) $s['max_output']]);
             update_post_meta($post_id, '_ai0r_retry_after', time() + 7 * DAY_IN_SECONDS);
             $r = wp_remote_post('https://api.openai.com/v1/responses', ['timeout' => 90, 'redirection' => 0, 'headers' => ['Authorization' => 'Bearer ' . $api_key, 'Content-Type' => 'application/json'], 'body' => $encoded]);
             if (is_wp_error($r)) { throw new RuntimeException(__('The OpenAI request was interrupted. Usage is unknown; the token reservation is retained.', 'ai0-content-refresh')); }
@@ -234,7 +234,7 @@ final class AI0R_Plugin {
             $json = json_decode(wp_remote_retrieve_body($r), true);
             if (isset($json['usage']['input_tokens'], $json['usage']['output_tokens'])) {
                 $cost = AI0R_Cost::from_usage($cost, $json['usage']);
-                AI0R_Store::update($history_id, ['details' => wp_json_encode(['cost' => $cost]), 'input_tokens' => (int) $json['usage']['input_tokens'], 'output_tokens' => (int) $json['usage']['output_tokens']]);
+                AI0R_Store::update($history_id, ['details' => wp_json_encode(['cost' => $cost, 'publication_mode' => $auto ? 'auto' : 'review']), 'input_tokens' => (int) $json['usage']['input_tokens'], 'output_tokens' => (int) $json['usage']['output_tokens']]);
             }
             if (($json['status'] ?? '') !== 'completed') { throw new RuntimeException(__('OpenAI did not complete the response. Try another model or increase the response limit.', 'ai0-content-refresh')); }
             $text = '';
@@ -252,6 +252,7 @@ final class AI0R_Plugin {
             $report['media_search'] = ['enabled' => (bool) $s['media_library'], 'terms' => $plan['media']['terms'], 'candidates' => count($plan['media']['images'])];
             $no_change = $after === $p->post_content;
             $report['cost'] = $cost;
+            $report['publication_mode'] = $auto ? 'auto' : 'review';
             $report['findings'] = [];
             foreach (array_slice(is_array($answer['findings'] ?? null) ? $answer['findings'] : [], 0, 12) as $finding) {
                 if (is_string($finding)) { $report['findings'][] = sanitize_textarea_field(mb_substr($finding, 0, 1000)); }
@@ -264,13 +265,25 @@ final class AI0R_Plugin {
             if ($no_change) { $summary = (__('No changes suggested.', 'ai0-content-refresh') . ' ') . $report['no_change_reason']; }
             AI0R_Store::update($history_id, ['status' => $no_change ? 'no_change' : 'pending', 'summary' => $summary, 'details' => wp_json_encode($report, JSON_UNESCAPED_UNICODE), 'after_content' => $after, 'after_hash' => hash('sha256', $after)]);
             update_post_meta($post_id, '_ai0r_retry_after', time() + ($no_change ? 30 : 7) * DAY_IN_SECONDS);
-            if ($auto && !$no_change) { self::apply_locked($history_id, false); }
+            if ($auto && !$no_change) {
+                if (AI0R_Store::settings()['mode'] === 'auto') {
+                    self::apply_locked($history_id, false);
+                } else {
+                    $report['publication_paused'] = true;
+                    AI0R_Store::update($history_id, ['details' => wp_json_encode($report, JSON_UNESCAPED_UNICODE)]);
+                }
+            }
             return $history_id;
         } catch (Throwable $e) {
             if ($history_id) {
                 $h = AI0R_Store::history($history_id);
                 // A validated pending proposal survives an application failure for later review.
                 if ($h && $h->status === 'running') { AI0R_Store::update($history_id, ['status' => 'error', 'summary' => $e->getMessage()]); }
+                elseif ($h && $h->status === 'pending' && $auto) {
+                    $details = (array) json_decode($h->details ?? '', true);
+                    $details['publication_error'] = $e->getMessage();
+                    AI0R_Store::update($history_id, ['details' => wp_json_encode($details, JSON_UNESCAPED_UNICODE)]);
+                }
             }
             throw $e;
         } finally { AI0R_Store::unlock($lock); }

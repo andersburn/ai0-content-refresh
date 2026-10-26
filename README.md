@@ -4,7 +4,7 @@
 
 Ai0 Content Refresh reviews pages and blog posts you have already written. It uses your chosen OpenAI model to propose clearer writing, better structure and useful additions while preserving Gutenberg layouts, images, videos, banners and links. A complete history lets you inspect changes, publish proposals and restore previous content.
 
-**Latest version: 1.5.0.** [Download the installation ZIP](https://github.com/andersburn/ai0-content-refresh/releases/latest) · [All releases](https://github.com/andersburn/ai0-content-refresh/releases) · [Changelog](CHANGELOG.md)
+**Latest version: 1.6.0.** [Download the installation ZIP](https://github.com/andersburn/ai0-content-refresh/releases/latest) · [All releases](https://github.com/andersburn/ai0-content-refresh/releases) · [Changelog](CHANGELOG.md)
 
 ## What it does
 
@@ -42,15 +42,26 @@ Minimum requirements are not a complete compatibility matrix. Local validation u
 
 ## Installation
 
-1. Download **ai0-content-refresh-1.5.0.zip** from the [latest release](https://github.com/andersburn/ai0-content-refresh/releases/latest). Choose the named installation asset, rather than GitHub's generated source archive.
+1. Download **ai0-content-refresh-1.6.0.zip** from the [latest release](https://github.com/andersburn/ai0-content-refresh/releases/latest). Choose the named installation asset, rather than GitHub's generated source archive.
 2. In WordPress, open **Plugins → Add New Plugin → Upload Plugin**, upload the ZIP and activate it.
 3. Open **Content Refresh → Settings**, enter your OpenAI API key and save.
 4. Click **Test key and retrieve models**. Choose a compatible text model from the dropdown or enter an ID under **Other model**. The list includes all account model names, including models unsuitable for generation.
 5. Configure the prompt, content types, exclusions, media access, traffic source and usage limits.
 6. Generate a proposal for an eligible page and inspect its history, changes and image choices.
-7. Enable scheduled reviews when ready. Manual generations always save proposals.
+7. Enable scheduled reviews when ready. Manual generations follow the selected publishing mode.
 
 The recommendation is a starting point, subject to model availability and your own review. New installations use an English editorial prompt that preserves the article's existing language. Updating the interface does not translate articles or replace existing saved prompts.
+
+## Publishing mode: review or automatic
+
+Under **Settings → When a proposal is ready**, choose one of two options and save:
+
+- **Save proposals for review:** new manual and scheduled runs save a proposal with **Pending review** status. Open the history entry and click **Publish this proposal** to apply it. These proposals are not automatically approved later.
+- **Publish automatically after technical validation:** new manual and scheduled runs publish changes immediately after validation. No approval click is needed. Manual buttons say **Generate and publish**, including the next-page and retry actions.
+
+Enable **Scheduled reviews** for unattended generation; selecting automatic publishing alone does not start scheduled jobs. Manual generation can publish automatically even while the schedule is disabled. Monthly limits and the six-month cooldown still apply.
+
+The setting applies to **future runs**. Existing pending entries remain available for manual approval and are not published retroactively. Upgrading retains your saved publishing setting. Stale forms are refused when the setting has changed since the button was displayed. Switching to review while a request is in progress retains its proposal rather than publishing it. Failed automatic publication retains the proposal and records the reason in history.
 
 ### Google Search Console
 
@@ -66,14 +77,15 @@ Counts are approximate and are not unique visitors. Clear WordPress/CDN caches a
 
 ## Updates and versions
 
-**Upgrade from 1.0–1.4:** install the 1.5.0 ZIP once using WordPress' replace-existing-plugin flow. Older versions do not contain an update client and therefore cannot discover this first upgrade themselves. Settings, encrypted credentials, custom prompts and history are retained.
+**Upgrade from 1.0–1.4:** install the latest ZIP once using WordPress' replace-existing-plugin flow. Older versions do not contain an update client and therefore cannot discover this first upgrade themselves. Settings, encrypted credentials, custom prompts and history are retained.
 
-**After installing 1.5.0:** WordPress checks this repository's latest stable release and uses the named plugin ZIP and matching `update.json` compatibility manifest. Checks are cached for six hours; opening **Dashboard → Updates** clears the plugin's cache for a fresh WordPress check. Failures are retried after a short delay. Drafts, prereleases, foreign packages and mismatched metadata are ignored. GitHub's public API limits can delay discovery.
+**On version 1.5.0 or later:** WordPress checks this repository's latest stable release and uses the named plugin ZIP and matching `update.json` compatibility manifest. Checks are cached for six hours; opening **Dashboard → Updates** clears the plugin's cache for a fresh WordPress check. Failures are retried after a short delay. Drafts, prereleases, foreign packages and mismatched metadata are ignored. GitHub's public API limits can delay discovery.
 
 New versions appear in **Plugins / Dashboard → Updates**. WordPress keeps the administrator's existing auto-update preference; this plugin does not enable auto-updates for you. To install future releases automatically, use WordPress' normal **Enable auto-updates** control. Content-review automation is a separate setting.
 
 | Version | Main changes |
 | --- | --- |
+| [1.6.0](https://github.com/andersburn/ai0-content-refresh/releases/tag/v1.6.0) | Publishing mode applies to manual and scheduled runs, clear radio options and status messages |
 | [1.5.0](https://github.com/andersburn/ai0-content-refresh/releases/tag/v1.5.0) | English interface and documentation, bundled Danish translation, language-preserving defaults and native GitHub updates |
 | [1.4.0](https://github.com/andersburn/ai0-content-refresh/releases/tag/v1.4.0) | WordPress media library search and image reuse |
 | [1.3.0](https://github.com/andersburn/ai0-content-refresh/releases/tag/v1.3.0) | Online currency conversion, 90-day/year views and frontend/editor links |
@@ -97,7 +109,7 @@ Frankfurter/ECB provides exchange rates without a key. Google is used after conf
 
 ## Validation
 
-Version 1.5.0 passed **76 regression checks, 107 WordPress integration checks and 33 language/update checks** locally, plus PHP and JavaScript syntax checks. The update suite exercises WordPress core's actual update discovery, English/Danish switching and JavaScript catalogues. OpenAI, Google and update-service responses were simulated; this is not a live-model quality evaluation or Elementor test. Earlier public currency access was also verified through WordPress. See [TESTING.md](TESTING.md).
+Version 1.6.0 passed **76 regression checks, 107 existing WordPress integration checks, 28 publishing checks and 33 language/update checks** locally, plus PHP and JavaScript syntax checks. The update suite exercises WordPress core's actual update discovery, English/Danish switching and JavaScript catalogues. OpenAI, Google and update-service responses were simulated; this is not a live-model quality evaluation or Elementor test. Earlier public currency access was also verified through WordPress. See [TESTING.md](TESTING.md).
 
 ## License
 

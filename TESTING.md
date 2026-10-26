@@ -1,4 +1,4 @@
-# Validation for 1.5.0
+# Validation for 1.6.0
 
 Run date: 25 October 2026 (Europe/Copenhagen).
 
@@ -53,3 +53,17 @@ Additional command:
 ```sh
 php tests/i18n-updates.php /absolute/path/to/disposable/wordpress
 ```
+
+## Version 1.6.0: publishing choices
+
+Validation on 26 October 2026 used PHP 8.5.2 and WordPress 7.1.3 with the official SQLite Database Integration 3.0.2 drop-in. The 76 regression checks, 107 existing integration checks and 33 language/update checks still pass. PHP and JavaScript syntax checks also pass.
+
+28 additional publishing checks exercise the same server-side manual-generation method used by page, next-page and retry actions. They cover review-only proposals, automatic manual publication with scheduling disabled, accurate outcome notices, publishing labels and submitted mode, six-month enforcement, unchanged replies, stale/legacy form refusal without provider requests, switching to review during generation, transactional rollback and error retention after a save-filter failure, scheduled auto/review behavior and keeping earlier pending entries pending.
+
+Both setting choices and the new explanations are available in English and Danish. Provider responses were simulated; no production content or real API credentials were used. The SQLite compatibility layer does not constitute a concurrent InnoDB load test. Production publishing still requires InnoDB. The test files and disposable WordPress environment are excluded from the installation ZIP.
+
+```sh
+php tests/publishing.php /absolute/path/to/disposable/wordpress
+```
+
+This runner includes the 107 existing integration checks before its 28 additional checks; do not count the included suite twice.
