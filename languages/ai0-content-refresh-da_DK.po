@@ -2,14 +2,14 @@
 # Copyright (C) 2026 Ai0
 # Distributed under the GPL-2.0-or-later license.
 msgid ""
-msgstr "Project-Id-Version: Ai0 Content Refresh 1.5.0\nReport-Msgid-Bugs-To: https://github.com/andersburn/ai0-content-refresh/issues\nPOT-Creation-Date: 2026-10-25 15:00+0100\nPO-Revision-Date: 2026-10-25 15:00+0100\nLanguage: da_DK\nMIME-Version: 1.0\nContent-Type: text/plain; charset=UTF-8\nContent-Transfer-Encoding: 8bit\nPlural-Forms: nplurals=2; plural=(n != 1);\nX-Domain: ai0-content-refresh\n"
+msgstr "Project-Id-Version: Ai0 Content Refresh 1.6.0\nReport-Msgid-Bugs-To: https://github.com/andersburn/ai0-content-refresh/issues\nPOT-Creation-Date: 2026-10-26 12:00+0100\nPO-Revision-Date: 2026-10-26 12:00+0100\nLanguage: da_DK\nMIME-Version: 1.0\nContent-Type: text/plain; charset=UTF-8\nContent-Transfer-Encoding: 8bit\nPlural-Forms: nplurals=2; plural=(n != 1);\nX-Domain: ai0-content-refresh\n"
 
 #: assets/admin.js:63
 #, javascript-format
 msgid "(%d selected)"
 msgstr "(%d valgt)"
 
-#: includes/class-admin.php:424
+#: includes/class-admin.php:470
 msgid "(Content deleted)"
 msgstr "(Indhold slettet)"
 
@@ -17,11 +17,11 @@ msgstr "(Indhold slettet)"
 msgid "(DKK awaiting exchange rate)"
 msgstr "(DKK afventer valutakurs)"
 
-#: includes/class-admin.php:219 includes/class-admin.php:257
+#: includes/class-admin.php:253 includes/class-admin.php:291
 msgid "(Untitled)"
 msgstr "(Uden titel)"
 
-#: includes/class-admin.php:391
+#: includes/class-admin.php:437
 msgid "(empty in the media library)"
 msgstr "(tom i mediebiblioteket)"
 
@@ -29,7 +29,7 @@ msgstr "(tom i mediebiblioteket)"
 msgid "(estimate; usage unknown)"
 msgstr "(overslag; forbrug ukendt)"
 
-#: includes/class-admin.php:283
+#: includes/class-admin.php:317
 msgid "(recommended)"
 msgstr "(anbefalet)"
 
@@ -45,27 +45,27 @@ msgstr "). Kontroller adgang og valgt website."
 msgid "). Check the model, key and API account balance."
 msgstr "). Kontroller model, nøgle og API-kontoens saldo."
 
-#: includes/class-admin.php:278
+#: includes/class-admin.php:312
 msgid ", and review the first proposals."
 msgstr ", og gennemgå de første forslag."
 
-#: includes/class-admin.php:241
+#: includes/class-admin.php:275
 msgid ". Data older than seven days is excluded from priorities."
 msgstr ". Data ældre end syv dage indgår ikke i prioriteringen."
 
-#: includes/class-admin.php:241
+#: includes/class-admin.php:275
 msgid ". Last retrieved"
 msgstr ". Senest hentet"
 
-#: includes/class-admin.php:340
+#: includes/class-admin.php:377
 msgid ". Period:"
 msgstr ". Periode:"
 
-#: includes/class-admin.php:216
+#: includes/class-admin.php:250
 msgid "28 days"
 msgstr "28 dage"
 
-#: includes/class-admin.php:216
+#: includes/class-admin.php:250
 msgid "90 days / 1 year"
 msgstr "90 dage / 1 år"
 
@@ -105,11 +105,11 @@ msgstr "En tekst kunne ikke ændres sikkert."
 msgid "AI-assisted SEO improvements for existing WordPress pages and posts, with preserved media, traffic-based priorities and review history."
 msgstr "AI-assisterede SEO-forbedringer af eksisterende WordPress-sider og indlæg med bevarede medier, trafikbaseret prioritering og ændringshistorik."
 
-#: includes/class-admin.php:274
+#: includes/class-admin.php:308
 msgid "API and editorial preferences"
 msgstr "API og redaktionelle valg"
 
-#: includes/class-admin.php:16 includes/class-admin.php:46 includes/class-admin.php:95
+#: includes/class-admin.php:16 includes/class-admin.php:79 includes/class-admin.php:126
 msgid "Access denied."
 msgstr "Adgang nægtet."
 
@@ -117,27 +117,31 @@ msgstr "Adgang nægtet."
 msgid "Add item"
 msgstr "Tilføj punkt"
 
-#: includes/class-admin.php:343
+#: includes/class-admin.php:380
 msgid "Add this redirect URI:"
 msgstr "Tilføj denne redirect-URI:"
 
-#: includes/class-admin.php:415
+#: includes/class-admin.php:461
 msgid "After"
 msgstr "Efter"
 
-#: includes/class-admin.php:422
-msgid "All attempts are saved, including errors and reviews without changes. Proposals change the published page only when published."
-msgstr "Alle forsøg gemmes, også fejl og gennemgange uden ændringer. Forslag ændrer først den udgivne side, når de publiceres."
+#: includes/class-admin.php:468
+msgid "All attempts are saved, including errors and reviews without changes. Pending review means you must open the proposal and click Publish this proposal. These entries are not approved automatically later."
+msgstr "Alle forsøg gemmes, også fejl og gennemgange uden ændringer. Afventer gennemgang betyder, at du skal åbne forslaget og klikke på Publicér dette forslag. Disse poster bliver ikke automatisk godkendt senere."
 
-#: includes/class-admin.php:306
+#: includes/class-admin.php:340
 msgid "All logged-in users are excluded, including on cached pages. Data older than one calendar year is deleted on upgrade and then daily through WP-Cron, even when automation is disabled. Only the date, content ID and view count are stored. No tracking cookies or visitor profiles are created. A short-lived abuse limit uses a one-way value derived from the IP address for up to two minutes. Respects DNT/GPC. Clear your page cache after activation or changes."
 msgstr "Alle indloggede brugere udelades, også på cachede sider. Data ældre end ét kalenderår slettes ved opdatering og derefter dagligt via WP-Cron, også når automatikken er slået fra. Gemmer kun dato, indholds-ID og antal visninger. Sætter ingen sporingscookies og gemmer ingen besøgsprofiler. Kortvarig misbrugsbegrænsning bruger en envejsværdi af IP-adressen i op til to minutter. Respekterer DNT/GPC. Ryd sidens cache efter aktivering eller ændring."
 
-#: includes/class-admin.php:295
+#: includes/class-admin.php:245
+msgid "All runs count towards the monthly limit. Scheduled reviews process at most one page per hour from the selected day of the month. Earlier pending proposals still require approval."
+msgstr "Alle kørsler tæller med i månedens loft. Planlagte gennemgange behandler højst én side i timen fra den valgte månedsdag. Tidligere afventende forslag kræver stadig godkendelse."
+
+#: includes/class-admin.php:329
 msgid "Allow searching and reusing existing images"
 msgstr "Tillad søgning og genbrug af eksisterende billeder"
 
-#: includes/class-admin.php:294
+#: includes/class-admin.php:328
 msgid "Allow summaries, FAQs, checklists, tables, callouts and relevant links"
 msgstr "Tillad resumé, FAQ, tjekliste, tabel, faktaboks og relevante links"
 
@@ -145,7 +149,7 @@ msgstr "Tillad resumé, FAQ, tjekliste, tabel, faktaboks og relevante links"
 msgid "Already has a proposal or a run in progress."
 msgstr "Har allerede et forslag eller en igangværende kørsel."
 
-#: includes/class-admin.php:391
+#: includes/class-admin.php:437
 msgid "Alt text:"
 msgstr "Alt-tekst:"
 
@@ -161,7 +165,11 @@ msgstr "En anden kørsel er i gang. Prøv igen om lidt."
 msgid "Answer"
 msgstr "Svar"
 
-#: includes/class-admin.php:294
+#: includes/class-admin.php:243
+msgid "Approval is required. New manual and scheduled runs save proposals; click Publish this proposal in the history to apply them."
+msgstr "Godkendelse er påkrævet. Nye manuelle og planlagte kørsler gemmer forslag; klik på Publicér dette forslag i historikken for at anvende dem."
+
+#: includes/class-admin.php:328
 msgid "At most four new elements per page in total. Existing media and custom blocks are preserved."
 msgstr "Højst fire nye elementer pr. side i alt. Eksisterende medier og specialblokke bliver bevaret."
 
@@ -169,51 +177,59 @@ msgstr "Højst fire nye elementer pr. side i alt. Eksisterende medier og special
 msgid "At most two new images are allowed, and media access must be enabled."
 msgstr "Højst to nye billeder er tilladt, og billedadgang skal være slået til."
 
-#: includes/class-admin.php:318
+#: includes/class-admin.php:355
 msgid "Authorized redirect URI"
 msgstr "Autoriseret redirect-URI"
 
-#: includes/class-admin.php:292
+#: includes/class-admin.php:326
 msgid "Automatic USD → DKK"
 msgstr "Automatisk USD → DKK"
 
-#: includes/class-admin.php:205
-msgid "Automation"
-msgstr "Automatik"
+#: includes/class-admin.php:416
+msgid "Automatic publishing did not complete:"
+msgstr "Automatisk publicering blev ikke gennemført:"
 
-#: includes/class-admin.php:307
+#: includes/class-admin.php:242
+msgid "Automatic publishing is on. New manual and scheduled runs update the live page immediately after technical validation."
+msgstr "Automatisk publicering er slået til. Nye manuelle og planlagte kørsler opdaterer den udgivne side straks efter teknisk kontrol."
+
+#: includes/class-admin.php:413
+msgid "Automatic publishing was switched off while this run was in progress. The proposal has been retained for review."
+msgstr "Automatisk publicering blev slået fra, mens kørslen var i gang. Forslaget er gemt til gennemgang."
+
+#: includes/class-admin.php:341
 msgid "Automation and usage limits"
 msgstr "Automatik og forbrugsgrænser"
 
-#: includes/class-admin.php:409 includes/class-admin.php:415
+#: includes/class-admin.php:455 includes/class-admin.php:461
 msgid "Before"
 msgstr "Før"
 
-#: includes/class-admin.php:396
+#: includes/class-admin.php:442
 msgid "Before and after are identical."
 msgstr "Før og efter er identiske."
 
-#: includes/class-admin.php:219 includes/class-admin.php:257
+#: includes/class-admin.php:253 includes/class-admin.php:291
 msgid "Blog post"
 msgstr "Blogindlæg"
 
-#: includes/class-admin.php:297
+#: includes/class-admin.php:331
 msgid "Blog posts"
 msgstr "Blogindlæg"
 
-#: includes/class-admin.php:291
+#: includes/class-admin.php:325
 msgid "Built-in standard rates are dated 25 October 2026. Other models need custom rates to show a cost estimate. Custom rates are used without automatic long-context surcharges."
 msgstr "Indbyggede standardtakster er dateret 25.10.2026. Andre modeller kræver egne takster for at vise et prisestimat. Egne takster bruges uden automatiske tillæg for lang kontekst."
 
-#: includes/class-admin.php:304
+#: includes/class-admin.php:338
 msgid "Built-in view counter only"
 msgstr "Kun indbygget besøgstæller"
 
-#: includes/class-admin.php:287
+#: includes/class-admin.php:321
 msgid "Cache writes"
 msgstr "Cache-skrivning"
 
-#: includes/class-admin.php:287
+#: includes/class-admin.php:321
 msgid "Cached input"
 msgstr "Cache-læsning"
 
@@ -221,15 +237,15 @@ msgstr "Cache-læsning"
 msgid "Callout"
 msgstr "Faktaboks"
 
-#: includes/class-admin.php:229
+#: includes/class-admin.php:263
 msgid "Cannot estimate this content"
 msgstr "Kan ikke beregnes for dette indhold"
 
-#: includes/class-admin.php:400
+#: includes/class-admin.php:446
 msgid "Change the model or prompt and try again. The run counts towards monthly usage; the six-month cooldown still applies."
 msgstr "Du kan ændre model eller prompt og prøve igen. Kørslen tæller med i månedens forbrug; seksmånedersgrænsen gælder stadig."
 
-#: includes/class-admin.php:317
+#: includes/class-admin.php:354
 msgid "Changing the client requires a new Google login."
 msgstr "En ændring af klienten kræver nyt Google-login."
 
@@ -237,23 +253,23 @@ msgstr "En ændring af klienten kræver nyt Google-login."
 msgid "Checklist"
 msgstr "Tjekliste"
 
-#: includes/class-admin.php:64
+#: includes/class-admin.php:97
 msgid "Choose a Search Console property that covers this WordPress domain."
 msgstr "Vælg et Search Console-website, der dækker dette WordPress-domæne."
 
-#: includes/class-admin.php:132
+#: includes/class-admin.php:163
 msgid "Choose a model or complete the Other model field."
 msgstr "Vælg en model, eller udfyld feltet Anden model."
 
-#: includes/class-admin.php:269
+#: includes/class-admin.php:303
 msgid "Clear all selections"
 msgstr "Ryd alle valg"
 
-#: includes/class-admin.php:415
+#: includes/class-admin.php:461
 msgid "Complete content before and after"
 msgstr "Komplet indhold før og efter"
 
-#: includes/class-admin.php:343
+#: includes/class-admin.php:380
 msgid "Configure OAuth consent with read-only access"
 msgstr "Konfigurér OAuth-samtykke med læseadgangen"
 
@@ -261,11 +277,11 @@ msgstr "Konfigurér OAuth-samtykke med læseadgangen"
 msgid "Connect Google Search Console first."
 msgstr "Forbind Google Search Console først."
 
-#: includes/class-admin.php:329
+#: includes/class-admin.php:366
 msgid "Connect with Google"
 msgstr "Forbind med Google"
 
-#: includes/class-admin.php:228
+#: includes/class-admin.php:262
 msgid "Conservative scenario:"
 msgstr "Forsigtigt scenario:"
 
@@ -273,11 +289,11 @@ msgstr "Forsigtigt scenario:"
 msgid "Contact box"
 msgstr "Kontaktboks"
 
-#: includes/class-admin.php:216 includes/class-admin.php:422
+#: includes/class-admin.php:250 includes/class-admin.php:468
 msgid "Content"
 msgstr "Indhold"
 
-#: includes/class-admin.php:186
+#: includes/class-admin.php:217
 msgid "Content & priorities"
 msgstr "Indhold & prioritering"
 
@@ -289,15 +305,15 @@ msgstr "Content Refresh – indholdselement"
 msgid "Content age"
 msgstr "Indholdets alder"
 
-#: includes/class-admin.php:407
+#: includes/class-admin.php:453
 msgid "Content changes"
 msgstr "Ændringer i indholdet"
 
-#: includes/class-admin.php:370
+#: includes/class-admin.php:407
 msgid "Content deleted"
 msgstr "Indhold slettet"
 
-#: includes/class-admin.php:205
+#: includes/class-admin.php:236
 msgid "Content in the overview"
 msgstr "Indhold i oversigten"
 
@@ -305,27 +321,27 @@ msgstr "Indhold i oversigten"
 msgid "Content not found."
 msgstr "Indholdet findes ikke."
 
-#: includes/class-admin.php:414
+#: includes/class-admin.php:460
 msgid "Content preview"
 msgstr "Forhåndsvisning af indhold"
 
-#: includes/class-admin.php:411
+#: includes/class-admin.php:457
 msgid "Content preview (without the theme header/footer)"
 msgstr "Forhåndsvisning af indhold (uden temaets header/footer)"
 
-#: includes/class-admin.php:86
+#: includes/class-admin.php:117
 msgid "Content restored. The six-month cooldown still applies."
 msgstr "Indholdet er gendannet. Seks måneders grænsen gælder fortsat."
 
-#: includes/class-admin.php:298
+#: includes/class-admin.php:332
 msgid "Content types"
 msgstr "Indholdstyper"
 
-#: includes/class-admin.php:318
+#: includes/class-admin.php:355
 msgid "Copy this exact address to the OAuth client in Google Cloud."
 msgstr "Kopiér denne præcise adresse til OAuth-klienten i Google Cloud."
 
-#: includes/class-admin.php:243
+#: includes/class-admin.php:277
 msgid "Cost forecasts use the selected model, prompt and response limit. Token counts are estimates; actual usage, including reasoning, may differ. The conservative scenario is not a guaranteed maximum. Views are counted from installation, are not unique visitors and may be affected by blockers and bots."
 msgstr "Prisoverslag bruger valgt model, prompt og svargrænse. Tokenmængden er anslået; faktisk forbrug, herunder reasoning, kan afvige. Det forsigtige scenario er ikke et garanteret maksimum. Sidevisninger tælles fra installationen, er ikke unikke besøgende og kan påvirkes af blokering og bots."
 
@@ -333,15 +349,15 @@ msgstr "Prisoverslag bruger valgt model, prompt og svargrænse. Tokenmængden er
 msgid "Cost not recorded"
 msgstr "Pris ikke registreret"
 
-#: includes/class-admin.php:343
+#: includes/class-admin.php:380
 msgid "Create a Web application OAuth client."
 msgstr "Opret en OAuth-klient af typen Web application."
 
-#: includes/class-admin.php:343
+#: includes/class-admin.php:380
 msgid "Create or select your project in"
 msgstr "Opret eller vælg dit projekt i"
 
-#: includes/class-admin.php:292
+#: includes/class-admin.php:326
 msgid "Currency conversion"
 msgstr "Valutaomregning"
 
@@ -354,7 +370,7 @@ msgstr "Egne takster"
 msgid "Custom rates are saved for %s."
 msgstr "Egne takster gemmes for %s."
 
-#: includes/class-admin.php:293
+#: includes/class-admin.php:327
 msgid "Customize the prompt. The plugin's preservation rules and six-month cooldown cannot be disabled by the prompt."
 msgstr "Prompten kan tilpasses. Pluginets faste bevaringsregler og seksmånedersgrænse kan ikke slås fra med prompten."
 
@@ -362,11 +378,11 @@ msgstr "Prompten kan tilpasses. Pluginets faste bevaringsregler og seksmåneders
 msgid "DKK · rate date"
 msgstr "DKK · kursdato"
 
-#: includes/class-admin.php:342
+#: includes/class-admin.php:379
 msgid "Data is retrieved daily and compares two 28-day periods. The latest three days are excluded to avoid preliminary figures. Missing rows do not necessarily mean zero traffic; Search Console may omit data. Search queries and visitor profiles are not sent to OpenAI."
 msgstr "Data hentes dagligt og sammenligner to perioder på 28 dage. De seneste tre dage udelades for at undgå foreløbige tal. Manglende rækker betyder ikke nødvendigvis nul trafik; Search Console returnerer ikke nødvendigvis alle data. Søgeord og besøgsprofiler sendes ikke til OpenAI."
 
-#: includes/class-admin.php:422
+#: includes/class-admin.php:468
 msgid "Date"
 msgstr "Dato"
 
@@ -374,19 +390,19 @@ msgstr "Dato"
 msgid "Declining Google clicks"
 msgstr "Faldende Google-klik"
 
-#: includes/class-admin.php:205
+#: includes/class-admin.php:236
 msgid "Disabled"
 msgstr "Slået fra"
 
-#: includes/class-admin.php:337
+#: includes/class-admin.php:374
 msgid "Disconnect Google"
 msgstr "Afbryd Google-forbindelsen"
 
-#: includes/class-admin.php:168
+#: includes/class-admin.php:199
 msgid "Earliest next update:"
 msgstr "Tidligst næste opdatering:"
 
-#: includes/class-admin.php:359
+#: includes/class-admin.php:396
 msgid "Edit in WordPress ↗"
 msgstr "Redigér i WordPress ↗"
 
@@ -398,55 +414,55 @@ msgstr "Redigerbart resumé, FAQ, tjekliste, tabel eller linkboks."
 msgid "Element type"
 msgstr "Elementtype"
 
-#: includes/class-admin.php:308
+#: includes/class-admin.php:342
 msgid "Enable scheduled reviews"
 msgstr "Aktivér planlagt gennemgang"
 
-#: includes/class-admin.php:343
+#: includes/class-admin.php:380
 msgid "Enable the Google Search Console API."
 msgstr "Aktivér Google Search Console API."
 
-#: includes/class-admin.php:306
+#: includes/class-admin.php:340
 msgid "Enable the built-in view counter"
 msgstr "Aktivér den indbyggede besøgstæller"
 
-#: includes/class-admin.php:317
+#: includes/class-admin.php:354
 msgid "Enter Client Secret"
 msgstr "Indtast Client Secret"
 
-#: includes/class-admin.php:140
+#: includes/class-admin.php:171
 msgid "Enter all four rates as numbers from 0 to 100,000 USD per million tokens."
 msgstr "Udfyld alle fire takster med et tal fra 0 til 100.000 USD pr. million tokens."
 
-#: includes/class-admin.php:277
+#: includes/class-admin.php:311
 msgid "Enter your API key"
 msgstr "Indtast din API-nøgle"
 
-#: includes/class-admin.php:347
+#: includes/class-admin.php:384
 msgid "Error"
 msgstr "Fejl"
 
-#: includes/class-admin.php:216 includes/class-admin.php:422
+#: includes/class-admin.php:250 includes/class-admin.php:468
 msgid "Estimated cost"
 msgstr "Estimeret pris"
 
-#: includes/class-admin.php:373
+#: includes/class-admin.php:419
 msgid "Estimated cost:"
 msgstr "Estimeret pris:"
 
-#: includes/class-admin.php:292
+#: includes/class-admin.php:326
 msgid "Exchange rate source ↗"
 msgstr "Valutakilde ↗"
 
-#: includes/class-admin.php:225
+#: includes/class-admin.php:259
 msgid "Exclude"
 msgstr "Udeluk"
 
-#: includes/class-admin.php:299
+#: includes/class-admin.php:333
 msgid "Exclude pages and posts"
 msgstr "Udeluk sider og indlæg"
 
-#: includes/class-admin.php:167
+#: includes/class-admin.php:198
 msgid "Exclude this page"
 msgstr "Udeluk denne side"
 
@@ -466,47 +482,59 @@ msgstr "Forklaring / højre tabelkolonne"
 msgid "FAQ"
 msgstr "FAQ"
 
-#: includes/class-admin.php:213
+#: includes/class-admin.php:247
 msgid "Find content"
 msgstr "Find indhold"
 
-#: includes/class-admin.php:210
+#: includes/class-admin.php:48
 msgid "Generate a proposal for the next page"
 msgstr "Generér forslag til næste side"
 
-#: includes/class-admin.php:232
+#: includes/class-admin.php:50
+msgid "Generate and publish"
+msgstr "Generér og publicér"
+
+#: includes/class-admin.php:50
+msgid "Generate and publish a new version"
+msgstr "Generér og publicér en ny version"
+
+#: includes/class-admin.php:48
+msgid "Generate and publish the next page"
+msgstr "Generér og publicér næste side"
+
+#: includes/class-admin.php:52
 msgid "Generate proposal"
 msgstr "Generér forslag"
 
-#: includes/class-admin.php:186 includes/class-admin.php:422
+#: includes/class-admin.php:217 includes/class-admin.php:468
 msgid "Generation history"
 msgstr "Genereringshistorik"
 
-#: includes/class-admin.php:205
+#: includes/class-admin.php:236
 msgid "Generations this month"
 msgstr "Genereringer denne måned"
 
-#: includes/class-admin.php:216
+#: includes/class-admin.php:250
 msgid "Google"
 msgstr "Google"
 
-#: includes/class-admin.php:316 includes/class-admin.php:316
+#: includes/class-admin.php:353 includes/class-admin.php:353
 msgid "Google Client ID"
 msgstr "Google Client ID"
 
-#: includes/class-admin.php:317 includes/class-admin.php:317
+#: includes/class-admin.php:354 includes/class-admin.php:354
 msgid "Google Client Secret"
 msgstr "Google Client Secret"
 
-#: includes/class-admin.php:343
+#: includes/class-admin.php:380
 msgid "Google Cloud"
 msgstr "Google Cloud"
 
-#: includes/class-admin.php:186 includes/class-admin.php:326
+#: includes/class-admin.php:217 includes/class-admin.php:363
 msgid "Google Search Console"
 msgstr "Google Search Console"
 
-#: includes/class-admin.php:304
+#: includes/class-admin.php:338
 msgid "Google Search Console only"
 msgstr "Kun Google Search Console"
 
@@ -530,7 +558,7 @@ msgstr "Google gav ikke adgang til baggrundskørsel. Forbind kontoen igen."
 msgid "Google did not grant the required read-only Search Console access."
 msgstr "Google gav ikke den nødvendige læseadgang til Search Console."
 
-#: includes/class-admin.php:331
+#: includes/class-admin.php:368
 msgid "Google is connected"
 msgstr "Google er forbundet"
 
@@ -542,7 +570,7 @@ msgstr "Google er forbundet. Vælg website nedenfor."
 msgid "Google login has expired or belongs to another user. Start the connection again."
 msgstr "Google-login er udløbet eller tilhører en anden bruger. Start forbindelsen igen."
 
-#: includes/class-admin.php:315
+#: includes/class-admin.php:352
 msgid "Google — one-time setup"
 msgstr "Google – engangsopsætning"
 
@@ -558,15 +586,15 @@ msgstr "Historikken kunne ikke gemmes. Ingen API-kald blev startet."
 msgid "History could not be updated."
 msgstr "Historikken kunne ikke opdateres."
 
-#: includes/class-admin.php:369
+#: includes/class-admin.php:406
 msgid "History entry not found."
 msgstr "Historikken findes ikke."
 
-#: includes/class-admin.php:389
+#: includes/class-admin.php:435
 msgid "Images in the proposal"
 msgstr "Billeder i forslaget"
 
-#: includes/class-admin.php:164 includes/class-admin.php:224
+#: includes/class-admin.php:195 includes/class-admin.php:258
 msgid "Important"
 msgstr "Vigtig"
 
@@ -574,11 +602,11 @@ msgstr "Vigtig"
 msgid "Improve existing pages and posts with OpenAI, Search Console priorities and a complete change history."
 msgstr "Forbedrer eksisterende sider og indlæg med OpenAI, Search Console-prioritering og fuld ændringshistorik."
 
-#: includes/class-admin.php:343
+#: includes/class-admin.php:380
 msgid "Initial Google login setup"
 msgstr "Første opsætning af Google-login"
 
-#: includes/class-admin.php:287
+#: includes/class-admin.php:321
 msgid "Input"
 msgstr "Input"
 
@@ -590,7 +618,7 @@ msgstr "Ugyldig elementtype eller for mange punkter."
 msgid "Item / left table column"
 msgstr "Punkt / venstre tabelkolonne"
 
-#: includes/class-admin.php:277
+#: includes/class-admin.php:311
 msgid "Key saved — leave blank to keep it"
 msgstr "Nøgle gemt — lad feltet stå tomt for at beholde den"
 
@@ -598,7 +626,7 @@ msgstr "Nøgle gemt — lad feltet stå tomt for at beholde den"
 msgid "Last known rate — update pending."
 msgstr "Senest kendte kurs – opdatering afventer."
 
-#: includes/class-admin.php:340
+#: includes/class-admin.php:377
 msgid "Last synced:"
 msgstr "Senest synkroniseret:"
 
@@ -606,13 +634,9 @@ msgstr "Senest synkroniseret:"
 msgid "Link (optional)"
 msgstr "Link (valgfrit)"
 
-#: includes/class-admin.php:313
+#: includes/class-admin.php:350
 msgid "Manual attempts, rejected proposals and runs without changes also count. A token limit is not an exact money budget. A conservative reservation is retained when API usage is unknown."
 msgstr "Også manuelle forsøg, afviste forslag og kørsler uden ændringer tæller med. Et tokenloft er ikke et præcist kronebudget. Ved ukendt API-forbrug beholdes en forsigtig reservation."
-
-#: includes/class-admin.php:211
-msgid "Manual generations always save a proposal and count towards the monthly limit. Automation processes at most one page per hour from the selected day of the month."
-msgstr "Manuelle genereringer gemmer altid et forslag. De tæller med i månedens loft. Automatikken arbejder højst på én side i timen fra den valgte månedsdag."
 
 #: includes/class-plugin.php:140
 msgid "Manual: important"
@@ -626,15 +650,15 @@ msgstr "Manuelt: meget vigtig"
 msgid "Many Google impressions and a low click-through rate"
 msgstr "Mange Google-visninger og lav klikrate"
 
-#: includes/class-admin.php:310
+#: includes/class-admin.php:347
 msgid "Max. generations per month"
 msgstr "Maks. genereringer pr. måned"
 
-#: includes/class-admin.php:310
+#: includes/class-admin.php:347
 msgid "Max. response tokens per run"
 msgstr "Maks. svartokens pr. kørsel"
 
-#: includes/class-admin.php:310
+#: includes/class-admin.php:347
 msgid "Max. tokens per month"
 msgstr "Maks. tokens pr. måned"
 
@@ -642,43 +666,51 @@ msgstr "Maks. tokens pr. måned"
 msgid "Media access is disabled. The proposal with new images has been retained."
 msgstr "Billedadgang er slået fra. Forslaget med nye billeder er bevaret."
 
-#: includes/class-admin.php:295
+#: includes/class-admin.php:329
 msgid "Media library images"
 msgstr "Billeder fra mediebiblioteket"
 
-#: includes/class-admin.php:386
+#: includes/class-admin.php:432
 msgid "Media library: searched for"
 msgstr "Mediebibliotek: søgt på"
 
-#: includes/class-admin.php:282 includes/class-admin.php:285
+#: includes/class-admin.php:316 includes/class-admin.php:319
 msgid "Model"
 msgstr "Model"
 
-#: includes/class-admin.php:422
+#: includes/class-admin.php:468
 msgid "Model / tokens"
 msgstr "Model / tokens"
 
-#: includes/class-admin.php:284
+#: includes/class-admin.php:318
 msgid "Model ID (other)"
 msgstr "Model-ID (andet)"
 
-#: includes/class-admin.php:380
+#: includes/class-admin.php:426
 msgid "Model assessment"
 msgstr "Modellens vurdering"
 
-#: includes/class-admin.php:396
+#: includes/class-admin.php:442
 msgid "Model explanation:"
 msgstr "Modellens begrundelse:"
 
-#: includes/class-admin.php:291
+#: includes/class-admin.php:325
 msgid "Model rates · USD per 1M tokens"
 msgstr "Modelpriser · USD pr. 1 mio. tokens"
 
-#: includes/class-admin.php:294
+#: includes/class-admin.php:328
 msgid "New content elements"
 msgstr "Nye indholdselementer"
 
-#: includes/class-admin.php:241
+#: includes/class-admin.php:345
+msgid "New manual and scheduled runs publish changes to the live page immediately after validation. No approval click is needed. Enable scheduled reviews above for unattended runs."
+msgstr "Nye manuelle og planlagte kørsler publicerer ændringer på den udgivne side straks efter kontrollen. Du behøver ikke at godkende dem. Slå planlagt gennemgang til ovenfor for kørsler uden manuelt klik."
+
+#: includes/class-admin.php:344
+msgid "New manual and scheduled runs wait for your approval. Open the history and click Publish this proposal; there is no later automatic approval."
+msgstr "Nye manuelle og planlagte kørsler venter på din godkendelse. Åbn historikken, og klik på Publicér dette forslag; der sker ingen automatisk godkendelse senere."
+
+#: includes/class-admin.php:275
 msgid "No Google data yet. Connect Search Console using the tab above."
 msgstr "Der er endnu ingen Google-data. Forbind Search Console under fanen ovenfor."
 
@@ -686,23 +718,23 @@ msgstr "Der er endnu ingen Google-data. Forbind Search Console under fanen ovenf
 msgid "No built-in rates for this model. Enter custom rates for a cost estimate."
 msgstr "Ingen indbygget pris for denne model. Angiv egne takster for at få et prisestimat."
 
-#: includes/class-admin.php:347
+#: includes/class-admin.php:384
 msgid "No changes suggested"
 msgstr "Ingen ændringer foreslået"
 
-#: includes/class-plugin.php:264
+#: includes/class-plugin.php:265
 msgid "No changes suggested."
 msgstr "Ingen ændringer foreslået."
 
-#: includes/class-admin.php:396
+#: includes/class-admin.php:442
 msgid "No changes were proposed or published."
 msgstr "Ingen ændringer blev foreslået eller publiceret."
 
-#: includes/class-admin.php:410
+#: includes/class-admin.php:456
 msgid "No content changes."
 msgstr "Ingen ændringer i indholdet."
 
-#: includes/class-admin.php:269
+#: includes/class-admin.php:303
 msgid "No pages match your search."
 msgstr "Ingen sider matcher din søgning."
 
@@ -710,15 +742,15 @@ msgstr "Ingen sider matcher din søgning."
 msgid "No pages or posts are manually excluded."
 msgstr "Ingen sider eller indlæg er manuelt udelukket."
 
-#: includes/class-admin.php:235
+#: includes/class-admin.php:269
 msgid "No published pages or posts found."
 msgstr "Ingen udgivne sider eller indlæg fundet."
 
-#: includes/class-admin.php:426
+#: includes/class-admin.php:472
 msgid "No runs yet."
 msgstr "Ingen kørsler endnu."
 
-#: includes/class-admin.php:164 includes/class-admin.php:224
+#: includes/class-admin.php:195 includes/class-admin.php:258
 msgid "Normal"
 msgstr "Normal"
 
@@ -726,23 +758,23 @@ msgstr "Normal"
 msgid "Not a public page or post in the selected content types."
 msgstr "Ikke en offentlig side/et indlæg i de valgte typer."
 
-#: includes/class-admin.php:220 includes/class-admin.php:220
+#: includes/class-admin.php:254 includes/class-admin.php:254
 msgid "Not selected"
 msgstr "Ikke valgt"
 
-#: includes/class-admin.php:315
+#: includes/class-admin.php:352
 msgid "Once the client is configured, connect with Google login on the Google Search Console tab."
 msgstr "Når klienten er konfigureret, foregår tilslutning med Google-login under fanen Google Search Console."
 
-#: includes/class-admin.php:299
+#: includes/class-admin.php:333
 msgid "Open the list, search and select multiple pages.\nSelections are shared with Content & priorities and the editor.\nSave settings to apply them.\nThe privacy policy page, password-protected content and Yoast noindex content are automatically excluded."
 msgstr "Åbn listen, søg og vælg flere sider.\nValgene er de samme som under Indhold & prioritering og i editoren.\nGem indstillingerne for at anvende dem.\nPrivatlivssiden, adgangskodebeskyttet indhold og Yoast-noindex er automatisk udelukket."
 
-#: includes/class-admin.php:277 includes/class-admin.php:277
+#: includes/class-admin.php:311 includes/class-admin.php:311
 msgid "OpenAI API key"
 msgstr "OpenAI API-nøgle"
 
-#: includes/class-admin.php:278
+#: includes/class-admin.php:312
 msgid "OpenAI Docs ↗"
 msgstr "OpenAI Docs ↗"
 
@@ -766,119 +798,123 @@ msgstr "OpenAI afviste genereringen (HTTP"
 msgid "OpenAI standard rates, 25 October 2026"
 msgstr "OpenAI standardtakster, 25.10.2026"
 
-#: includes/class-admin.php:284
+#: includes/class-admin.php:318
 msgid "Other model …"
 msgstr "Anden model …"
 
-#: includes/class-admin.php:347
+#: includes/class-admin.php:384
 msgid "Outdated proposal"
 msgstr "Forældet forslag"
 
-#: includes/class-admin.php:287
+#: includes/class-admin.php:321
 msgid "Output"
 msgstr "Output"
 
-#: includes/class-admin.php:219 includes/class-admin.php:257
+#: includes/class-admin.php:253 includes/class-admin.php:291
 msgid "Page"
 msgstr "Side"
 
-#: includes/class-admin.php:306
+#: includes/class-admin.php:340
 msgid "Page views"
 msgstr "Sidevisninger"
 
-#: includes/class-admin.php:297
+#: includes/class-admin.php:331
 msgid "Pages"
 msgstr "Sider"
 
-#: includes/class-admin.php:265
+#: includes/class-admin.php:299
 msgid "Pages and posts to exclude"
 msgstr "Sider og indlæg der skal udelukkes"
 
-#: includes/class-admin.php:347
+#: includes/class-admin.php:384
 msgid "Pending review"
 msgstr "Afventer gennemgang"
 
-#: includes/class-admin.php:220
+#: includes/class-admin.php:254
 msgid "Position"
 msgstr "Position"
 
-#: includes/class-admin.php:376
+#: includes/class-admin.php:422
 msgid "Previous manual exchange rate:"
 msgstr "Tidligere manuel beregningskurs:"
 
-#: includes/class-admin.php:261
+#: includes/class-admin.php:295
 msgid "Previously excluded content · ID"
 msgstr "Tidligere udelukket indhold · ID"
 
-#: includes/class-admin.php:208
+#: includes/class-admin.php:239
 msgid "Priorities use your selections, Yoast cornerstone content, the selected traffic source and content age. The six-month cooldown starts at the latest publication, manual content change or content update by this plugin."
 msgstr "Prioriteringen bruger dine markeringer, Yoast-hjørnestensindhold, den valgte trafikkilde og indholdets alder. Seks måneders pause regnes fra seneste udgivelse, manuel indholdsændring eller pluginets indholdsopdatering."
 
-#: includes/class-admin.php:216 includes/class-admin.php:223
+#: includes/class-admin.php:250 includes/class-admin.php:257
 msgid "Priority"
 msgstr "Prioritet"
 
-#: includes/class-admin.php:163
+#: includes/class-admin.php:194
 msgid "Priority for the next content review:"
 msgstr "Prioritet til næste indholdsgennemgang:"
 
-#: includes/class-admin.php:98
+#: includes/class-admin.php:129
 msgid "Priority saved."
 msgstr "Prioriteringen er gemt."
 
-#: includes/class-admin.php:293 includes/class-admin.php:293
+#: includes/class-admin.php:327 includes/class-admin.php:327
 msgid "Prompt"
 msgstr "Prompt"
 
-#: includes/class-admin.php:405
+#: includes/class-admin.php:451
 msgid "Prompt used for this run"
 msgstr "Prompt brugt til denne kørsel"
 
-#: includes/class-admin.php:333
+#: includes/class-admin.php:370
 msgid "Property"
 msgstr "Website"
 
-#: includes/class-admin.php:68
+#: includes/class-admin.php:101
 msgid "Property selected and search data retrieved."
 msgstr "Website er valgt, og søgedata er hentet."
 
-#: includes/class-admin.php:409
+#: includes/class-admin.php:455
 msgid "Proposal"
 msgstr "Forslag"
 
-#: includes/class-admin.php:309
+#: includes/class-admin.php:345
 msgid "Publish automatically after technical validation"
 msgstr "Publicér automatisk efter teknisk kontrol"
 
-#: includes/class-admin.php:403
+#: includes/class-admin.php:449
 msgid "Publish this proposal"
 msgstr "Publicér dette forslag"
 
-#: includes/class-admin.php:347
+#: includes/class-admin.php:384
 msgid "Published"
 msgstr "Publiceret"
 
-#: includes/class-admin.php:205
+#: includes/class-admin.php:236
 msgid "Publishes automatically"
 msgstr "Publicerer automatisk"
 
-#: includes/class-admin.php:309
+#: includes/class-admin.php:343
 msgid "Publishing"
 msgstr "Publicering"
+
+#: includes/class-admin.php:241
+msgid "Publishing mode:"
+msgstr "Publiceringsvalg:"
 
 #: assets/block.js:44
 msgid "Question"
 msgstr "Spørgsmål"
 
-#: includes/class-admin.php:373
+#: includes/class-admin.php:419
 msgid "Rates and the exchange rate are saved with each run. Excludes VAT, fees and negotiated discounts. API usage may be unknown on failure."
 msgstr "Priser og beregningskurs gemmes sammen med kørslen. Uden moms, gebyrer og aftalerabatter. Ved fejl kan API-forbruget være ukendt."
 
-#: includes/class-admin.php:205 includes/class-admin.php:232
+#: includes/class-admin.php:236 includes/class-admin.php:266
 msgid "Ready for review"
 msgstr "Klar til gennemgang"
 
-#: includes/class-admin.php:278
+#: includes/class-admin.php:312
 msgid "Recommended: GPT-6.1 Sol"
 msgstr "Anbefalet: GPT-6.1 Sol"
 
@@ -886,15 +922,15 @@ msgstr "Anbefalet: GPT-6.1 Sol"
 msgid "Reconnect Google; the saved credentials could not be read."
 msgstr "Forbind Google igen; den gemte adgang kunne ikke læses."
 
-#: includes/class-admin.php:336
+#: includes/class-admin.php:373
 msgid "Refresh search data now"
 msgstr "Opdatér søgedata nu"
 
-#: includes/class-admin.php:403
+#: includes/class-admin.php:449
 msgid "Reject proposal"
 msgstr "Afvis forslag"
 
-#: includes/class-admin.php:347
+#: includes/class-admin.php:384
 msgid "Rejected"
 msgstr "Afvist"
 
@@ -906,35 +942,35 @@ msgstr "Relaterede links"
 msgid "Remove item"
 msgstr "Fjern punkt"
 
-#: includes/class-admin.php:277
+#: includes/class-admin.php:311
 msgid "Remove saved API key"
 msgstr "Fjern gemt API-nøgle"
 
-#: includes/class-admin.php:404
+#: includes/class-admin.php:450
 msgid "Restore content from before this update"
 msgstr "Gendan indhold før denne opdatering"
 
-#: includes/class-admin.php:347
+#: includes/class-admin.php:384
 msgid "Restored"
 msgstr "Gendannet"
 
-#: includes/class-admin.php:285
+#: includes/class-admin.php:319
 msgid "Retrieve the list from your API account using the button below. It includes all model names on the account; choose a text model with Responses and Structured Outputs. Choose Other model to enter an ID yourself."
 msgstr "Listen kan hentes fra din API-konto med knappen nederst. Den indeholder alle kontoens modelnavne; vælg en tekstmodel med Responses og Structured Outputs. Vælg Anden model for selv at skrive et ID."
 
-#: includes/class-admin.php:180
+#: includes/class-admin.php:211
 msgid "Review your existing content. Preserve media and layout, and track every change."
 msgstr "Giv dit eksisterende indhold en ny gennemgang. Bevar medier og layout, og følg alle ændringer."
 
-#: includes/class-admin.php:347
+#: includes/class-admin.php:384
 msgid "Running"
 msgstr "Kører"
 
-#: includes/class-plugin.php:295
+#: includes/class-plugin.php:308
 msgid "Safe publishing requires InnoDB tables for content, metadata and history. Contact your hosting provider; the proposal has been retained."
 msgstr "Sikker publicering kræver InnoDB-tabeller til indhold, metadata og historik. Kontakt webhotellet; forslaget er bevaret."
 
-#: includes/class-admin.php:225
+#: includes/class-admin.php:259
 msgid "Save"
 msgstr "Gem"
 
@@ -946,19 +982,23 @@ msgstr "Gem API-nøgle og vælg model under Indstillinger."
 msgid "Save an OpenAI API key first."
 msgstr "Gem en OpenAI API-nøgle først."
 
-#: includes/class-admin.php:321
+#: includes/class-admin.php:358
 msgid "Save changed keys before testing. The test retrieves model names; it does not generate content."
 msgstr "Gem ændrede nøgler før testen. Testen henter modelnavne; den genererer ikke indhold."
 
-#: includes/class-admin.php:309
+#: includes/class-admin.php:344
 msgid "Save proposals for review"
 msgstr "Gem forslag til gennemgang"
 
-#: includes/class-admin.php:319
+#: includes/class-admin.php:356
 msgid "Save settings"
 msgstr "Gem indstillinger"
 
-#: includes/class-admin.php:343
+#: includes/class-admin.php:346
+msgid "Save settings to apply this choice to future runs. Earlier pending proposals still require approval. Technical validation checks format and preservation; it does not guarantee factual accuracy or better Google rankings."
+msgstr "Gem indstillingerne for at bruge dette valg til fremtidige kørsler. Tidligere afventende forslag kræver stadig godkendelse. Teknisk kontrol sikrer format og bevaring; den garanterer ikke faktuel korrekthed eller bedre Google-placeringer."
+
+#: includes/class-admin.php:380
 msgid "Save the Client ID and Client Secret in the plugin Settings. Return here and connect Google."
 msgstr "Gem Client ID og Client Secret under pluginets Indstillinger. Vend tilbage hertil, og forbind Google."
 
@@ -966,31 +1006,31 @@ msgstr "Gem Client ID og Client Secret under pluginets Indstillinger. Vend tilba
 msgid "Save the Google Client ID and Client Secret in Settings first."
 msgstr "Gem Google Client ID og Client Secret under Indstillinger først."
 
-#: includes/class-admin.php:317
+#: includes/class-admin.php:354
 msgid "Saved — leave blank to keep the value"
 msgstr "Gemt — tomt felt beholder værdien"
 
-#: includes/class-admin.php:205
+#: includes/class-admin.php:236
 msgid "Saves proposals"
 msgstr "Gemmer forslag"
 
-#: includes/class-admin.php:308
+#: includes/class-admin.php:236 includes/class-admin.php:342
 msgid "Scheduled review"
 msgstr "Planlagt kørsel"
 
-#: includes/class-admin.php:221
+#: includes/class-admin.php:255
 msgid "Score"
 msgstr "Score"
 
-#: includes/class-admin.php:213
+#: includes/class-admin.php:247
 msgid "Search"
 msgstr "Søg"
 
-#: includes/class-admin.php:304
+#: includes/class-admin.php:338
 msgid "Search Console + built-in view counter"
 msgstr "Search Console + indbygget besøgstæller"
 
-#: includes/class-admin.php:239
+#: includes/class-admin.php:273
 msgid "Search Console + view counter"
 msgstr "Search Console + besøgstæller"
 
@@ -998,11 +1038,11 @@ msgstr "Search Console + besøgstæller"
 msgid "Search Console could not be reached."
 msgstr "Search Console kunne ikke kontaktes."
 
-#: includes/class-admin.php:327
+#: includes/class-admin.php:364
 msgid "Search Console is not selected as a traffic source. Automatic syncing is disabled and Google data is excluded from priorities. You can still retrieve data manually here."
 msgstr "Search Console er ikke valgt som trafikkilde. Automatisk synkronisering er slået fra, og Google-data indgår ikke i prioriteringen. Du kan stadig hente data manuelt her."
 
-#: includes/class-admin.php:239
+#: includes/class-admin.php:273
 msgid "Search Console only"
 msgstr "Kun Search Console"
 
@@ -1014,31 +1054,31 @@ msgstr "Search Console afviste forespørgslen (HTTP"
 msgid "Search Console returned an invalid response."
 msgstr "Search Console returnerede et ugyldigt svar."
 
-#: includes/class-admin.php:264
+#: includes/class-admin.php:298
 msgid "Search by title or ID …"
 msgstr "Søg på titel eller ID …"
 
-#: includes/class-admin.php:69
+#: includes/class-admin.php:102
 msgid "Search data updated."
 msgstr "Søgedata er opdateret."
 
-#: includes/class-admin.php:264
+#: includes/class-admin.php:298
 msgid "Search pages and blog posts"
 msgstr "Søg i sider og blogindlæg"
 
-#: includes/class-admin.php:333
+#: includes/class-admin.php:370
 msgid "Select a property"
 msgstr "Vælg website"
 
-#: includes/class-admin.php:335
+#: includes/class-admin.php:372
 msgid "Select and retrieve data"
 msgstr "Vælg og hent data"
 
-#: includes/class-admin.php:151
+#: includes/class-admin.php:182
 msgid "Select at least one content type."
 msgstr "Vælg mindst én indholdstype."
 
-#: includes/class-admin.php:263
+#: includes/class-admin.php:297
 msgid "Select pages and posts"
 msgstr "Vælg sider og indlæg"
 
@@ -1046,15 +1086,15 @@ msgstr "Vælg sider og indlæg"
 msgid "Selected pages and posts:"
 msgstr "Valgte sider og indlæg:"
 
-#: includes/class-admin.php:239
+#: includes/class-admin.php:273
 msgid "Selected traffic source:"
 msgstr "Valgt trafikkilde:"
 
-#: includes/class-admin.php:186
+#: includes/class-admin.php:217
 msgid "Settings"
 msgstr "Indstillinger"
 
-#: includes/class-admin.php:53
+#: includes/class-admin.php:86
 msgid "Settings saved."
 msgstr "Indstillingerne er gemt."
 
@@ -1067,23 +1107,23 @@ msgstr "Seks måneders pause indtil"
 msgid "Standard: input $%1$s, output $%2$s, cached input $%3$s, cache writes $%4$s per million tokens."
 msgstr "Standard: input $%1$s, output $%2$s, cache-læsning $%3$s, cache-skrivning $%4$s pr. million tokens."
 
-#: includes/class-admin.php:310
+#: includes/class-admin.php:347
 msgid "Start day of the month"
 msgstr "Startdag i måneden"
 
-#: includes/class-admin.php:310
+#: includes/class-admin.php:347
 msgid "Start time (hour)"
 msgstr "Starttidspunkt (time)"
 
-#: includes/class-admin.php:422
+#: includes/class-admin.php:468
 msgid "Status"
 msgstr "Status"
 
-#: includes/class-admin.php:216
+#: includes/class-admin.php:250
 msgid "Status / action"
 msgstr "Status / handling"
 
-#: includes/class-admin.php:278
+#: includes/class-admin.php:312
 msgid "Suggested for this task: good writing quality with a balance of quality and cost. Start with"
 msgstr "Mit forslag til denne opgave: god tekstkvalitet og en balance mellem kvalitet og pris. Start med"
 
@@ -1095,11 +1135,7 @@ msgstr "Resumé"
 msgid "Table"
 msgstr "Tabel"
 
-#: includes/class-admin.php:309
-msgid "Technical validation checks format and preservation. It does not guarantee factual accuracy or better Google rankings."
-msgstr "Teknisk kontrol sikrer format og bevaring. Den er ikke en garanti for faktuel korrekthed eller bedre Google-placeringer."
-
-#: includes/class-admin.php:320
+#: includes/class-admin.php:357
 msgid "Test key and retrieve models"
 msgstr "Test nøgle og hent modeller"
 
@@ -1107,19 +1143,19 @@ msgstr "Test nøgle og hent modeller"
 msgid "Text"
 msgstr "Tekst"
 
-#: includes/class-admin.php:118
+#: includes/class-admin.php:149
 msgid "The API key has an invalid format."
 msgstr "API-nøglen har et ugyldigt format."
 
-#: includes/class-admin.php:56
+#: includes/class-admin.php:89
 msgid "The API key works. Retrieved"
 msgstr "API-nøglen virker. Der blev hentet"
 
-#: includes/class-admin.php:343
+#: includes/class-admin.php:380
 msgid "The Google Account must have access to your Search Console property. An external OAuth app in testing mode may receive short-lived refresh tokens and require frequent logins. For ongoing use, check the app's publishing status and any Google verification requirements."
 msgstr "Google-kontoen skal have adgang til dit website i Search Console. En ekstern OAuth-app i testtilstand kan få kortlivede refresh-tokens og derfor kræve hyppige nye login. Ved varig brug skal appens publiceringsstatus og eventuelle Google-verifikationskrav være afklaret."
 
-#: includes/class-admin.php:58
+#: includes/class-admin.php:91
 msgid "The Google connection has been removed locally. You can also revoke access in your Google Account."
 msgstr "Google-forbindelsen er fjernet lokalt. Du kan også tilbagekalde adgangen i din Google-konto."
 
@@ -1139,6 +1175,10 @@ msgstr "OpenAI-kaldet blev afbrudt. Forbruget er ukendt; tokenreservationen beho
 msgid "The blocks could not be validated after the change."
 msgstr "Blokkene kunne ikke valideres efter ændringen."
 
+#: includes/class-admin.php:70
+msgid "The changes have been published automatically. View the result and restore options in the history."
+msgstr "Ændringerne er publiceret automatisk. Se resultatet og mulighederne for gendannelse i historikken."
+
 #: includes/class-plugin.php:192
 msgid "The content has no safely editable text or more than 600 text segments."
 msgstr "Indholdet har ingen sikkert redigerbare tekster eller flere end 600 tekstfelter."
@@ -1155,7 +1195,7 @@ msgstr "Elementet mangler indhold."
 msgid "The exchange rate could not be retrieved yet. Prices are shown in USD until an online rate is available."
 msgstr "Valutakursen kunne ikke hentes endnu. Priser vises i USD, indtil en onlinekurs er tilgængelig."
 
-#: includes/class-plugin.php:292
+#: includes/class-plugin.php:305
 msgid "The history content has changed and cannot be used."
 msgstr "Historikkens indhold er ændret og kan ikke bruges."
 
@@ -1167,15 +1207,15 @@ msgstr "Billedet er ikke længere tilgængeligt eller findes allerede på siden.
 msgid "The key could not be encrypted."
 msgstr "Nøglen kunne ikke krypteres."
 
-#: includes/class-admin.php:277
+#: includes/class-admin.php:311
 msgid "The key is stored encrypted on this WordPress installation and is sent only to OpenAI."
 msgstr "Nøglen gemmes krypteret på denne WordPress-installation og sendes kun til OpenAI."
 
-#: includes/class-admin.php:292
+#: includes/class-admin.php:326
 msgid "The latest reference rate is retrieved automatically and cached locally for up to one day. No extra API key is needed. Weekends and holidays use the last published rate. Estimates exclude VAT, fees and negotiated discounts."
 msgstr "Seneste referencekurs hentes automatisk og gemmes lokalt i op til et døgn. Ingen ekstra API-nøgle nødvendig. Weekender og helligdage bruger seneste offentliggjorte kurs. Estimater er uden moms, gebyrer og aftalerabatter."
 
-#: includes/class-admin.php:133
+#: includes/class-admin.php:164
 msgid "The model name has an invalid format."
 msgstr "Modelnavnet har et ugyldigt format."
 
@@ -1195,7 +1235,7 @@ msgstr "Modellen returnerede en ugyldig billedliste."
 msgid "The model returned an invalid response."
 msgstr "Modellen returnerede et ugyldigt svar."
 
-#: includes/class-plugin.php:261
+#: includes/class-plugin.php:262
 msgid "The model returned no concrete changes and gave no separate explanation."
 msgstr "Modellen returnerede ingen konkrete ændringer og gav ingen særskilt begrundelse."
 
@@ -1203,7 +1243,7 @@ msgstr "Modellen returnerede ingen konkrete ændringer og gav ingen særskilt be
 msgid "The model suggested a link outside the approved pages."
 msgstr "Modellen foreslog et link uden for de godkendte sider."
 
-#: includes/class-admin.php:75
+#: includes/class-admin.php:72
 msgid "The model suggested no changes. The page is unchanged; see the explanation in the history."
 msgstr "Modellen foreslog ingen ændringer. Siden er uændret; se begrundelsen i historikken."
 
@@ -1211,7 +1251,7 @@ msgstr "Modellen foreslog ingen ændringer. Siden er uændret; se begrundelsen i
 msgid "The model tried to change an unknown or repeated text segment."
 msgstr "Modellen forsøgte at ændre et ukendt eller gentaget tekstfelt."
 
-#: includes/class-plugin.php:261
+#: includes/class-plugin.php:262
 msgid "The model's text proposals were identical to the existing text."
 msgstr "Modellens tekstforslag var identiske med den eksisterende tekst."
 
@@ -1223,11 +1263,7 @@ msgstr "Månedens maksimale antal genereringer er nået."
 msgid "The monthly token limit has no room for this run. Increase the limit or wait until next month."
 msgstr "Månedens tokenloft har ikke plads til denne kørsel. Hæv loftet eller vent til næste måned."
 
-#: includes/class-admin.php:81
-msgid "The next page has been reviewed."
-msgstr "Næste side er gennemgået."
-
-#: includes/class-plugin.php:304
+#: includes/class-plugin.php:317
 msgid "The page has changed since this version. Newer content will not be overwritten."
 msgstr "Siden er ændret siden denne version. Der bliver ikke overskrevet nyere indhold."
 
@@ -1239,25 +1275,29 @@ msgstr "Siden er markeret noindex i Yoast."
 msgid "The plugin history table could not be upgraded. Contact your hosting provider; existing history has been retained."
 msgstr "Pluginets historiktabel kunne ikke opdateres. Kontakt webhotellet; eksisterende historik er bevaret."
 
-#: includes/class-admin.php:157
+#: includes/class-admin.php:188
 msgid "The prompt must not exceed 12,000 characters."
 msgstr "Prompten må højst fylde 12.000 tegn."
 
-#: includes/class-plugin.php:288
+#: includes/class-plugin.php:301
 msgid "The proposal does not have the required status."
 msgstr "Forslaget har ikke den nødvendige status."
 
-#: includes/class-admin.php:86
+#: includes/class-admin.php:117
 msgid "The proposal has been published."
 msgstr "Forslaget er publiceret."
 
-#: includes/class-admin.php:92
+#: includes/class-admin.php:123
 msgid "The proposal has been rejected."
 msgstr "Forslaget er afvist."
 
-#: includes/class-admin.php:75
-msgid "The run has been saved in the history. A proposal does not change the published page."
-msgstr "Kørslen er gemt i historikken. Et forslag ændrer ikke den udgivne side."
+#: includes/class-admin.php:74
+msgid "The proposal is waiting for your approval. Open the history and click Publish this proposal to apply it."
+msgstr "Forslaget venter på din godkendelse. Åbn historikken, og klik på Publicér dette forslag for at anvende det."
+
+#: includes/class-admin.php:62
+msgid "The publishing mode has changed. Reload this page before generating content."
+msgstr "Publiceringsvalget er ændret. Genindlæs siden, før du genererer indhold."
 
 #: includes/class-plugin.php:157
 msgid "The run was interrupted. The token reservation is retained because API usage is unknown."
@@ -1271,15 +1311,15 @@ msgstr "Det samme billede må ikke indsættes to gange."
 msgid "The server is missing OpenSSL for secure key storage."
 msgstr "Serveren mangler OpenSSL til sikker opbevaring af nøgler."
 
-#: includes/class-admin.php:80
+#: includes/class-admin.php:111
 msgid "There are no pages eligible for an update right now."
 msgstr "Der er ingen sider, som må opdateres lige nu."
 
-#: includes/class-plugin.php:308
+#: includes/class-plugin.php:321
 msgid "This content type cannot be restored."
 msgstr "Indholdstypen kan ikke gendannes."
 
-#: includes/class-admin.php:305
+#: includes/class-admin.php:339
 msgid "This determines which traffic data affects the order. Search Console only stops internal view counting. Built-in view counter only stops automatic Google syncing. Your manual priorities are always used."
 msgstr "Valget bestemmer, hvilke trafiktal der påvirker rækkefølgen. Kun Search Console stopper intern optælling. Kun indbygget besøgstæller stopper automatisk Google-synkronisering. Dine manuelle prioriteringer bruges altid."
 
@@ -1287,11 +1327,15 @@ msgstr "Valget bestemmer, hvilke trafiktal der påvirker rækkefølgen. Kun Sear
 msgid "This plugin requires WordPress 6.7 or later."
 msgstr "Pluginet kræver WordPress 6.7 eller nyere."
 
-#: includes/class-admin.php:89
+#: includes/class-admin.php:120
 msgid "This proposal cannot be rejected."
 msgstr "Forslaget kan ikke afvises."
 
-#: includes/class-admin.php:314
+#: includes/class-admin.php:411
+msgid "This proposal is waiting for your approval. It will not be published automatically. Click Publish this proposal to apply it. Changing the publishing mode affects future runs only."
+msgstr "Dette forslag venter på din godkendelse. Det bliver ikke publiceret automatisk. Klik på Publicér dette forslag for at anvende det. Ændring af publiceringsvalget gælder kun fremtidige kørsler."
+
+#: includes/class-admin.php:351
 msgid "Time zone"
 msgstr "Tidszone"
 
@@ -1307,11 +1351,11 @@ msgstr "Emne"
 msgid "Traffic"
 msgstr "Trafik"
 
-#: includes/class-admin.php:303 includes/class-admin.php:305
+#: includes/class-admin.php:337 includes/class-admin.php:339
 msgid "Traffic source for priorities"
 msgstr "Trafikkilde til prioritering"
 
-#: includes/class-admin.php:399
+#: includes/class-admin.php:52
 msgid "Try another review"
 msgstr "Prøv en ny gennemgang"
 
@@ -1319,11 +1363,11 @@ msgstr "Prøv en ny gennemgang"
 msgid "Type"
 msgstr "Type"
 
-#: includes/class-admin.php:288
+#: includes/class-admin.php:322
 msgid "USD per million tokens"
 msgstr "USD pr. million tokens"
 
-#: includes/class-admin.php:99
+#: includes/class-admin.php:130
 msgid "Unknown action."
 msgstr "Ukendt handling."
 
@@ -1331,43 +1375,43 @@ msgstr "Ukendt handling."
 msgid "Unknown cost — enter the model rates"
 msgstr "Ukendt pris – angiv modellens takster"
 
-#: includes/class-admin.php:313
+#: includes/class-admin.php:350
 msgid "Usage this month"
 msgstr "Månedens forbrug"
 
-#: includes/class-admin.php:286
+#: includes/class-admin.php:320
 msgid "Use custom rates for the selected model"
 msgstr "Brug egne takster til den valgte model"
 
-#: includes/class-admin.php:326
+#: includes/class-admin.php:363
 msgid "Use search clicks, impressions, click-through rate and position to prioritize existing pages. The plugin requests read-only access."
 msgstr "Brug søgeklik, eksponeringer, klikrate og placering til at prioritere eksisterende sider. Pluginet anmoder kun om læseadgang."
 
-#: includes/class-admin.php:278
+#: includes/class-admin.php:312
 msgid "Use the recommended model"
 msgstr "Brug den anbefalede model"
 
-#: includes/class-admin.php:295
+#: includes/class-admin.php:329
 msgid "Uses WordPress to search titles, filenames, alt text and captions based on the page topics. The model receives metadata for up to 12 relevant images and can insert at most two. Image files are not sent to OpenAI. Existing images and metadata are preserved. Images attached to private or unpublished pages are excluded."
 msgstr "Søger via WordPress i titler, filnavne, alt-tekster og billedtekster ud fra sidens emner. Modellen får metadata om op til 12 relevante billeder og kan indsætte højst to. Billedfiler sendes ikke til OpenAI. Eksisterende billeder og metadata bevares. Billeder tilknyttet private eller ikke-udgivne sider udelades."
 
-#: includes/class-admin.php:164 includes/class-admin.php:224
+#: includes/class-admin.php:195 includes/class-admin.php:258
 msgid "Very important"
 msgstr "Meget vigtig"
 
-#: includes/class-admin.php:239
+#: includes/class-admin.php:273
 msgid "View counter only"
 msgstr "Kun besøgstæller"
 
-#: includes/class-admin.php:219 includes/class-admin.php:355
+#: includes/class-admin.php:253 includes/class-admin.php:392
 msgid "View page ↗"
 msgstr "Se siden ↗"
 
-#: includes/class-admin.php:216
+#: includes/class-admin.php:250
 msgid "Views"
 msgstr "Visninger"
 
-#: includes/class-admin.php:314
+#: includes/class-admin.php:351
 msgid "WP-Cron depends on traffic. Use your hosting provider's cron to run wp-cron.php for a more reliable schedule."
 msgstr "WP-Cron afhænger af trafik. Brug webhotellets cron til wp-cron.php for mere pålidelig kørsel."
 
@@ -1375,15 +1419,15 @@ msgstr "WP-Cron afhænger af trafik. Brug webhotellets cron til wp-cron.php for 
 msgid "Waiting for the next assessment after the latest run."
 msgstr "Afventer næste vurdering efter seneste kørsel."
 
-#: includes/class-admin.php:309
+#: includes/class-admin.php:346
 msgid "When a proposal is ready"
 msgstr "Når et forslag er klar"
 
-#: includes/class-plugin.php:313
+#: includes/class-plugin.php:326
 msgid "WordPress could not save the change."
 msgstr "WordPress kunne ikke gemme ændringen."
 
-#: includes/class-plugin.php:315
+#: includes/class-plugin.php:328
 msgid "WordPress or another plugin modified the content during saving. The update was cancelled to preserve your elements."
 msgstr "WordPress eller et andet plugin ændrede indholdet under lagring. Opdateringen er annulleret for at bevare dine elementer."
 
@@ -1391,62 +1435,62 @@ msgstr "WordPress eller et andet plugin ændrede indholdet under lagring. Opdate
 msgid "Yoast cornerstone content"
 msgstr "Yoast-hjørnestensindhold"
 
-#: includes/class-admin.php:72 includes/class-plugin.php:289
+#: includes/class-admin.php:59 includes/class-plugin.php:302
 msgid "You are not allowed to edit this content."
 msgstr "Du må ikke redigere dette indhold."
 
-#: includes/class-admin.php:61
+#: includes/class-admin.php:94
 msgid "You do not have access to the selected property."
 msgstr "Du har ikke adgang til det valgte website."
 
-#: includes/class-admin.php:220
+#: includes/class-admin.php:254
 msgid "clicks"
 msgstr "klik"
 
-#: includes/class-admin.php:386
+#: includes/class-admin.php:432
 msgid "eligible candidates."
 msgstr "egnede kandidater."
 
-#: includes/class-admin.php:220
+#: includes/class-admin.php:254
 msgid "impressions"
 msgstr "visninger"
 
-#: includes/class-admin.php:370
+#: includes/class-admin.php:407
 msgid "input tokens +"
 msgstr "inputtokens +"
 
-#: includes/class-admin.php:56
+#: includes/class-admin.php:89
 msgid "model names. Choose a text model that supports Responses and Structured Outputs."
 msgstr "modelnavne. Vælg en tekstmodel, der understøtter Responses og Structured Outputs."
 
-#: includes/class-admin.php:378
+#: includes/class-admin.php:424
 msgid "new elements ·"
 msgstr "nye elementer ·"
 
-#: includes/class-admin.php:378
+#: includes/class-admin.php:424
 msgid "new image"
 msgstr "nyt billede"
 
-#: includes/class-admin.php:378
+#: includes/class-admin.php:424
 msgid "new images"
 msgstr "nye billeder"
 
-#: includes/class-admin.php:370
+#: includes/class-admin.php:407
 msgid "output tokens (or reserved tokens when usage is unknown)."
 msgstr "outputtokens (eller reserverede tokens ved ukendt forbrug)."
 
-#: includes/class-admin.php:216
+#: includes/class-admin.php:250
 msgid "per review"
 msgstr "pr. gennemgang"
 
-#: includes/class-admin.php:263
+#: includes/class-admin.php:297
 msgid "selected)"
 msgstr "valgt)"
 
-#: includes/class-admin.php:378
+#: includes/class-admin.php:424
 msgid "text changes ·"
 msgstr "tekstændringer ·"
 
-#: includes/class-admin.php:313
+#: includes/class-admin.php:350
 msgid "tokens / reservations"
 msgstr "tokens / reservationer"

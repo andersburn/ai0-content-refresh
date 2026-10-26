@@ -42,6 +42,39 @@ final class AI0R_Admin {
         echo '<button class="button ' . ($primary ? 'button-primary' : '') . '">' . esc_html($label) . '</button></form>';
     }
 
+    private static function generation_button(string $do, array $extra = [], string $tab = 'queue', bool $primary = false, bool $retry = false): void {
+        $mode = AI0R_Store::settings()['mode'];
+        if ($do === 'next') {
+            $label = $mode === 'auto' ? __('Generate and publish the next page', 'ai0-content-refresh') : __('Generate a proposal for the next page', 'ai0-content-refresh');
+        } elseif ($mode === 'auto') {
+            $label = $retry ? __('Generate and publish a new version', 'ai0-content-refresh') : __('Generate and publish', 'ai0-content-refresh');
+        } else {
+            $label = $retry ? __('Try another review', 'ai0-content-refresh') : __('Generate proposal', 'ai0-content-refresh');
+        }
+        self::button($do, $label, $extra + ['generation_mode' => $mode], $tab, $primary);
+    }
+
+    /** Bind a manual run to the publishing choice shown on its submit button. */
+    private static function generate_from_admin(int $post_id): int {
+        if (!current_user_can('edit_post', $post_id)) { throw new RuntimeException(__('You are not allowed to edit this content.', 'ai0-content-refresh')); }
+        $mode = sanitize_key(wp_unslash($_POST['generation_mode'] ?? 'review'));
+        if (!in_array($mode, ['review', 'auto'], true) || $mode !== AI0R_Store::settings()['mode']) {
+            throw new RuntimeException(__('The publishing mode has changed. Reload this page before generating content.', 'ai0-content-refresh'));
+        }
+        return AI0R_Plugin::generate($post_id, $mode === 'auto');
+    }
+
+    private static function generation_notice(int $id): void {
+        $h = AI0R_Store::history($id);
+        if ($h && $h->status === 'applied') {
+            self::notice(__('The changes have been published automatically. View the result and restore options in the history.', 'ai0-content-refresh'));
+        } elseif ($h && $h->status === 'no_change') {
+            self::notice(__('The model suggested no changes. The page is unchanged; see the explanation in the history.', 'ai0-content-refresh'));
+        } else {
+            self::notice(__('The proposal is waiting for your approval. Open the history and click Publish this proposal to apply it.', 'ai0-content-refresh'));
+        }
+    }
+
     public static function action(): void {
         if (!current_user_can('manage_options') || ($_SERVER['REQUEST_METHOD'] ?? '') !== 'POST') { wp_die(__('Access denied.', 'ai0-content-refresh'), '', ['response' => 403]); }
         check_admin_referer('ai0r_admin');
@@ -69,16 +102,14 @@ final class AI0R_Admin {
                 case 'sync': AI0R_Google::sync(); self::notice(__('Search data updated.', 'ai0-content-refresh')); break;
                 case 'generate':
                     $post_id = absint($_POST['post_id'] ?? 0);
-                    if (!current_user_can('edit_post', $post_id)) { throw new RuntimeException(__('You are not allowed to edit this content.', 'ai0-content-refresh')); }
-                    $detail = AI0R_Plugin::generate($post_id, false); $tab = 'history';
-                    $h = AI0R_Store::history($detail);
-                    self::notice($h && $h->status === 'no_change' ? __('The model suggested no changes. The page is unchanged; see the explanation in the history.', 'ai0-content-refresh') : __('The run has been saved in the history. A proposal does not change the published page.', 'ai0-content-refresh')); break;
+                    $detail = self::generate_from_admin($post_id); $tab = 'history';
+                    self::generation_notice($detail); break;
                 case 'next':
                     foreach (AI0R_Plugin::queue() as $row) {
-                        if (!$row['blocked']) { $detail = AI0R_Plugin::generate($row['post']->ID, false); break; }
+                        if (!$row['blocked']) { $detail = self::generate_from_admin($row['post']->ID); break; }
                     }
                     if (!$detail) { throw new RuntimeException(__('There are no pages eligible for an update right now.', 'ai0-content-refresh')); }
-                    $tab = 'history'; self::notice(__('The next page has been reviewed.', 'ai0-content-refresh')); break;
+                    $tab = 'history'; self::generation_notice($detail); break;
                 case 'apply':
                 case 'restore':
                     $detail = absint($_POST['id'] ?? 0);
@@ -202,13 +233,16 @@ final class AI0R_Admin {
         $rows = AI0R_Plugin::queue();
         $eligible = count(array_filter($rows, static fn($r) => !$r['blocked']));
         echo '<div class="ai0r-cards">';
-        foreach ([__('Content in the overview', 'ai0-content-refresh') => count($rows), __('Ready for review', 'ai0-content-refresh') => $eligible, __('Generations this month', 'ai0-content-refresh') => (int) $usage['attempts'] . ' / ' . $s['monthly_limit'], __('Automation', 'ai0-content-refresh') => $s['enabled'] ? ($s['mode'] === 'auto' ? __('Publishes automatically', 'ai0-content-refresh') : __('Saves proposals', 'ai0-content-refresh')) : __('Disabled', 'ai0-content-refresh')] as $label => $value) {
+        foreach ([__('Content in the overview', 'ai0-content-refresh') => count($rows), __('Ready for review', 'ai0-content-refresh') => $eligible, __('Generations this month', 'ai0-content-refresh') => (int) $usage['attempts'] . ' / ' . $s['monthly_limit'], __('Scheduled review', 'ai0-content-refresh') => $s['enabled'] ? ($s['mode'] === 'auto' ? __('Publishes automatically', 'ai0-content-refresh') : __('Saves proposals', 'ai0-content-refresh')) : __('Disabled', 'ai0-content-refresh')] as $label => $value) {
             echo '<div class="ai0r-card"><span>' . esc_html($label) . '</span><strong>' . esc_html((string) $value) . '</strong></div>';
         }
         echo '</div><p class="description">' . esc_html(AI0R_Exchange::description(AI0R_Exchange::current())) . ('</p><p>' . esc_html__('Priorities use your selections, Yoast cornerstone content, the selected traffic source and content age. The six-month cooldown starts at the latest publication, manual content change or content update by this plugin.', 'ai0-content-refresh') . '</p>');
         foreach (['ai0r_worker_error', 'ai0r_google_error'] as $option) { if (get_option($option)) { echo '<p class="ai0r-warning">' . esc_html(get_option($option)) . '</p>'; } }
-        self::button('next', __('Generate a proposal for the next page', 'ai0-content-refresh'), [], 'queue', true);
-        echo ('<p class="description">' . esc_html__('Manual generations always save a proposal and count towards the monthly limit. Automation processes at most one page per hour from the selected day of the month.', 'ai0-content-refresh') . '</p>');
+        echo '<p class="' . ($s['mode'] === 'auto' ? 'ai0r-warning' : 'description') . '"><strong>' . esc_html__('Publishing mode:', 'ai0-content-refresh') . '</strong> ' . esc_html($s['mode'] === 'auto'
+            ? __('Automatic publishing is on. New manual and scheduled runs update the live page immediately after technical validation.', 'ai0-content-refresh')
+            : __('Approval is required. New manual and scheduled runs save proposals; click Publish this proposal in the history to apply them.', 'ai0-content-refresh')) . '</p>';
+        self::generation_button('next', [], 'queue', true);
+        echo '<p class="description">' . esc_html__('All runs count towards the monthly limit. Scheduled reviews process at most one page per hour from the selected day of the month. Earlier pending proposals still require approval.', 'ai0-content-refresh') . '</p>';
         $search = sanitize_text_field(wp_unslash($_GET['s'] ?? ''));
         echo ('<form method="get" class="ai0r-search"><input type="hidden" name="page" value="ai0-refresh"><label for="ai0r-search">' . esc_html__('Find content', 'ai0-content-refresh') . ' </label><input id="ai0r-search" type="search" name="s" value="') . esc_attr($search) . ('"><button class="button">' . esc_html__('Search', 'ai0-content-refresh') . '</button></form>');
         if ($search) { $rows = array_values(array_filter($rows, static fn($r) => mb_stripos($r['post']->post_title, $search) !== false)); }
@@ -229,7 +263,7 @@ final class AI0R_Admin {
             } catch (Throwable $e) { echo __('Cannot estimate this content', 'ai0-content-refresh'); }
             echo '</td><td>';
             if ($r['blocked']) { echo esc_html($r['blocked']); }
-            else { echo ('<p class="ai0r-ready">' . esc_html__('Ready for review', 'ai0-content-refresh') . '</p>'); self::button('generate', __('Generate proposal', 'ai0-content-refresh'), ['post_id' => $p->ID]); }
+            else { echo ('<p class="ai0r-ready">' . esc_html__('Ready for review', 'ai0-content-refresh') . '</p>'); self::generation_button('generate', ['post_id' => $p->ID]); }
             echo '</td></tr>';
         }
         if (!$rows) { echo ('<tr><td colspan="6">' . esc_html__('No published pages or posts found.', 'ai0-content-refresh') . '</td></tr>'); }
@@ -306,7 +340,10 @@ The privacy policy page, password-protected content and Yoast noindex content ar
         self::row(__('Page views', 'ai0-content-refresh'), '<label><input type="checkbox" name="tracking" value="1" ' . checked((bool) $s['tracking'], true, false) . ('> ' . esc_html__('Enable the built-in view counter', 'ai0-content-refresh') . '</label>'), __('All logged-in users are excluded, including on cached pages. Data older than one calendar year is deleted on upgrade and then daily through WP-Cron, even when automation is disabled. Only the date, content ID and view count are stored. No tracking cookies or visitor profiles are created. A short-lived abuse limit uses a one-way value derived from the IP address for up to two minutes. Respects DNT/GPC. Clear your page cache after activation or changes.', 'ai0-content-refresh'));
         echo ('</table><h2>' . esc_html__('Automation and usage limits', 'ai0-content-refresh') . '</h2><table class="form-table">');
         self::row(__('Scheduled review', 'ai0-content-refresh'), '<label><input name="enabled" type="checkbox" value="1" ' . checked((bool) $s['enabled'], true, false) . ('> ' . esc_html__('Enable scheduled reviews', 'ai0-content-refresh') . '</label>'));
-        self::row(__('When a proposal is ready', 'ai0-content-refresh'), ('<select aria-label="' . esc_attr__('Publishing', 'ai0-content-refresh') . '" name="mode"><option value="review" ') . selected($s['mode'], 'review', false) . ('>' . esc_html__('Save proposals for review', 'ai0-content-refresh') . '</option><option value="auto" ') . selected($s['mode'], 'auto', false) . ('>' . esc_html__('Publish automatically after technical validation', 'ai0-content-refresh') . '</option></select>'), __('Technical validation checks format and preservation. It does not guarantee factual accuracy or better Google rankings.', 'ai0-content-refresh'));
+        $publishing = '<fieldset class="ai0r-publishing"><legend class="screen-reader-text">' . esc_html__('Publishing', 'ai0-content-refresh') . '</legend>';
+        $publishing .= '<label class="ai0r-mode-choice"><input type="radio" name="mode" value="review" ' . checked($s['mode'], 'review', false) . '><strong>' . esc_html__('Save proposals for review', 'ai0-content-refresh') . '</strong><span class="description">' . esc_html__('New manual and scheduled runs wait for your approval. Open the history and click Publish this proposal; there is no later automatic approval.', 'ai0-content-refresh') . '</span></label>';
+        $publishing .= '<label class="ai0r-mode-choice"><input type="radio" name="mode" value="auto" ' . checked($s['mode'], 'auto', false) . '><strong>' . esc_html__('Publish automatically after technical validation', 'ai0-content-refresh') . '</strong><span class="description">' . esc_html__('New manual and scheduled runs publish changes to the live page immediately after validation. No approval click is needed. Enable scheduled reviews above for unattended runs.', 'ai0-content-refresh') . '</span></label></fieldset>';
+        self::row(__('When a proposal is ready', 'ai0-content-refresh'), $publishing, __('Save settings to apply this choice to future runs. Earlier pending proposals still require approval. Technical validation checks format and preservation; it does not guarantee factual accuracy or better Google rankings.', 'ai0-content-refresh'));
         foreach (['monthly_limit' => [__('Max. generations per month', 'ai0-content-refresh'),1,500], 'monthly_tokens' => [__('Max. tokens per month', 'ai0-content-refresh'),10000,10000000], 'max_output' => [__('Max. response tokens per run', 'ai0-content-refresh'),1000,32000], 'start_day' => [__('Start day of the month', 'ai0-content-refresh'),1,28], 'hour' => [__('Start time (hour)', 'ai0-content-refresh'),0,23]] as $k => $f) {
             self::row($f[0], '<input aria-label="' . esc_attr($f[0]) . '" type="number" name="' . esc_attr($k) . '" min="' . $f[1] . '" max="' . $f[2] . '" value="' . (int) $s[$k] . '">');
         }
@@ -370,6 +407,15 @@ The privacy policy page, password-protected content and Yoast noindex content ar
             echo '<div class="ai0r-panel"><h2>' . esc_html(get_the_title($h->post_id) ?: __('Content deleted', 'ai0-content-refresh')) . '</h2><p>' . esc_html(self::statuses()[$h->status] ?? $h->status) . ' · ' . esc_html($h->model) . ' · ' . esc_html(get_date_from_gmt($h->created_at, 'd.m.Y H:i')) . '</p><p>' . nl2br(esc_html($h->summary)) . '</p><p>' . (int) $h->input_tokens . (' ' . __('input tokens +', 'ai0-content-refresh') . ' ') . (int) $h->output_tokens . (' ' . esc_html__('output tokens (or reserved tokens when usage is unknown).', 'ai0-content-refresh') . '</p>');
             echo self::post_links((int) $h->post_id);
             $details = json_decode($h->details ?? '', true);
+            if ($h->status === 'pending') {
+                echo '<p class="ai0r-warning">' . esc_html__('This proposal is waiting for your approval. It will not be published automatically. Click Publish this proposal to apply it. Changing the publishing mode affects future runs only.', 'ai0-content-refresh') . '</p>';
+                if (!empty($details['publication_paused'])) {
+                    echo '<p class="description">' . esc_html__('Automatic publishing was switched off while this run was in progress. The proposal has been retained for review.', 'ai0-content-refresh') . '</p>';
+                }
+                if (!empty($details['publication_error'])) {
+                    echo '<p class="ai0r-warning"><strong>' . esc_html__('Automatic publishing did not complete:', 'ai0-content-refresh') . '</strong> ' . esc_html($details['publication_error']) . '</p>';
+                }
+            }
             echo ('<p><strong>' . esc_html__('Estimated cost:', 'ai0-content-refresh') . ' ') . esc_html(AI0R_Cost::label($details['cost'] ?? null)) . ('</strong></p><p class="description">' . esc_html__('Rates and the exchange rate are saved with each run. Excludes VAT, fees and negotiated discounts. API usage may be unknown on failure.', 'ai0-content-refresh') . '</p>');
             if (!empty($details['cost']['rates']['source'])) { echo '<p class="description">' . esc_html($details['cost']['rates']['source']) . '</p>'; }
             if (array_key_exists('exchange', $details['cost'] ?? [])) { echo '<p class="description">' . esc_html(AI0R_Exchange::description($details['cost']['exchange'])) . '</p>'; }
@@ -396,7 +442,7 @@ The privacy policy page, password-protected content and Yoast noindex content ar
                 echo ('<p class="ai0r-warning"><strong>' . esc_html__('No changes were proposed or published.', 'ai0-content-refresh') . '</strong> ' . esc_html__('Before and after are identical.', 'ai0-content-refresh')) . (!empty($details['no_change_reason']) ? ('<br>' . esc_html__('Model explanation:', 'ai0-content-refresh') . ' ') . esc_html($details['no_change_reason']) : '') . '</p>';
                 $post = get_post($h->post_id);
                 if ($post && AI0R_Plugin::reason($post) === '') {
-                    self::button('generate', __('Try another review', 'ai0-content-refresh'), ['post_id' => $h->post_id], 'history');
+                    self::generation_button('generate', ['post_id' => $h->post_id], 'history', false, true);
                     echo ('<p class="description">' . esc_html__('Change the model or prompt and try again. The run counts towards monthly usage; the six-month cooldown still applies.', 'ai0-content-refresh') . '</p>');
                 }
             }
@@ -419,7 +465,7 @@ The privacy policy page, password-protected content and Yoast noindex content ar
         $t = AI0R_Store::table('history');
         $page = max(1, absint($_GET['paged'] ?? 1));
         $rows = $wpdb->get_results($wpdb->prepare("SELECT id,post_id,created_at,status,model,summary,input_tokens,output_tokens,details FROM $t ORDER BY id DESC LIMIT 20 OFFSET %d", ($page - 1) * 20));
-        echo ('<div class="ai0r-panel"><h2>' . esc_html__('Generation history', 'ai0-content-refresh') . '</h2><p>' . esc_html__('All attempts are saved, including errors and reviews without changes. Proposals change the published page only when published.', 'ai0-content-refresh') . '</p><table class="widefat striped"><thead><tr><th>' . esc_html__('Date', 'ai0-content-refresh') . '</th><th>' . esc_html__('Content', 'ai0-content-refresh') . '</th><th>' . esc_html__('Status', 'ai0-content-refresh') . '</th><th>' . esc_html__('Model / tokens', 'ai0-content-refresh') . '</th><th>' . esc_html__('Estimated cost', 'ai0-content-refresh') . '</th></tr></thead><tbody>');
+        echo ('<div class="ai0r-panel"><h2>' . esc_html__('Generation history', 'ai0-content-refresh') . '</h2><p>' . esc_html__('All attempts are saved, including errors and reviews without changes. Pending review means you must open the proposal and click Publish this proposal. These entries are not approved automatically later.', 'ai0-content-refresh') . '</p><table class="widefat striped"><thead><tr><th>' . esc_html__('Date', 'ai0-content-refresh') . '</th><th>' . esc_html__('Content', 'ai0-content-refresh') . '</th><th>' . esc_html__('Status', 'ai0-content-refresh') . '</th><th>' . esc_html__('Model / tokens', 'ai0-content-refresh') . '</th><th>' . esc_html__('Estimated cost', 'ai0-content-refresh') . '</th></tr></thead><tbody>');
         foreach ($rows as $h) {
             echo '<tr><td>' . esc_html(get_date_from_gmt($h->created_at, 'd.m.Y H:i')) . '</td><td><a href="' . esc_url(add_query_arg(['page' => 'ai0-refresh', 'tab' => 'history', 'id' => $h->id], admin_url('admin.php'))) . '">' . esc_html(get_the_title($h->post_id) ?: __('(Content deleted)', 'ai0-content-refresh')) . '</a>' . self::post_links((int) $h->post_id) . '<p>' . esc_html(mb_substr($h->summary, 0, 180)) . '</p></td><td>' . esc_html(self::statuses()[$h->status] ?? $h->status) . '</td><td>' . esc_html($h->model) . '<br>' . ((int) $h->input_tokens + (int) $h->output_tokens) . '</td><td>' . esc_html(AI0R_Cost::label(json_decode($h->details ?? '', true)['cost'] ?? null)) . '</td></tr>';
         }

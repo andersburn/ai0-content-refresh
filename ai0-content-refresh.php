@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Ai0 Content Refresh
  * Description: Improve existing pages and posts with OpenAI, Search Console priorities and a complete change history.
- * Version: 1.5.0
+ * Version: 1.6.0
  * Requires at least: 6.7
  * Requires PHP: 8.1
  * Author: Ai0
@@ -14,7 +14,7 @@
  */
 
 defined('ABSPATH') || exit;
-define('AI0R_VERSION', '1.5.0');
+define('AI0R_VERSION', '1.6.0');
 define('AI0R_FILE', __FILE__);
 define('AI0R_DIR', __DIR__ . '/');
 require_once AI0R_DIR . 'includes/class-store.php';

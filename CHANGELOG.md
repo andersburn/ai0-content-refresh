@@ -2,6 +2,18 @@
 
 The original five versions were imported to GitHub on 25 October 2026. Historical 1.0–1.4 installation ZIPs and tags remain unchanged. Version 1.5.0 introduces English source strings, Danish translations and native WordPress updates.
 
+## 1.6.0 — Clear review and automatic publishing
+
+- Apply the saved publishing mode to new manual, next-page, retry and scheduled runs.
+- Replace the compact mode dropdown with two separate choices and clear descriptions.
+- Show Generate and publish on manual buttons in automatic mode.
+- Report actual outcomes: published, pending review or no changes.
+- Explain that pending proposals require a Publish click and are not approved later.
+- Keep earlier pending proposals for manual approval when changing settings.
+- Refuse stale forms after a mode change, and pause automatic publication if review is selected during generation.
+- Record automatic-publication failures in history while retaining the proposal.
+- Preserve existing settings, quotas, cooldown and content validation.
+
 ## 1.5.0 — English, Danish translation and WordPress updates
 
 - English source strings throughout the administration screens, Gutenberg controls and runtime messages.

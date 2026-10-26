@@ -4,7 +4,7 @@ Tags: seo, gutenberg, content, openai, search-console
 Requires at least: 6.7
 Requires PHP: 8.1
 Tested up to: 7.1.3
-Stable tag: 1.5.0
+Stable tag: 1.6.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -20,19 +20,19 @@ Requirements: PHP 8.1+ with OpenSSL and mbstring; WordPress 6.7+; your own OpenA
 
 == Installation ==
 
-1. Download ai0-content-refresh-1.5.0.zip from https://github.com/andersburn/ai0-content-refresh/releases/latest. Choose the named installation asset rather than the generated source archive.
+1. Download ai0-content-refresh-1.6.0.zip from https://github.com/andersburn/ai0-content-refresh/releases/latest. Choose the named installation asset rather than the generated source archive.
 2. Open Plugins > Add New Plugin > Upload Plugin, upload the ZIP and activate it.
 3. Open Content Refresh > Settings, enter your OpenAI API key and save.
 4. Click Test key and retrieve models. Choose a compatible model from the dropdown or enter an ID under Other model. The list includes every model name on the account, including incompatible models.
 5. Configure the prompt, content types, exclusions, media access, traffic source and monthly generation/token limits.
 6. Generate a proposal for a page that has passed the six-month cooldown. Inspect the changes and preview in Generation history.
-7. Enable scheduled reviews when ready. Automation is disabled initially; manual runs always save proposals.
+7. Enable scheduled reviews when ready. Automation is disabled initially; manual runs follow the selected publishing mode.
 
 The recommended model is a starting point, subject to access and your review. Your existing model choice is retained. Use the recommendation button and then save to change it.
 
 == Upgrades and GitHub updates ==
 
-From versions 1.0–1.4, upload the 1.5.0 installation ZIP once and choose to replace the existing plugin. Those versions have no update client and cannot discover this first upgrade. Settings, encrypted API credentials, Google connection, custom prompts, exclusions and history are retained. The older 1.0 migration replaces only its exact original shipped prompt; custom editorial prompts are retained.
+From versions 1.0–1.4, upload the latest installation ZIP once and choose to replace the existing plugin. Those versions have no update client and cannot discover this first upgrade. Settings, encrypted API credentials, Google connection, custom prompts, exclusions and history are retained. The older 1.0 migration replaces only its exact original shipped prompt; custom editorial prompts are retained.
 
 From 1.5.0, updates use WordPress' native Plugins / Dashboard > Updates screen. The plugin checks the latest stable release at https://api.github.com/repos/andersburn/ai0-content-refresh/releases/latest and reads the matching update.json release asset. It accepts only the named installation ZIP and manifest URLs from this exact GitHub repository, with matching versions and valid WordPress/PHP compatibility metadata. Drafts, prereleases, missing assets, foreign URLs and invalid metadata are ignored. No GitHub token is needed.
 
@@ -49,6 +49,14 @@ Manual priority has the greatest weight, followed by Yoast cornerstone markers, 
 Exclude pages and posts is a searchable selection list. Search by title or ID, select multiple entries and save. Choices are shared with the editor and priority overview. Filtering does not clear selections; selected pages appear on separate lines. Old IDs and per-page exclusion metadata are migrated.
 
 Only published posts/pages without passwords are processed. The privacy policy page, Yoast noindex and manually excluded content are skipped. Custom post types are not processed. Select any additional pages that should not be edited.
+
+== Publishing mode: review or automatic ==
+
+Settings > When a proposal is ready has two separate choices with explanations. Save proposals for review leaves new manual and scheduled runs Pending review until you click Publish this proposal in history. There is no later automatic approval. Publish automatically after technical validation publishes new changes immediately after validation; no approval click is needed. Manual page, next-page and retry buttons show Generate and publish when this mode is saved.
+
+Selecting automatic publishing does not enable the schedule. Enable scheduled reviews separately for unattended runs. Manual runs can publish automatically even when the schedule is disabled. Existing monthly limits, preservation checks and the six-month cooldown still apply.
+
+The setting applies only to future runs. Earlier pending proposals still require manual approval. Your saved setting is retained on upgrade. A stale form cannot silently use a different publishing choice: reload the page if the choice changed. Switching off automatic publishing during a request retains the proposal for review. A failed automatic publication retains its proposal and records the reason in history.
 
 == Six-month cooldown and scheduling ==
 
@@ -141,6 +149,9 @@ GitHub update checks send a plugin-version user agent and ordinary server networ
 Developer hooks: ai0r_content_applied($post_id, $history_id, $is_restore) for cache purging/local integrations; ai0r_media_allowed($allowed, $attachment_id) for media access; ai0r_tracking_allowed($allowed, $post_id) for counting. Normal WordPress post-update hooks also run.
 
 == Changelog ==
+
+= 1.6.0 =
+Publishing mode applies to new manual and scheduled runs. Clear separate radio options explain approval and immediate automatic publication. Manual buttons disclose Generate and publish in auto mode. Completion notices report actual status. Pending entries explain required approval. Existing pending proposals are never published retroactively. Stale forms and a mode change during generation cannot silently publish; automatic publication failures retain the proposal and reason.
 
 = 1.5.0 =
 English interface and documentation; bundled Danish PHP/JavaScript translations and POT template; article-language-preserving new default prompt; English media-search stop words; locale-aware numeric display; native GitHub release updates with matching compatibility metadata and administrator-controlled auto-updates. Existing saved prompts/settings/history are retained.
